@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
-using LT.DigitalOffice.FileService.Commands;
-using LT.DigitalOffice.FileService.Commands.Interfaces;
-using LT.DigitalOffice.FileService.Database.Entities;
+using LT.DigitalOffice.FileService.Business;
+using LT.DigitalOffice.FileService.Business.Interfaces;
+using LT.DigitalOffice.FileService.Data.Interfaces;
 using LT.DigitalOffice.FileService.Mappers.Interfaces;
-using LT.DigitalOffice.FileService.Models;
-using LT.DigitalOffice.FileService.Repositories.Interfaces;
+using LT.DigitalOffice.FileService.Models.Db;
+using LT.DigitalOffice.FileService.Models.Dto;
 using Moq;
 using NUnit.Framework;
 using System;

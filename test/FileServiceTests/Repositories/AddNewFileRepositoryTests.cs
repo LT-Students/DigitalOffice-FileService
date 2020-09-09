@@ -1,7 +1,7 @@
-﻿using LT.DigitalOffice.FileService.Database;
-using LT.DigitalOffice.FileService.Database.Entities;
-using LT.DigitalOffice.FileService.Repositories;
-using LT.DigitalOffice.FileService.Repositories.Interfaces;
+﻿using LT.DigitalOffice.FileService.Data;
+using LT.DigitalOffice.FileService.Data.Interfaces;
+using LT.DigitalOffice.FileService.Data.Provider.MsSql.Ef;
+using LT.DigitalOffice.FileService.Models.Db;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using System;

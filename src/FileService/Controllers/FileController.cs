@@ -1,5 +1,5 @@
-﻿using LT.DigitalOffice.FileService.Commands.Interfaces;
-using LT.DigitalOffice.FileService.Models;
+﻿using LT.DigitalOffice.FileService.Business.Interfaces;
+using LT.DigitalOffice.FileService.Models.Dto;
 using Microsoft.AspNetCore.Mvc;
 using System;
 

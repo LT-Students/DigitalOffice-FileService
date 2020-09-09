@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using FluentValidation.TestHelper;
-using LT.DigitalOffice.FileService.Models;
-using LT.DigitalOffice.FileService.Validators;
+using LT.DigitalOffice.FileService.Models.Dto;
+using LT.DigitalOffice.FileService.Validation;
 using NUnit.Framework;
 
 namespace LT.DigitalOffice.FileServiceUnitTests.Validators

@@ -1,7 +1,7 @@
-﻿using LT.DigitalOffice.FileService.Database.Entities;
-using LT.DigitalOffice.FileService.Mappers;
+﻿using LT.DigitalOffice.FileService.Mappers;
 using LT.DigitalOffice.FileService.Mappers.Interfaces;
-using LT.DigitalOffice.FileService.Models;
+using LT.DigitalOffice.FileService.Models.Db;
+using LT.DigitalOffice.FileService.Models.Dto;
 using LT.DigitalOffice.FileServiceUnitTests.UnitTestLibrary;
 using NUnit.Framework;
 using System;

@@ -1,0 +1,9 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>LT.DigitalOffice.FileService.Data.Provider</AssemblyName>
+    <RootNamespace>LT.DigitalOffice.FileService.Data.Provider</RootNamespace>
+  </PropertyGroup>
+
+</Project>

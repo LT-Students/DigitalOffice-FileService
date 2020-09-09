@@ -1,8 +1,8 @@
 ﻿using LT.DigitalOffice.Broker.Requests;
 using LT.DigitalOffice.Broker.Responses;
 using LT.DigitalOffice.FileService.Broker.Consumers;
-using LT.DigitalOffice.FileService.Database.Entities;
-using LT.DigitalOffice.FileService.Repositories.Interfaces;
+using LT.DigitalOffice.FileService.Data.Interfaces;
+using LT.DigitalOffice.FileService.Models.Db;
 using LT.DigitalOffice.FileServiceUnitTests.UnitTestLibrary;
 using LT.DigitalOffice.Kernel.Broker;
 using MassTransit;

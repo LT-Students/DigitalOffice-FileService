@@ -7,9 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentValidation" Version="9.0.1" />
     <PackageReference Include="LT.DigitalOffice.Kernel" Version="1.0.2" />
-    <PackageReference Include="MassTransit" Version="7.0.3" />
     <PackageReference Include="MassTransit.AspNetCore" Version="7.0.3" />
     <PackageReference Include="MassTransit.Extensions.DependencyInjection" Version="7.0.3" />
     <PackageReference Include="MassTransit.RabbitMQ" Version="7.0.3" />
@@ -17,6 +15,15 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.5" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\FileService.Mappers\FileService.Mappers.csproj" />
+    <ProjectReference Include="..\FileService.Broker\FileService.Broker.csproj" />
+    <ProjectReference Include="..\FileService.Business\FileService.Business.csproj" />
+    <ProjectReference Include="..\FileService.Models.Db\FileService.Models.Db.csproj" />
+    <ProjectReference Include="..\FileService.Models.Dto\FileService.Models.Dto.csproj" />
+    <ProjectReference Include="..\FileService.Validation\FileService.Validation.csproj" />
   </ItemGroup>
 
 </Project>

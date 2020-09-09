@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>LT.DigitalOffice.FileService.Business</AssemblyName>
+    <RootNamespace>LT.DigitalOffice.FileService.Business</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="9.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\FileService.Mappers\FileService.Mappers.csproj" />
+    <ProjectReference Include="..\FileService.Data\FileService.Data.csproj" />
+  </ItemGroup>
+
+</Project>
