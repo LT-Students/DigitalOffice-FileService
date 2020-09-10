@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>LT.DigitalOffice.FileService.Data.Provider</AssemblyName>
+    <RootNamespace>LT.DigitalOffice.FileService.Data.Provider</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.8" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FileService.Models.Db\FileService.Models.Db.csproj" />
+  </ItemGroup>
+
+</Project>
