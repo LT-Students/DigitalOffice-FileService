@@ -1,15 +1,14 @@
-﻿using LT.DigitalOffice.FileService.Business;
-using LT.DigitalOffice.FileService.Business.Interfaces;
+﻿using LT.DigitalOffice.FileService.Business.Interfaces;
 using LT.DigitalOffice.FileService.Data.Interfaces;
 using LT.DigitalOffice.FileService.Mappers.Interfaces;
 using LT.DigitalOffice.FileService.Models.Db;
 using LT.DigitalOffice.FileService.Models.Dto;
-using LT.DigitalOffice.FileServiceUnitTests.UnitTestLibrary;
+using LT.DigitalOffice.Kernel.UnitTestLibrary;
 using Moq;
 using NUnit.Framework;
 using System;
 
-namespace LT.DigitalOffice.FileServiceUnitTests.Commands
+namespace LT.DigitalOffice.FileService.Business.UnitTests
 {
     public class GetFileByIdCommandTests
     {

@@ -1,12 +1,11 @@
-﻿using LT.DigitalOffice.FileService.Data;
-using LT.DigitalOffice.FileService.Data.Interfaces;
+﻿using LT.DigitalOffice.FileService.Data.Interfaces;
 using LT.DigitalOffice.FileService.Data.Provider.MsSql.Ef;
 using LT.DigitalOffice.FileService.Models.Db;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using System;
 
-namespace LT.DigitalOffice.FileServiceUnitTests.Repositories
+namespace LT.DigitalOffice.FileService.Data.UnitTests
 {
     public class AddNewFileRepositoryTests
     {

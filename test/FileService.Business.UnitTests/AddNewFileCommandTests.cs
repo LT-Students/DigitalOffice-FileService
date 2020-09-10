@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using LT.DigitalOffice.FileService.Business;
 using LT.DigitalOffice.FileService.Business.Interfaces;
 using LT.DigitalOffice.FileService.Data.Interfaces;
 using LT.DigitalOffice.FileService.Mappers.Interfaces;
@@ -9,7 +8,7 @@ using Moq;
 using NUnit.Framework;
 using System;
 
-namespace LT.DigitalOffice.FileServiceUnitTests.Commands
+namespace LT.DigitalOffice.FileService.Business.UnitTests
 {
     public class AddNewFileCommandTests
     {

@@ -20,6 +20,7 @@
   <ItemGroup>
     <ProjectReference Include="..\FileService.Broker\FileService.Broker.csproj" />
     <ProjectReference Include="..\FileService.Business\FileService.Business.csproj" />
+    <ProjectReference Include="..\FileService.Data.Provider\FileService.Data.Provider.csproj" />
     <ProjectReference Include="..\FileService.Data\FileService.Data.csproj" />
     <ProjectReference Include="..\FileService.Mappers\FileService.Mappers.csproj" />
     <ProjectReference Include="..\FileService.Models.Db\FileService.Models.Db.csproj" />

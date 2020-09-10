@@ -4,6 +4,7 @@ using LT.DigitalOffice.FileService.Business;
 using LT.DigitalOffice.FileService.Business.Interfaces;
 using LT.DigitalOffice.FileService.Data;
 using LT.DigitalOffice.FileService.Data.Interfaces;
+using LT.DigitalOffice.FileService.Data.Provider;
 using LT.DigitalOffice.FileService.Data.Provider.MsSql.Ef;
 using LT.DigitalOffice.FileService.Mappers;
 using LT.DigitalOffice.FileService.Mappers.Interfaces;
@@ -85,6 +86,8 @@ namespace LT.DigitalOffice.FileService
 
         private void ConfigureRepositories(IServiceCollection services)
         {
+            services.AddTransient<IDataProvider, FileServiceDbContext>();
+
             services.AddTransient<IFileRepository, FileRepository>();
         }
 

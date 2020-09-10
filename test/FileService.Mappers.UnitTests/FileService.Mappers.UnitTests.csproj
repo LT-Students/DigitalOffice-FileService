@@ -5,22 +5,22 @@
 
     <IsPackable>false</IsPackable>
 
-    <AssemblyName>LT.DigitalOffice.FileService.Broker.UnitTests</AssemblyName>
+    <AssemblyName>LT.DigitalOffice.FileService.Mappers.UnitTests</AssemblyName>
 
-    <RootNamespace>LT.DigitalOffice.FileService.Broker.UnitTests</RootNamespace>
+    <RootNamespace>LT.DigitalOffice.FileService.Mappers.UnitTests</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="LT.DigitalOffice.Kernel" Version="1.0.2" />
-    <PackageReference Include="Moq" Version="4.14.5" />
     <PackageReference Include="nunit" Version="3.12.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.15.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\FileService.Broker\FileService.Broker.csproj" />
+    <ProjectReference Include="..\..\src\FileService.Mappers\FileService.Mappers.csproj" />
     <ProjectReference Include="..\..\src\FileService.Models.Db\FileService.Models.Db.csproj" />
+    <ProjectReference Include="..\..\src\FileService.Models.Dto\FileService.Models.Dto.csproj" />
   </ItemGroup>
 
 </Project>

@@ -3,8 +3,8 @@ using LT.DigitalOffice.Broker.Responses;
 using LT.DigitalOffice.FileService.Broker.Consumers;
 using LT.DigitalOffice.FileService.Data.Interfaces;
 using LT.DigitalOffice.FileService.Models.Db;
-using LT.DigitalOffice.FileServiceUnitTests.UnitTestLibrary;
 using LT.DigitalOffice.Kernel.Broker;
+using LT.DigitalOffice.Kernel.UnitTestLibrary;
 using MassTransit;
 using MassTransit.Testing;
 using Moq;
@@ -13,7 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace LT.DigitalOffice.FileServiceUnitTests.Consumers
+namespace LT.DigitalOffice.FileService.Broker.UnitTests
 {
     internal class GetFileConsumerTests
     {

@@ -1,10 +1,9 @@
 ﻿using FluentValidation;
 using FluentValidation.TestHelper;
 using LT.DigitalOffice.FileService.Models.Dto;
-using LT.DigitalOffice.FileService.Validation;
 using NUnit.Framework;
 
-namespace LT.DigitalOffice.FileServiceUnitTests.Validators
+namespace LT.DigitalOffice.FileService.Validation.UnitTests
 {
     public class AddNewFileRequestValidatorTests
     {

@@ -1,7 +1,6 @@
 ﻿using LT.DigitalOffice.FileService.Data.Interfaces;
-using LT.DigitalOffice.FileService.Data.Provider.MsSql.Ef;
+using LT.DigitalOffice.FileService.Data.Provider;
 using LT.DigitalOffice.FileService.Models.Db;
-using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
 
@@ -9,24 +8,24 @@ namespace LT.DigitalOffice.FileService.Data
 {
     public class FileRepository : IFileRepository
     {
-        private readonly FileServiceDbContext dbContext;
+        private readonly IDataProvider provider;
 
-        public FileRepository([FromServices] FileServiceDbContext dbContext)
+        public FileRepository(IDataProvider provider)
         {
-            this.dbContext = dbContext;
+            this.provider = provider;
         }
 
         public Guid AddNewFile(DbFile file)
         {
-            dbContext.Files.Add(file);
-            dbContext.SaveChanges();
+            provider.Files.Add(file);
+            provider.Save();
 
             return file.Id;
         }
 
         public DbFile GetFileById(Guid fileId)
         {
-            var dbFile = dbContext.Files.FirstOrDefault(file => file.Id == fileId);
+            var dbFile = provider.Files.FirstOrDefault(file => file.Id == fileId);
 
             if (dbFile == null)
             {
