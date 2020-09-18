@@ -104,7 +104,7 @@ namespace LT.DigitalOffice.FileService
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseHealthChecks("/healthcheck");
+            app.UseHealthChecks("/api/healthcheck");
 
             app.UseExceptionHandler(tempApp => tempApp.Run(CustomExceptionHandler.HandleCustomException));
 
