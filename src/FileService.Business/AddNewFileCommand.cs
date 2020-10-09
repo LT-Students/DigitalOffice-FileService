@@ -9,6 +9,7 @@ using System;
 
 namespace LT.DigitalOffice.FileService.Business
 {
+    /// <inheritdoc cref="IAddNewFileCommand"/>
     public class AddNewFileCommand : IAddNewFileCommand
     {
         private readonly IFileRepository repository;
