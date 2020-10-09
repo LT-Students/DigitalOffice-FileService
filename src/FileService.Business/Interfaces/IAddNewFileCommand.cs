@@ -14,7 +14,7 @@ namespace LT.DigitalOffice.FileService.Business.Interfaces
         /// </summary>
         /// <param name="request">File data.</param>
         /// <returns>Id of the added file.</returns>
-        /// <exception cref="Kernel.Exceptions.BadRequestException">Thrown when file data is incorrect.</exception>
+        /// <exception cref="ValidationException">Thrown when file data is incorrect.</exception>
         Guid Execute(FileCreateRequest request);
     }
 }

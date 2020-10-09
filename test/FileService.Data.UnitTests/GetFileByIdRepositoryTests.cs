@@ -1,6 +1,7 @@
 ﻿using LT.DigitalOffice.FileService.Data.Interfaces;
 using LT.DigitalOffice.FileService.Data.Provider.MsSql.Ef;
 using LT.DigitalOffice.FileService.Models.Db;
+using LT.DigitalOffice.Kernel.Exceptions;
 using LT.DigitalOffice.Kernel.UnitTestLibrary;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
@@ -49,7 +50,7 @@ namespace LT.DigitalOffice.FileService.Data.UnitTests
         [Test]
         public void ShouldThrowExceptionWhenThereNoFileInDatabaseWithSuchId()
         {
-            Assert.Throws<Exception>(() => repository.GetFileById(Guid.NewGuid()));
+            Assert.Throws<NotFoundException>(() => repository.GetFileById(Guid.NewGuid()));
         }
 
         [Test]
