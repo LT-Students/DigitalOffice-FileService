@@ -100,10 +100,13 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
         }
 
         [Test]
-        public void ShouldThrowNullReferenceExceptionWhenFileRequestIsNull()
+        public void ShouldThrowNullReferenceExceptionWhenMapperThrowsIt()
         {
-            fileRequest = null;
-            Assert.Throws<NullReferenceException>(() => command.Execute(fileRequest), "Request is null");
+            mapperMock
+                .Setup(x => x.Map(It.IsAny<FileCreateRequest>()))
+                .Throws(new ArgumentNullException());
+
+            Assert.Throws<ArgumentNullException>(() => command.Execute(fileRequest));
         }
     }
 }

@@ -2,18 +2,18 @@
 using LT.DigitalOffice.FileService.Data.Provider.MsSql.Ef;
 using LT.DigitalOffice.FileService.Models.Db;
 using LT.DigitalOffice.Kernel.Exceptions;
-using LT.DigitalOffice.Kernel.UnitTestLibrary;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using System;
+using System.Linq;
 
 namespace LT.DigitalOffice.FileService.Data.UnitTests
 {
-    public class GetFileByIdRepositoryTests
+    class DeleteFileByIdRepositoryTests
     {
         private FileServiceDbContext dbContext;
         private IFileRepository repository;
-
+        private Guid fileId;
         private DbFile dbFile;
 
         [SetUp]
@@ -25,9 +25,10 @@ namespace LT.DigitalOffice.FileService.Data.UnitTests
             dbContext = new FileServiceDbContext(dbOptions);
             repository = new FileRepository(dbContext);
 
+            fileId = Guid.NewGuid();
             dbFile = new DbFile
             {
-                Id = Guid.NewGuid(),
+                Id = fileId,
                 Content = Convert.FromBase64String("RGlnaXRhbCBPZmA5Y2U="),
                 Extension = ".txt",
                 IsActive = true,
@@ -48,26 +49,17 @@ namespace LT.DigitalOffice.FileService.Data.UnitTests
         }
 
         [Test]
-        public void ShouldThrowExceptionWhenThereNoFileInDatabaseWithSuchId()
+        public void ShouldThrowExceptionWhenFileWasNotFound()
         {
-            Assert.Throws<NotFoundException>(() => repository.GetFileById(Guid.NewGuid()));
+            Assert.Throws<NotFoundException>(() => repository.DeleteFileById(Guid.NewGuid()));
         }
 
         [Test]
-        public void ShouldReturnFileInfoWhenGettingFileById()
+        public void ShouldDeleteFile()
         {
-            var result = repository.GetFileById(dbFile.Id);
+            repository.DeleteFileById(dbFile.Id);
 
-            var expected = new DbFile
-            {
-                Id = dbFile.Id,
-                Name = dbFile.Name,
-                Content = dbFile.Content,
-                Extension = dbFile.Extension,
-                IsActive = dbFile.IsActive
-            };
-
-            SerializerAssert.AreEqual(expected, result);
+            Assert.That(dbContext.Files.Find(fileId) == null);
         }
     }
 }
