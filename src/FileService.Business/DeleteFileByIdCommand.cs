@@ -16,7 +16,7 @@ namespace LT.DigitalOffice.FileService.Business
 
         public void Execute(Guid fileId)
         {
-            repository.DeleteFileById(fileId);
+            repository.DisableFileById(fileId);
         }
     }
 }

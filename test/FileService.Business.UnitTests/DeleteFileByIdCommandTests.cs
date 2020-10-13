@@ -26,7 +26,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
         [Test]
         public void ShouldThrowExceptionWhenRepositoryThrowsIt()
         {
-            repositoryMock.Setup(x => x.DeleteFileById(It.IsAny<Guid>())).Throws(new Exception());
+            repositoryMock.Setup(x => x.DisableFileById(It.IsAny<Guid>())).Throws(new Exception());
 
             Assert.Throws<Exception>(() => command.Execute(fileId));
         }
@@ -35,10 +35,10 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
         public void ShouldDeleteFile()
         {
             repositoryMock
-                .Setup(x => x.DeleteFileById(It.IsAny<Guid>()));
+                .Setup(x => x.DisableFileById(It.IsAny<Guid>()));
 
             Assert.DoesNotThrow(() => command.Execute(fileId));
-            repositoryMock.Verify(repository => repository.DeleteFileById(It.IsAny<Guid>()), Times.Once);
+            repositoryMock.Verify(repository => repository.DisableFileById(It.IsAny<Guid>()), Times.Once);
         }
     }
 }

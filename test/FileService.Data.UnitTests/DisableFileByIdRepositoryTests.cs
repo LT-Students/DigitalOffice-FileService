@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace LT.DigitalOffice.FileService.Data.UnitTests
 {
-    class DeleteFileByIdRepositoryTests
+    class DisableFileByIdRepositoryTests
     {
         private FileServiceDbContext dbContext;
         private IFileRepository repository;
@@ -51,15 +51,15 @@ namespace LT.DigitalOffice.FileService.Data.UnitTests
         [Test]
         public void ShouldThrowExceptionWhenFileWasNotFound()
         {
-            Assert.Throws<NotFoundException>(() => repository.DeleteFileById(Guid.NewGuid()));
+            Assert.Throws<NotFoundException>(() => repository.DisableFileById(Guid.NewGuid()));
         }
 
         [Test]
         public void ShouldDeleteFile()
         {
-            repository.DeleteFileById(dbFile.Id);
+            repository.DisableFileById(dbFile.Id);
 
-            Assert.That(dbContext.Files.Find(fileId) == null);
+            Assert.That(dbContext.Files.Find(fileId).IsActive == false);
         }
     }
 }

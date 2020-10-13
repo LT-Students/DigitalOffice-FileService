@@ -24,9 +24,9 @@ namespace LT.DigitalOffice.FileService.Data.Interfaces
         DbFile GetFileById(Guid fileId);
 
         /// <summary>
-        /// Deletes the file with the specified id from database.
+        /// Disable the file with the specified id in the database.
         /// </summary>
         /// <param name="fileId">Specified id of file.</param>
-        void DeleteFileById(Guid fileId);
+        void DisableFileById(Guid fileId);
     }
 }

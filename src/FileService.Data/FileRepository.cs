@@ -24,7 +24,7 @@ namespace LT.DigitalOffice.FileService.Data
             return file.Id;
         }
 
-        public void DeleteFileById(Guid fileId)
+        public void DisableFileById(Guid fileId)
         {
             var dbFile = provider.Files.FirstOrDefault(file => file.Id == fileId);
 
@@ -33,7 +33,9 @@ namespace LT.DigitalOffice.FileService.Data
                 throw new NotFoundException("File with this id was not found.");
             }
 
-            provider.Files.Remove(dbFile);
+            dbFile.IsActive = false;
+
+            provider.Files.Update(dbFile);
             provider.Save();
         }
 
