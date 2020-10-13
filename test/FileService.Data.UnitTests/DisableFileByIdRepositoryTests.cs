@@ -55,7 +55,7 @@ namespace LT.DigitalOffice.FileService.Data.UnitTests
         }
 
         [Test]
-        public void ShouldDeleteFile()
+        public void ShouldDisableFile()
         {
             repository.DisableFileById(dbFile.Id);
 

@@ -7,9 +7,9 @@ using System;
 
 namespace LT.DigitalOffice.FileService.Business.UnitTests
 {
-    public class DeleteFileByIdCommandTests
+    public class DisableFileByIdCommandTests
     {
-        private IDeleteFileByIdCommand command;
+        private IDisableFileByIdCommand command;
         private Mock<IFileRepository> repositoryMock;
 
         private Guid fileId;
@@ -18,7 +18,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
         public void Setup()
         {
             repositoryMock = new Mock<IFileRepository>();
-            command = new DeleteFileByIdCommand(repositoryMock.Object);
+            command = new DisableFileByIdCommand(repositoryMock.Object);
 
             fileId = Guid.NewGuid();
         }
@@ -32,7 +32,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
         }
 
         [Test]
-        public void ShouldDeleteFile()
+        public void ShouldDisableFile()
         {
             repositoryMock
                 .Setup(x => x.DisableFileById(It.IsAny<Guid>()));

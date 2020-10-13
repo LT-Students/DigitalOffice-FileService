@@ -23,9 +23,9 @@ namespace LT.DigitalOffice.FileService.Controllers
             return command.Execute(fileId);
         }
 
-        [HttpDelete("deleteFileById")]
+        [HttpDelete("disableFileById")]
         public void DeleteFileById(
-            [FromServices] IDeleteFileByIdCommand command,
+            [FromServices] IDisableFileByIdCommand command,
             [FromQuery] Guid fileId)
         {
             command.Execute(fileId);

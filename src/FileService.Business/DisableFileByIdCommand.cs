@@ -5,11 +5,11 @@ using System;
 
 namespace LT.DigitalOffice.FileService.Business
 {
-    public class DeleteFileByIdCommand : IDeleteFileByIdCommand
+    public class DisableFileByIdCommand : IDisableFileByIdCommand
     {
         private readonly IFileRepository repository;
 
-        public DeleteFileByIdCommand([FromServices] IFileRepository repository)
+        public DisableFileByIdCommand([FromServices] IFileRepository repository)
         {
             this.repository = repository;
         }
