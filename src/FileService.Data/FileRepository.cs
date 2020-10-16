@@ -1,11 +1,13 @@
 ﻿using LT.DigitalOffice.FileService.Data.Interfaces;
 using LT.DigitalOffice.FileService.Data.Provider;
 using LT.DigitalOffice.FileService.Models.Db;
+using LT.DigitalOffice.Kernel.Exceptions;
 using System;
 using System.Linq;
 
 namespace LT.DigitalOffice.FileService.Data
 {
+    /// <inheritdoc cref="IFileRepository"/>
     public class FileRepository : IFileRepository
     {
         private readonly IDataProvider provider;
@@ -29,7 +31,7 @@ namespace LT.DigitalOffice.FileService.Data
 
             if (dbFile == null)
             {
-                throw new Exception("File with this id was not found.");
+                throw new NotFoundException("File with this id was not found.");
             }
 
             return dbFile;

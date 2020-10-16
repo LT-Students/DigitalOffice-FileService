@@ -4,11 +4,13 @@ using LT.DigitalOffice.FileService.Data.Interfaces;
 using LT.DigitalOffice.FileService.Mappers.Interfaces;
 using LT.DigitalOffice.FileService.Models.Db;
 using LT.DigitalOffice.FileService.Models.Dto;
+using LT.DigitalOffice.Kernel.FluentValidationExtensions;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
 namespace LT.DigitalOffice.FileService.Business
 {
+    /// <inheritdoc cref="IAddNewFileCommand"/>
     public class AddNewFileCommand : IAddNewFileCommand
     {
         private readonly IFileRepository repository;
@@ -27,7 +29,7 @@ namespace LT.DigitalOffice.FileService.Business
 
         public Guid Execute(FileCreateRequest request)
         {
-            validator.ValidateAndThrow(request);
+            validator.ValidateAndThrowCustom(request);
 
             var newFile = mapper.Map(request);
 
