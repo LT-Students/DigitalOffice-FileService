@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using FluentValidation.Results;
 using LT.DigitalOffice.FileService.Business.Interfaces;
 using LT.DigitalOffice.FileService.Data.Interfaces;
 using LT.DigitalOffice.FileService.Mappers.Interfaces;
@@ -7,6 +8,7 @@ using LT.DigitalOffice.FileService.Models.Dto;
 using Moq;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 
 namespace LT.DigitalOffice.FileService.Business.UnitTests
 {
@@ -100,9 +102,18 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
         }
 
         [Test]
-        public void ShouldThrowNullReferenceExceptionWhenFileRequestIsNull()
+        public void ShouldThrowExceptionWhenFileRequestIsNull()
         {
+            validatorMock
+                 .Setup(x => x.Validate(It.IsAny<IValidationContext>()).IsValid)
+                 .Returns(true);
+
+            mapperMock
+                 .Setup(x => x.Map(It.IsAny<FileCreateRequest>()))
+                 .Throws(new NullReferenceException());
+
             fileRequest = null;
+
             Assert.Throws<NullReferenceException>(() => command.Execute(fileRequest), "Request is null");
         }
     }

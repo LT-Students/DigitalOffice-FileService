@@ -33,9 +33,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileService.Models.Dto", "s
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileService.Mappers", "src\FileService.Mappers\FileService.Mappers.csproj", "{8D74CA0E-100C-4A2F-9372-BBFEB08ADC50}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileService.Validation.UnitTests", "test\FileService.Validation.UnitTests\FileService.Validation.UnitTests.csproj", "{CB283C99-45E2-4477-B488-C8F91A392DE0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileService.Validation.UnitTests", "test\FileService.Validation.UnitTests\FileService.Validation.UnitTests.csproj", "{CB283C99-45E2-4477-B488-C8F91A392DE0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileService.Mappers.UnitTests", "test\FileService.Mappers.UnitTests\FileService.Mappers.UnitTests.csproj", "{3B0BB63E-4256-4A5A-B81E-2B33233B44CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileService.Mappers.UnitTests", "test\FileService.Mappers.UnitTests\FileService.Mappers.UnitTests.csproj", "{3B0BB63E-4256-4A5A-B81E-2B33233B44CF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileService.Models.Broker", "src\FileService.Models.Broker\FileService.Models.Broker.csproj", "{28E48A9D-7493-403E-994C-93D263359211}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -103,6 +105,10 @@ Global
 		{3B0BB63E-4256-4A5A-B81E-2B33233B44CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B0BB63E-4256-4A5A-B81E-2B33233B44CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3B0BB63E-4256-4A5A-B81E-2B33233B44CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28E48A9D-7493-403E-994C-93D263359211}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28E48A9D-7493-403E-994C-93D263359211}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28E48A9D-7493-403E-994C-93D263359211}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28E48A9D-7493-403E-994C-93D263359211}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -123,6 +129,7 @@ Global
 		{8D74CA0E-100C-4A2F-9372-BBFEB08ADC50} = {D8CBFAE1-3A2C-4C6D-B87E-5E57C921A438}
 		{CB283C99-45E2-4477-B488-C8F91A392DE0} = {2E9B3C45-D2CB-48A2-A92B-8288FF50DA10}
 		{3B0BB63E-4256-4A5A-B81E-2B33233B44CF} = {2E9B3C45-D2CB-48A2-A92B-8288FF50DA10}
+		{28E48A9D-7493-403E-994C-93D263359211} = {D8CBFAE1-3A2C-4C6D-B87E-5E57C921A438}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9E55E6C4-D501-490B-ADC8-A7078713E49D}
