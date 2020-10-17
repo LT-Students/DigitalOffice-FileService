@@ -7,6 +7,7 @@ using System.Linq;
 
 namespace LT.DigitalOffice.FileService.Data
 {
+    /// <inheritdoc cref="IFileRepository"/>
     public class FileRepository : IFileRepository
     {
         private readonly IDataProvider provider;

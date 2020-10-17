@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using FluentValidation.Results;
 using LT.DigitalOffice.FileService.Business.Interfaces;
 using LT.DigitalOffice.FileService.Data.Interfaces;
 using LT.DigitalOffice.FileService.Mappers.Interfaces;
@@ -7,6 +8,7 @@ using LT.DigitalOffice.FileService.Models.Dto;
 using Moq;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 
 namespace LT.DigitalOffice.FileService.Business.UnitTests
 {
@@ -73,11 +75,14 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
         public void ShouldThrowExceptionWhenValidatorThrowsException()
         {
             validatorMock
-                 .Setup(x => x.Validate(It.IsAny<IValidationContext>()).IsValid)
-                 .Returns(false);
+                .Setup(x => x.Validate(It.IsAny<IValidationContext>()))
+                .Returns(new ValidationResult(
+                    new List<ValidationFailure>
+                    {
+                        new ValidationFailure("test", "something", null)
+                    }));
 
-            Assert.Throws<ValidationException>(() =>
-                command.Execute(fileRequest), "File content encoding validation error");
+            Assert.Throws<ValidationException>(() => command.Execute(fileRequest));
             repositoryMock.Verify(r => r.AddNewFile(newFile), Times.Never);
             mapperMock.Verify(m => m.Map(fileRequest), Times.Never);
         }
