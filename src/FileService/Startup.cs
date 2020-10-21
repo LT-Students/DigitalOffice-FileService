@@ -82,6 +82,7 @@ namespace LT.DigitalOffice.FileService
         {
             services.AddTransient<IAddNewFileCommand, AddNewFileCommand>();
             services.AddTransient<IGetFileByIdCommand, GetFileByIdCommand>();
+            services.AddTransient<IDisableFileByIdCommand, DisableFileByIdCommand>();
         }
 
         private void ConfigureRepositories(IServiceCollection services)
@@ -102,7 +103,7 @@ namespace LT.DigitalOffice.FileService
             services.AddTransient<IValidator<FileCreateRequest>, AddNewFileValidator>();
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
             app.UseHealthChecks("/api/healthcheck");
 

@@ -22,5 +22,11 @@ namespace LT.DigitalOffice.FileService.Data.Interfaces
         /// <param name="fileId">Specified id of file.</param>
         /// <returns>File with specified id.</returns>
         DbFile GetFileById(Guid fileId);
+
+        /// <summary>
+        /// Disable the file with the specified id in the database.
+        /// </summary>
+        /// <param name="fileId">Specified id of file.</param>
+        void DisableFileById(Guid fileId);
     }
 }

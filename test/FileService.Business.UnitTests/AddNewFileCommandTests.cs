@@ -103,5 +103,15 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
             repositoryMock.Verify(r => r.AddNewFile(newFile), Times.Once);
             mapperMock.Verify(m => m.Map(fileRequest), Times.Once);
         }
+
+        [Test]
+        public void ShouldThrowNullReferenceExceptionWhenMapperThrowsIt()
+        {
+            mapperMock
+                .Setup(x => x.Map(It.IsAny<FileCreateRequest>()))
+                .Throws(new ArgumentNullException());
+
+            Assert.Throws<ArgumentNullException>(() => command.Execute(fileRequest));
+        }
     }
 }
