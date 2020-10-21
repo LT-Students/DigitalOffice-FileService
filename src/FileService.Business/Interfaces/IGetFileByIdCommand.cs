@@ -14,6 +14,7 @@ namespace LT.DigitalOffice.FileService.Business.Interfaces
         /// </summary>
         /// <param name="fileId">Specified id of file.</param>
         /// <returns>File model with specified id.</returns>
+        /// <exception cref="Kernel.Exceptions.NotFoundException">Thrown when file not found.</exception>
         File Execute(Guid fileId);
     }
 }

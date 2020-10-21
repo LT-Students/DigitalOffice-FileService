@@ -75,11 +75,14 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
         public void ShouldThrowExceptionWhenValidatorThrowsException()
         {
             validatorMock
-                 .Setup(x => x.Validate(It.IsAny<IValidationContext>()).IsValid)
-                 .Returns(false);
+                .Setup(x => x.Validate(It.IsAny<IValidationContext>()))
+                .Returns(new ValidationResult(
+                    new List<ValidationFailure>
+                    {
+                        new ValidationFailure("test", "something", null)
+                    }));
 
-            Assert.Throws<ValidationException>(() =>
-                command.Execute(fileRequest), "File content encoding validation error");
+            Assert.Throws<ValidationException>(() => command.Execute(fileRequest));
             repositoryMock.Verify(r => r.AddNewFile(newFile), Times.Never);
             mapperMock.Verify(m => m.Map(fileRequest), Times.Never);
         }
