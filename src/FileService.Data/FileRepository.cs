@@ -25,6 +25,21 @@ namespace LT.DigitalOffice.FileService.Data
             return file.Id;
         }
 
+        public void DisableFileById(Guid fileId)
+        {
+            var dbFile = provider.Files.FirstOrDefault(file => file.Id == fileId);
+
+            if (dbFile == null)
+            {
+                throw new NotFoundException("File with this id was not found.");
+            }
+
+            dbFile.IsActive = false;
+
+            provider.Files.Update(dbFile);
+            provider.Save();
+        }
+
         public DbFile GetFileById(Guid fileId)
         {
             var dbFile = provider.Files.FirstOrDefault(file => file.Id == fileId);

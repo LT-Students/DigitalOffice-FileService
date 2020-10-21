@@ -82,6 +82,7 @@ namespace LT.DigitalOffice.FileService
         {
             services.AddTransient<IAddNewFileCommand, AddNewFileCommand>();
             services.AddTransient<IGetFileByIdCommand, GetFileByIdCommand>();
+            services.AddTransient<IDisableFileByIdCommand, DisableFileByIdCommand>();
         }
 
         private void ConfigureRepositories(IServiceCollection services)
