@@ -111,7 +111,10 @@ namespace LT.DigitalOffice.FileService
 
             UpdateDatabase(app);
 
+#if RELEASE
             app.UseHttpsRedirection();
+#endif
+
             app.UseRouting();
 
             string corsUrl = Configuration.GetSection("Settings")["CorsUrl"];

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Project>
+
+  <ItemGroup Condition="$(AssemblyName.Contains('.UnitTests')) != 'true'">
+    <PackageReference Include="LT.DigitalOffice.Kernel" Version="1.0.9" />
+  </ItemGroup>
+
+  <ItemGroup Condition="$(AssemblyName.Contains('.UnitTests'))">
+    <PackageReference Include="LT.DigitalOffice.Kernel" Version="1.0.9" />
+  </ItemGroup>
+
+</Project>
