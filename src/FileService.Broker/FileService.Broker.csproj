@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FileService.Data\FileService.Data.csproj" />
+    <ProjectReference Include="..\FileService.Models.Broker\FileService.Models.Broker.csproj" />
   </ItemGroup>
 
 </Project>

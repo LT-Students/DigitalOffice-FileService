@@ -6,7 +6,6 @@
     <IsPackable>false</IsPackable>
 
     <AssemblyName>LT.DigitalOffice.FileService.Data.UnitTests</AssemblyName>
-
     <RootNamespace>LT.DigitalOffice.FileService.Data.UnitTests</RootNamespace>
   </PropertyGroup>
 
