@@ -4,7 +4,7 @@ using LT.DigitalOffice.FileService.Broker.Consumers;
 using LT.DigitalOffice.FileService.Data.Interfaces;
 using LT.DigitalOffice.FileService.Models.Db;
 using LT.DigitalOffice.Kernel.Broker;
-using LT.DigitalOffice.Kernel.UnitTestLibrary;
+using LT.DigitalOffice.UnitTestKernel;
 using MassTransit;
 using MassTransit.Testing;
 using Moq;

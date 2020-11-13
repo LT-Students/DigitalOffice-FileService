@@ -2,6 +2,7 @@ using FluentValidation;
 using LT.DigitalOffice.FileService.Broker.Consumers;
 using LT.DigitalOffice.FileService.Business;
 using LT.DigitalOffice.FileService.Business.Interfaces;
+using LT.DigitalOffice.FileService.Configuration;
 using LT.DigitalOffice.FileService.Data;
 using LT.DigitalOffice.FileService.Data.Interfaces;
 using LT.DigitalOffice.FileService.Data.Provider;
@@ -33,8 +34,6 @@ namespace LT.DigitalOffice.FileService
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<RabbitMQOptions>(Configuration);
-
             services.AddHealthChecks();
 
             services.AddDbContext<FileServiceDbContext>(options =>
@@ -52,9 +51,7 @@ namespace LT.DigitalOffice.FileService
 
         private void ConfigureMassTransit(IServiceCollection services)
         {
-            const string serviceSection = "RabbitMQ";
-            string serviceName = Configuration.GetSection(serviceSection)["Username"];
-            string servicePassword = Configuration.GetSection(serviceSection)["Password"];
+            var rabbitMqConfig = Configuration.GetSection(BaseRabbitMqOptions.RabbitMqSectionName).Get<RabbitMqConfig>();
 
             services.AddMassTransit(x =>
             {
@@ -64,11 +61,11 @@ namespace LT.DigitalOffice.FileService
                 {
                     cfg.Host("localhost", "/", host =>
                     {
-                        host.Username($"{serviceName}_{servicePassword}");
-                        host.Password(servicePassword);
+                        host.Username($"{rabbitMqConfig.Username}_{rabbitMqConfig.Password}");
+                        host.Password(rabbitMqConfig.Password);
                     });
 
-                    cfg.ReceiveEndpoint(serviceName, ep =>
+                    cfg.ReceiveEndpoint(rabbitMqConfig.Username, ep =>
                     {
                         ep.ConfigureConsumer<GetFileConsumer>(context);
                     });
@@ -107,6 +104,10 @@ namespace LT.DigitalOffice.FileService
             app.UseHealthChecks("/api/healthcheck");
 
             app.UseExceptionHandler(tempApp => tempApp.Run(CustomExceptionHandler.HandleCustomException));
+
+#if RELEASE
+            app.UseHttpsRedirection();
+#endif
 
             UpdateDatabase(app);
 
