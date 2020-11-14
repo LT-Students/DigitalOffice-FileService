@@ -33,8 +33,6 @@ namespace LT.DigitalOffice.FileService
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<RabbitMQOptions>(Configuration);
-
             services.AddHealthChecks();
 
             services.AddDbContext<FileServiceDbContext>(options =>
@@ -52,9 +50,7 @@ namespace LT.DigitalOffice.FileService
 
         private void ConfigureMassTransit(IServiceCollection services)
         {
-            const string serviceSection = "RabbitMQ";
-            string serviceName = Configuration.GetSection(serviceSection)["Username"];
-            string servicePassword = Configuration.GetSection(serviceSection)["Password"];
+            var rabbitMqConfig = Configuration.GetSection(BaseRabbitMqOptions.RabbitMqSectionName).Get<BaseRabbitMqOptions>();
 
             services.AddMassTransit(x =>
             {
@@ -64,11 +60,11 @@ namespace LT.DigitalOffice.FileService
                 {
                     cfg.Host("localhost", "/", host =>
                     {
-                        host.Username($"{serviceName}_{servicePassword}");
-                        host.Password(servicePassword);
+                        host.Username($"{rabbitMqConfig.Username}_{rabbitMqConfig.Password}");
+                        host.Password(rabbitMqConfig.Password);
                     });
 
-                    cfg.ReceiveEndpoint(serviceName, ep =>
+                    cfg.ReceiveEndpoint(rabbitMqConfig.Username, ep =>
                     {
                         ep.ConfigureConsumer<GetFileConsumer>(context);
                     });
