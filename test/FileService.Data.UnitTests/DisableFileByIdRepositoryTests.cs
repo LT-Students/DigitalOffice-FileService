@@ -5,7 +5,6 @@ using LT.DigitalOffice.Kernel.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using System;
-using System.Linq;
 
 namespace LT.DigitalOffice.FileService.Data.UnitTests
 {

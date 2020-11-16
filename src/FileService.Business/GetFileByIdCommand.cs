@@ -2,7 +2,6 @@
 using LT.DigitalOffice.FileService.Data.Interfaces;
 using LT.DigitalOffice.FileService.Mappers.Interfaces;
 using LT.DigitalOffice.FileService.Models.Db;
-using LT.DigitalOffice.FileService.Models.Dto;
 using LT.DigitalOffice.FileService.Models.Dto.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;

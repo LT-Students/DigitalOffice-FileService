@@ -1,6 +1,5 @@
 ﻿using LT.DigitalOffice.FileService.Business.Interfaces;
 using LT.DigitalOffice.FileService.Data.Interfaces;
-using LT.DigitalOffice.FileService.Models.Db;
 using Moq;
 using NUnit.Framework;
 using System;

@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using LT.DigitalOffice.FileService.Models.Dto;
 using LT.DigitalOffice.FileService.Models.Dto.Models;
 using System;
 
