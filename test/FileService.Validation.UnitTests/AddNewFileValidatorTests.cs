@@ -1,20 +1,21 @@
 ﻿using FluentValidation;
 using FluentValidation.TestHelper;
 using LT.DigitalOffice.FileService.Models.Dto;
+using LT.DigitalOffice.FileService.Models.Dto.Models;
 using NUnit.Framework;
 
 namespace LT.DigitalOffice.FileService.Validation.UnitTests
 {
     public class AddNewFileRequestValidatorTests
     {
-        private IValidator<FileCreateRequest> validator;
+        private IValidator<File> validator;
 
-        private FileCreateRequest fileRequest;
+        private File fileRequest;
 
         [SetUp]
         public void SetUp()
         {
-            fileRequest = new FileCreateRequest
+            fileRequest = new File
             {
                 Content = "RGlnaXRhbCBPZmA5Y2U=",
                 Extension = ".txt",

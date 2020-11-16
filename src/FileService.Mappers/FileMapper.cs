@@ -1,11 +1,12 @@
 ﻿using LT.DigitalOffice.FileService.Mappers.Interfaces;
 using LT.DigitalOffice.FileService.Models.Db;
 using LT.DigitalOffice.FileService.Models.Dto;
+using LT.DigitalOffice.FileService.Models.Dto.Models;
 using System;
 
 namespace LT.DigitalOffice.FileService.Mappers
 {
-    public class FileMapper : IMapper<DbFile, File>, IMapper<FileCreateRequest, DbFile>
+    public class FileMapper : IMapper<DbFile, File>, IMapper<File, DbFile>
     {
         public File Map(DbFile dbFile)
         {
@@ -23,7 +24,7 @@ namespace LT.DigitalOffice.FileService.Mappers
             };
         }
 
-        public DbFile Map(FileCreateRequest file)
+        public DbFile Map(File file)
         {
             if (file == null)
             {

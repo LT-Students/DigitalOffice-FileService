@@ -10,6 +10,7 @@ using LT.DigitalOffice.FileService.Mappers;
 using LT.DigitalOffice.FileService.Mappers.Interfaces;
 using LT.DigitalOffice.FileService.Models.Db;
 using LT.DigitalOffice.FileService.Models.Dto;
+using LT.DigitalOffice.FileService.Models.Dto.Models;
 using LT.DigitalOffice.FileService.Validation;
 using LT.DigitalOffice.Kernel;
 using LT.DigitalOffice.Kernel.Broker;
@@ -95,12 +96,12 @@ namespace LT.DigitalOffice.FileService
         private void ConfigureMappers(IServiceCollection services)
         {
             services.AddTransient<IMapper<DbFile, File>, FileMapper>();
-            services.AddTransient<IMapper<FileCreateRequest, DbFile>, FileMapper>();
+            services.AddTransient<IMapper<File, DbFile>, FileMapper>();
         }
 
         private void ConfigureValidators(IServiceCollection services)
         {
-            services.AddTransient<IValidator<FileCreateRequest>, AddNewFileValidator>();
+            services.AddTransient<IValidator<File>, AddNewFileValidator>();
         }
 
         public void Configure(IApplicationBuilder app)
