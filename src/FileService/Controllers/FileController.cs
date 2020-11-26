@@ -1,5 +1,5 @@
 ﻿using LT.DigitalOffice.FileService.Business.Interfaces;
-using LT.DigitalOffice.FileService.Models.Dto;
+using LT.DigitalOffice.FileService.Models.Dto.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
@@ -11,7 +11,7 @@ namespace LT.DigitalOffice.FileService.Controllers
     {
         [HttpPost("addNewFile")]
         public Guid AddNewFile(
-            [FromBody] FileCreateRequest request,
+            [FromBody] File request,
             [FromServices] IAddNewFileCommand command)
         {
             return command.Execute(request);

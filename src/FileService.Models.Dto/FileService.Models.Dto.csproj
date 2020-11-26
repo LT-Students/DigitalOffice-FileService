@@ -10,4 +10,9 @@
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Responses\" />
+    <Folder Include="Requests\" />
+  </ItemGroup>
+
 </Project>
