@@ -1,6 +1,6 @@
 ﻿using LT.DigitalOffice.FileService.Mappers.Interfaces;
 using LT.DigitalOffice.FileService.Models.Db;
-using LT.DigitalOffice.FileService.Models.Dto;
+using LT.DigitalOffice.FileService.Models.Dto.Models;
 using LT.DigitalOffice.Kernel.UnitTestLibrary;
 using NUnit.Framework;
 using System;
@@ -10,10 +10,10 @@ namespace LT.DigitalOffice.FileService.Mappers.UnitTests
     public class FileMapperTests
     {
         private IMapper<DbFile, File> dbToDtoMapper;
-        private IMapper<FileCreateRequest, DbFile> requestToDbMapper;
+        private IMapper<File, DbFile> requestToDbMapper;
 
         private DbFile dbFile;
-        private FileCreateRequest fileRequest;
+        private File fileRequest;
 
         [SetUp]
         public void SetUp()
@@ -21,7 +21,7 @@ namespace LT.DigitalOffice.FileService.Mappers.UnitTests
             dbToDtoMapper = new FileMapper();
             requestToDbMapper = new FileMapper();
 
-            fileRequest = new FileCreateRequest
+            fileRequest = new File
             {
                 Content = "RGlnaXRhbCBPZmA5Y2U=",
                 Extension = ".txt",

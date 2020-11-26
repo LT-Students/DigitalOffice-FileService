@@ -1,12 +1,12 @@
 ﻿using FluentValidation;
-using LT.DigitalOffice.FileService.Models.Dto;
+using LT.DigitalOffice.FileService.Models.Dto.Models;
 using System;
 
 namespace LT.DigitalOffice.FileService.Validation
 {
-    public class AddNewFileValidator : AbstractValidator<FileCreateRequest>
+    public class FileValidator : AbstractValidator<File>
     {
-        public AddNewFileValidator()
+        public FileValidator()
         {
             RuleFor(file => file.Name)
                 .NotEmpty()

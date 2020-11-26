@@ -1,8 +1,8 @@
 ﻿using LT.DigitalOffice.FileService.Business.Interfaces;
 using LT.DigitalOffice.FileService.Data.Interfaces;
-using LT.DigitalOffice.FileService.Mappers.Interfaces;
+using LT.DigitalOffice.FileService.Mappers.ModelMappers.Interfaces;
 using LT.DigitalOffice.FileService.Models.Db;
-using LT.DigitalOffice.FileService.Models.Dto;
+using LT.DigitalOffice.FileService.Models.Dto.Models;
 using LT.DigitalOffice.Kernel.UnitTestLibrary;
 using Moq;
 using NUnit.Framework;
@@ -14,7 +14,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
     {
         private IGetFileByIdCommand command;
         private Mock<IFileRepository> repositoryMock;
-        private Mock<IMapper<DbFile, File>> mapperMock;
+        private Mock<IFileMapper> mapperMock;
 
         private DbFile file;
         private Guid fileId;
@@ -23,7 +23,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
         public void Setup()
         {
             repositoryMock = new Mock<IFileRepository>();
-            mapperMock = new Mock<IMapper<DbFile, File>>();
+            mapperMock = new Mock<IFileMapper>();
             command = new GetFileByIdCommand(repositoryMock.Object, mapperMock.Object);
 
             fileId = Guid.NewGuid();
