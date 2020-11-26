@@ -4,9 +4,9 @@ using System;
 
 namespace LT.DigitalOffice.FileService.Validation
 {
-    public class AddNewFileValidator : AbstractValidator<File>
+    public class FileValidator : AbstractValidator<File>
     {
-        public AddNewFileValidator()
+        public FileValidator()
         {
             RuleFor(file => file.Name)
                 .NotEmpty()

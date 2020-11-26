@@ -1,11 +1,11 @@
-﻿using LT.DigitalOffice.FileService.Mappers.Interfaces;
+﻿using LT.DigitalOffice.FileService.Mappers.ModelMappers.Interfaces;
 using LT.DigitalOffice.FileService.Models.Db;
 using LT.DigitalOffice.FileService.Models.Dto.Models;
 using System;
 
 namespace LT.DigitalOffice.FileService.Mappers
 {
-    public class FileMapper : IMapper<DbFile, File>, IMapper<File, DbFile>
+    public class FileMapper : IFileMapper
     {
         public File Map(DbFile dbFile)
         {

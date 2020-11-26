@@ -2,7 +2,7 @@
 using FluentValidation.Results;
 using LT.DigitalOffice.FileService.Business.Interfaces;
 using LT.DigitalOffice.FileService.Data.Interfaces;
-using LT.DigitalOffice.FileService.Mappers.Interfaces;
+using LT.DigitalOffice.FileService.Mappers.ModelMappers.Interfaces;
 using LT.DigitalOffice.FileService.Models.Db;
 using LT.DigitalOffice.FileService.Models.Dto.Models;
 using Moq;
@@ -17,7 +17,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
         private IAddNewFileCommand command;
         private Mock<IFileRepository> repositoryMock;
         private Mock<IValidator<File>> validatorMock;
-        private Mock<IMapper<File, DbFile>> mapperMock;
+        private Mock<IFileMapper> mapperMock;
 
         private DbFile newFile;
         private File fileRequest;
@@ -27,7 +27,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
         {
             repositoryMock = new Mock<IFileRepository>();
             validatorMock = new Mock<IValidator<File>>();
-            mapperMock = new Mock<IMapper<File, DbFile>>();
+            mapperMock = new Mock<IFileMapper>();
 
             newFile = new DbFile
             {

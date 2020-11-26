@@ -7,8 +7,7 @@ using LT.DigitalOffice.FileService.Data.Interfaces;
 using LT.DigitalOffice.FileService.Data.Provider;
 using LT.DigitalOffice.FileService.Data.Provider.MsSql.Ef;
 using LT.DigitalOffice.FileService.Mappers;
-using LT.DigitalOffice.FileService.Mappers.Interfaces;
-using LT.DigitalOffice.FileService.Models.Db;
+using LT.DigitalOffice.FileService.Mappers.ModelMappers.Interfaces;
 using LT.DigitalOffice.FileService.Models.Dto.Models;
 using LT.DigitalOffice.FileService.Validation;
 using LT.DigitalOffice.Kernel;
@@ -94,13 +93,12 @@ namespace LT.DigitalOffice.FileService
 
         private void ConfigureMappers(IServiceCollection services)
         {
-            services.AddTransient<IMapper<DbFile, File>, FileMapper>();
-            services.AddTransient<IMapper<File, DbFile>, FileMapper>();
+            services.AddTransient<IFileMapper, FileMapper>();
         }
 
         private void ConfigureValidators(IServiceCollection services)
         {
-            services.AddTransient<IValidator<File>, AddNewFileValidator>();
+            services.AddTransient<IValidator<File>, FileValidator>();
         }
 
         public void Configure(IApplicationBuilder app)
