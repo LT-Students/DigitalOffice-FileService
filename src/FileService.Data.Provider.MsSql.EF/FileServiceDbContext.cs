@@ -1,4 +1,5 @@
 ﻿using LT.DigitalOffice.FileService.Models.Db;
+using LT.DigitalOffice.Kernel.Database;
 using Microsoft.EntityFrameworkCore;
 
 namespace LT.DigitalOffice.FileService.Data.Provider.MsSql.Ef
@@ -15,24 +16,30 @@ namespace LT.DigitalOffice.FileService.Data.Provider.MsSql.Ef
 
         public DbSet<DbFile> Files { get; set; }
 
-        void IDataProvider.Save()
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            this.SaveChanges();
+        }
+
+        void IBaseDataProvider.Save()
+        {
+            SaveChanges();
         }
 
         public void EnsureDeleted()
         {
-            this.Database.EnsureDeleted();
+            Database.EnsureDeleted();
         }
 
         public bool IsInMemory()
         {
-            return this.Database.IsInMemory();
+            return Database.IsInMemory();
         }
 
-    // Fluent API is written here.
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+        public object MakeEntityDetached(object obj)
         {
+            Entry(obj).State = EntityState.Detached;
+
+            return Entry(obj).State;
         }
     }
 }
