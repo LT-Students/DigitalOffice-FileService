@@ -6,9 +6,7 @@ name: CI
 # events but only for the develop branch
 on:
   push:
-    branches: 
-      - develop
-      - feature/*
+    branches: [ develop ]
   pull_request:
     branches: [ develop, master ]
 
@@ -27,7 +25,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v1
         with: 
-          dotnet-version: 3.1.301
+          dotnet-version: 5.0.200
       - name: Restore
         run: dotnet restore
       - name: Build 
