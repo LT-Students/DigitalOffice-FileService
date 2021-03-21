@@ -3,13 +3,6 @@
   <Import Project="$(ProjectDir)..\..\Common.Configurations.targets" />
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.9" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.9" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="3.1.9" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.9" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\FileService.Data.Provider\FileService.Data.Provider.csproj" />
     <ProjectReference Include="..\FileService.Models.Db\FileService.Models.Db.csproj" />
   </ItemGroup>

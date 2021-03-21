@@ -7,9 +7,4 @@
     <ProjectReference Include="..\FileService.Models.Dto\FileService.Models.Dto.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="ResponseMappers\" />
-    <Folder Include="RequestMappers\" />
-  </ItemGroup>
-
 </Project>
