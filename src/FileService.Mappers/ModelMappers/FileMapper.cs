@@ -3,7 +3,7 @@ using LT.DigitalOffice.FileService.Models.Db;
 using LT.DigitalOffice.FileService.Models.Dto.Models;
 using System;
 
-namespace LT.DigitalOffice.FileService.Mappers
+namespace LT.DigitalOffice.FileService.Mappers.ModelMappers
 {
     public class FileMapper : IFileMapper
     {
@@ -33,7 +33,7 @@ namespace LT.DigitalOffice.FileService.Mappers
             return new DbFile()
             {
                 Content = Convert.FromBase64String(file.Content),
-                Extension = file.Extension,
+                Extension = file.Extension.ToLower(),
                 Name = file.Name,
                 AddedOn = DateTime.UtcNow,
                 IsActive = true

@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using LT.DigitalOffice.FileService.Models.Dto.Models;
-using System;
+using LT.DigitalOffice.FileService.Validation.Helpers;
 
 namespace LT.DigitalOffice.FileService.Validation
 {
@@ -15,18 +15,7 @@ namespace LT.DigitalOffice.FileService.Validation
 
             RuleFor(file => file.Content)
                 .NotNull().WithMessage("The file is null")
-                .Must(IsBase64Coded);
-        }
-
-        private bool IsBase64Coded(string base64String)
-        {
-            if (base64String == null)
-            {
-                return false;
-            }
-
-            var byteString = new Span<byte>(new byte[base64String.Length]);
-            return Convert.TryFromBase64String(base64String, byteString, out _);
+                .Must(EncodeHelper.IsBase64Coded);
         }
     }
 }

@@ -6,9 +6,10 @@ using LT.DigitalOffice.FileService.Data;
 using LT.DigitalOffice.FileService.Data.Interfaces;
 using LT.DigitalOffice.FileService.Data.Provider;
 using LT.DigitalOffice.FileService.Data.Provider.MsSql.Ef;
-using LT.DigitalOffice.FileService.Mappers;
+using LT.DigitalOffice.FileService.Mappers.ModelMappers;
 using LT.DigitalOffice.FileService.Mappers.ModelMappers.Interfaces;
 using LT.DigitalOffice.FileService.Models.Dto.Models;
+using LT.DigitalOffice.FileService.Models.Dto.Requests;
 using LT.DigitalOffice.FileService.Validation;
 using LT.DigitalOffice.Kernel;
 using LT.DigitalOffice.Kernel.Broker;
@@ -18,6 +19,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using static LT.DigitalOffice.FileService.Business.AddNewImageCommand;
 
 namespace LT.DigitalOffice.FileService
 {
@@ -78,6 +80,9 @@ namespace LT.DigitalOffice.FileService
             services.AddTransient<IAddNewFileCommand, AddNewFileCommand>();
             services.AddTransient<IGetFileByIdCommand, GetFileByIdCommand>();
             services.AddTransient<IDisableFileByIdCommand, DisableFileByIdCommand>();
+
+            services.AddTransient<IAddNewImageCommand, AddNewImageCommand>();
+            services.AddTransient<IImageResizeAlgorithm, ImageToSquareAlgorithm>();
         }
 
         private void ConfigureRepositories(IServiceCollection services)
@@ -85,16 +90,19 @@ namespace LT.DigitalOffice.FileService
             services.AddTransient<IDataProvider, FileServiceDbContext>();
 
             services.AddTransient<IFileRepository, FileRepository>();
+            services.AddTransient<IImageRepository, ImageRepository>();
         }
 
         private void ConfigureMappers(IServiceCollection services)
         {
             services.AddTransient<IFileMapper, FileMapper>();
+            services.AddTransient<IImageMapper, ImageMapper>();
         }
 
         private void ConfigureValidators(IServiceCollection services)
         {
             services.AddTransient<IValidator<File>, FileValidator>();
+            services.AddTransient<IValidator<ImageRequest>, ImageRequestValidator>();
         }
 
         public void Configure(IApplicationBuilder app)

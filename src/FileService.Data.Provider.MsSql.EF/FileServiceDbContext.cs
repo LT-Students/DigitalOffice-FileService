@@ -15,6 +15,7 @@ namespace LT.DigitalOffice.FileService.Data.Provider.MsSql.Ef
         }
 
         public DbSet<DbFile> Files { get; set; }
+        public DbSet<DbImage> Images { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
