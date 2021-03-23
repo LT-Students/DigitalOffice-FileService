@@ -6,8 +6,11 @@ using LT.DigitalOffice.FileService.Data;
 using LT.DigitalOffice.FileService.Data.Interfaces;
 using LT.DigitalOffice.FileService.Data.Provider;
 using LT.DigitalOffice.FileService.Data.Provider.MsSql.Ef;
+using LT.DigitalOffice.FileService.Mappers.Interfaces;
 using LT.DigitalOffice.FileService.Mappers.ModelMappers;
 using LT.DigitalOffice.FileService.Mappers.ModelMappers.Interfaces;
+using LT.DigitalOffice.FileService.Mappers.RequestMappers;
+using LT.DigitalOffice.FileService.Models.Db;
 using LT.DigitalOffice.FileService.Models.Dto.Models;
 using LT.DigitalOffice.FileService.Models.Dto.Requests;
 using LT.DigitalOffice.FileService.Validation;
@@ -96,7 +99,7 @@ namespace LT.DigitalOffice.FileService
         private void ConfigureMappers(IServiceCollection services)
         {
             services.AddTransient<IFileMapper, FileMapper>();
-            services.AddTransient<IImageMapper, ImageMapper>();
+            services.AddTransient<IMapper<ImageRequest, DbImage>, ImageRequestMapper>();
         }
 
         private void ConfigureValidators(IServiceCollection services)

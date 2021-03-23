@@ -14,6 +14,7 @@ namespace LT.DigitalOffice.FileService.Models.Db
         public string Extension { get; set; }
         public string Name { get; set; }
         public DateTime AddedOn { get; set; }
+        public Guid UserId { get; set; }
         public int ImageType { get; set; }
         public bool IsActive { get; set; }
     }
@@ -22,8 +23,8 @@ namespace LT.DigitalOffice.FileService.Models.Db
     {
         public void Configure(EntityTypeBuilder<DbImage> builder)
         {
-            builder
-                .ToTable(DbImage.TableName);
+            //builder
+            //    .ToTable(DbImage.TableName);
 
             builder
                 .HasKey(p => p.Id);

@@ -52,13 +52,13 @@ namespace LT.DigitalOffice.FileService.Validation.UnitTests
         public void ShouldHaveValidationErrorWhenExtensionIsIncorrect()
         {
             imageRequest.Extension = ".mp3";
-            validator.TestValidate(imageRequest).ShouldHaveValidationErrorFor(request => request.Name);
+            validator.TestValidate(imageRequest).ShouldHaveValidationErrorFor(request => request.Extension);
 
             imageRequest.Extension = "abracadabra";
-            validator.TestValidate(imageRequest).ShouldHaveValidationErrorFor(request => request.Name);
+            validator.TestValidate(imageRequest).ShouldHaveValidationErrorFor(request => request.Extension);
 
             imageRequest.Extension = "";
-            validator.TestValidate(imageRequest).ShouldHaveValidationErrorFor(request => request.Name);
+            validator.TestValidate(imageRequest).ShouldHaveValidationErrorFor(request => request.Extension);
         }
     }
 }

@@ -38,7 +38,7 @@ namespace LT.DigitalOffice.FileService.Data.UnitTests
         public void ShouldAddNewImageToDatabase()
         {
             Assert.AreEqual(newImage.Id, repository.AddNewImage(newImage));
-            Assert.That(dbContext.Files.Find(newImage.Id), Is.EqualTo(newImage));
+            Assert.That(dbContext.Images.Find(newImage.Id), Is.EqualTo(newImage));
         }
 
         [Test]
@@ -47,7 +47,7 @@ namespace LT.DigitalOffice.FileService.Data.UnitTests
             repository.AddNewImage(newImage);
 
             Assert.Throws<ArgumentException>(() => repository.AddNewImage(newImage));
-            Assert.That(dbContext.Files.Find(newImage.Id), Is.EqualTo(newImage));
+            Assert.That(dbContext.Images.Find(newImage.Id), Is.EqualTo(newImage));
         }
 
         [TearDown]

@@ -2,9 +2,11 @@
 using FluentValidation.Results;
 using LT.DigitalOffice.FileService.Business.Interfaces;
 using LT.DigitalOffice.FileService.Data.Interfaces;
+using LT.DigitalOffice.FileService.Mappers.Interfaces;
 using LT.DigitalOffice.FileService.Mappers.ModelMappers.Interfaces;
 using LT.DigitalOffice.FileService.Models.Db;
 using LT.DigitalOffice.FileService.Models.Dto.Requests;
+using Microsoft.AspNetCore.Http;
 using Moq;
 using NUnit.Framework;
 using System;
@@ -15,10 +17,11 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
 {
     public class AddNewImageCommandTests
     {
+        //private Mock<IHttpContextAccessor> httpContextAccessorMock;
         private IAddNewImageCommand command;
         private Mock<IImageRepository> repositoryMock;
         private Mock<IValidator<ImageRequest>> validatorMock;
-        private Mock<IImageMapper> mapperMock;
+        private Mock<IMapper<ImageRequest, DbImage>> mapperMock;
         private Mock<IImageResizeAlgorithm> algorithmMock;
 
         private ImageRequest imageRequest;
@@ -53,16 +56,15 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
         [SetUp]
         public void SetUp()
         {
+            //httpContextAccessorMock = new Mock<IHttpContextAccessor>();
             repositoryMock = new Mock<IImageRepository>();
             validatorMock = new Mock<IValidator<ImageRequest>>();
-            mapperMock = new Mock<IImageMapper>();
+            mapperMock = new Mock<IMapper<ImageRequest, DbImage>>();
             algorithmMock = new Mock<IImageResizeAlgorithm>();
 
             imageRequest = new ImageRequest
             {
-                Content = "data:image/png;base64," +
-                    "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAHGVYSWZJSSoACAAAAAEAE" +
-                    "gEDAAEAAAABAAAAGgAAAAAAL74gKgAAAA1JREFUeJxjefLn/38ACZoD485K0AgAAAAASUVORK5CYII=",
+                Content = "RGlnaXRhbCBPZmA5Y2U=",
                 Extension = ".png",
                 Name = "Spartak_OnePixel"
             };
@@ -95,6 +97,10 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
 
             var mapperHelper = new TestMapperHelper();
 
+            //httpContextAccessorMock
+            //    .Setup(x => x.GetUserId())
+            //    .Returns(Guid.NewGuid());
+
             mapperMock
                 .Setup(x => x.Map(It.IsAny<ImageRequest>()))
                 .Returns(mapperHelper.GetImage());
@@ -111,7 +117,8 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
                 .Setup(x => x.Resize(imageRequest.Content, imageRequest.Extension))
                 .Returns(resizedImageContent);
 
-            command = new AddNewImageCommand(repositoryMock.Object, validatorMock.Object, mapperMock.Object, algorithmMock.Object);
+            command = new AddNewImageCommand(//httpContextAccessorMock.Object,
+                repositoryMock.Object, validatorMock.Object, mapperMock.Object, algorithmMock.Object);
         }
 
         [Test]

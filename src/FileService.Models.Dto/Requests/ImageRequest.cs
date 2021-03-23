@@ -1,4 +1,6 @@
-﻿namespace LT.DigitalOffice.FileService.Models.Dto.Requests
+﻿using System;
+
+namespace LT.DigitalOffice.FileService.Models.Dto.Requests
 {
     public class ImageRequest
     {

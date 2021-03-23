@@ -16,14 +16,19 @@ using System;
 using System.Collections.Generic;
 using SixLabors.ImageSharp.Formats;
 using LT.DigitalOffice.Kernel.Exceptions;
+using LT.DigitalOffice.FileService.Mappers.Interfaces;
+using LT.DigitalOffice.FileService.Models.Db;
+using Microsoft.AspNetCore.Http;
+using LT.DigitalOffice.FileService.Models.Dto.Enums;
 
 namespace LT.DigitalOffice.FileService.Business
 {
     public class AddNewImageCommand : IAddNewImageCommand
     {
+        //private readonly IHttpContextAccessor httpContextAccessor;
         private readonly IImageRepository repository;
         private readonly IValidator<ImageRequest> validator;
-        private readonly IImageMapper mapper;
+        private readonly IMapper<ImageRequest, DbImage> mapper;
         private readonly IImageResizeAlgorithm resizeAlgotithm;
 
         private static readonly Dictionary<string, IImageFormat> formats = new Dictionary<string, IImageFormat>
@@ -37,11 +42,13 @@ namespace LT.DigitalOffice.FileService.Business
         };
 
         public AddNewImageCommand(
+            //[FromServices] IHttpContextAccessor httpContextAccessor,
             [FromServices] IImageRepository repository,
             [FromServices] IValidator<ImageRequest> validator,
-            [FromServices] IImageMapper mapper,
+            [FromServices] IMapper<ImageRequest, DbImage> mapper,
             [FromServices] IImageResizeAlgorithm resizeAlgotithm)
         {
+            //this.httpContextAccessor = httpContextAccessor;
             this.repository = repository;
             this.validator = validator;
             this.mapper = mapper;
@@ -53,11 +60,14 @@ namespace LT.DigitalOffice.FileService.Business
             validator.ValidateAndThrowCustom(request);
 
             var parentDbImage = mapper.Map(request);
+            //parentDbImage.UserId = httpContextAccessor.GetUserId();
             repository.AddNewImage(parentDbImage);
 
             var childDbImage = mapper.Map(request);
+            //childDbImage.UserId = httpContextAccessor.GetUserId();
             childDbImage.Content = resizeAlgotithm.Resize(request.Content, childDbImage.Extension);
             childDbImage.ParentId = parentDbImage.Id;
+            childDbImage.ImageType = (int)ImageType.Thumbs;
             repository.AddNewImage(childDbImage);
 
             return parentDbImage.Id;

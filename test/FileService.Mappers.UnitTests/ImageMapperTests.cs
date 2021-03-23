@@ -1,6 +1,8 @@
 ﻿using LT.DigitalOffice.FileService.Mappers.Interfaces;
 using LT.DigitalOffice.FileService.Mappers.ModelMappers;
+using LT.DigitalOffice.FileService.Mappers.RequestMappers;
 using LT.DigitalOffice.FileService.Models.Db;
+using LT.DigitalOffice.FileService.Models.Dto.Enums;
 using LT.DigitalOffice.FileService.Models.Dto.Requests;
 using LT.DigitalOffice.UnitTestKernel;
 using NUnit.Framework;
@@ -17,7 +19,7 @@ namespace LT.DigitalOffice.FileService.Mappers.UnitTests
         [SetUp]
         public void SetUp()
         {
-            requestToDbMapper = new ImageMapper();
+            requestToDbMapper = new ImageRequestMapper();
 
             imageRequest = new ImageRequest
             {
@@ -38,19 +40,20 @@ namespace LT.DigitalOffice.FileService.Mappers.UnitTests
         [Test]
         public void ShouldReturnDbFileWhenMappingFileRequest()
         {
-            var newFile = requestToDbMapper.Map(imageRequest);
+            var newImage = requestToDbMapper.Map(imageRequest);
 
-            var expectedFile = new DbFile
+            var expectedImage = new DbImage
             {
-                Id = newFile.Id,
+                Id = newImage.Id,
                 Content = Convert.FromBase64String(imageRequest.Content),
                 Extension = imageRequest.Extension,
                 Name = imageRequest.Name,
                 IsActive = true,
-                AddedOn = newFile.AddedOn
+                ImageType = (int)ImageType.Full,
+                AddedOn = newImage.AddedOn
             };
 
-            SerializerAssert.AreEqual(expectedFile, newFile);
+            SerializerAssert.AreEqual(expectedImage, newImage);
         }
     }
 }
