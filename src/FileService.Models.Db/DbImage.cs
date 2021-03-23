@@ -23,8 +23,8 @@ namespace LT.DigitalOffice.FileService.Models.Db
     {
         public void Configure(EntityTypeBuilder<DbImage> builder)
         {
-            //builder
-            //    .ToTable(DbImage.TableName);
+            builder
+                .ToTable(DbImage.TableName);
 
             builder
                 .HasKey(p => p.Id);

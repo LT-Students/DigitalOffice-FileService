@@ -3,10 +3,6 @@
   <Import Project="$(ProjectDir)..\..\Common.Configurations.targets" />
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.9" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\FileService.Models.Db\FileService.Models.Db.csproj" />
   </ItemGroup>
 

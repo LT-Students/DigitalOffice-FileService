@@ -9,11 +9,14 @@ namespace LT.DigitalOffice.FileService.Controllers
     [Route("api/[controller]")]
     public class ImageController : ControllerBase
     {
-        [HttpPost("addNewFile")]
-        public Guid AddNewFile(
+        [HttpPost("addNewImage")]
+        public Guid AddNewImage(
             [FromBody] ImageRequest request,
+            [FromHeader] Guid userId,
             [FromServices] IAddNewImageCommand command)
         {
+            request.UserId = userId;
+
             return command.Execute(request);
         }
     }

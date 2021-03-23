@@ -21,8 +21,8 @@ namespace LT.DigitalOffice.FileService.Models.Db
     {
         public void Configure(EntityTypeBuilder<DbFile> builder)
         {
-            //builder
-            //    .ToTable(DbFile.TableName);
+            builder
+                .ToTable(DbFile.TableName);
 
             builder
                 .HasKey(p => p.Id);

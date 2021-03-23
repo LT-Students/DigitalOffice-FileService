@@ -17,7 +17,6 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
 {
     public class AddNewImageCommandTests
     {
-        //private Mock<IHttpContextAccessor> httpContextAccessorMock;
         private IAddNewImageCommand command;
         private Mock<IImageRepository> repositoryMock;
         private Mock<IValidator<ImageRequest>> validatorMock;
@@ -56,7 +55,6 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
         [SetUp]
         public void SetUp()
         {
-            //httpContextAccessorMock = new Mock<IHttpContextAccessor>();
             repositoryMock = new Mock<IImageRepository>();
             validatorMock = new Mock<IValidator<ImageRequest>>();
             mapperMock = new Mock<IMapper<ImageRequest, DbImage>>();
@@ -97,10 +95,6 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
 
             var mapperHelper = new TestMapperHelper();
 
-            //httpContextAccessorMock
-            //    .Setup(x => x.GetUserId())
-            //    .Returns(Guid.NewGuid());
-
             mapperMock
                 .Setup(x => x.Map(It.IsAny<ImageRequest>()))
                 .Returns(mapperHelper.GetImage());
@@ -117,8 +111,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
                 .Setup(x => x.Resize(imageRequest.Content, imageRequest.Extension))
                 .Returns(resizedImageContent);
 
-            command = new AddNewImageCommand(//httpContextAccessorMock.Object,
-                repositoryMock.Object, validatorMock.Object, mapperMock.Object, algorithmMock.Object);
+            command = new AddNewImageCommand(repositoryMock.Object, validatorMock.Object, mapperMock.Object, algorithmMock.Object);
         }
 
         [Test]

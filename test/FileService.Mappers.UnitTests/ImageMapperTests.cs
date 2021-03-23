@@ -25,7 +25,8 @@ namespace LT.DigitalOffice.FileService.Mappers.UnitTests
             {
                 Content = "RGlnaXRhbCBPZmA5Y2U=",
                 Extension = ".png",
-                Name = "Spartak_Photo"
+                Name = "Spartak_Photo",
+                UserId = Guid.NewGuid()
             };
         }
 
@@ -48,9 +49,10 @@ namespace LT.DigitalOffice.FileService.Mappers.UnitTests
                 Content = Convert.FromBase64String(imageRequest.Content),
                 Extension = imageRequest.Extension,
                 Name = imageRequest.Name,
-                IsActive = true,
+                UserId = imageRequest.UserId,
                 ImageType = (int)ImageType.Full,
-                AddedOn = newImage.AddedOn
+                AddedOn = newImage.AddedOn,
+                IsActive = true
             };
 
             SerializerAssert.AreEqual(expectedImage, newImage);

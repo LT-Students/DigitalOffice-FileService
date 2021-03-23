@@ -1,7 +1,9 @@
 using FluentValidation;
+using LT.DigitalOffice.Broker.Requests;
 using LT.DigitalOffice.FileService.Broker.Consumers;
 using LT.DigitalOffice.FileService.Business;
 using LT.DigitalOffice.FileService.Business.Interfaces;
+using LT.DigitalOffice.FileService.Configuration;
 using LT.DigitalOffice.FileService.Data;
 using LT.DigitalOffice.FileService.Data.Interfaces;
 using LT.DigitalOffice.FileService.Data.Provider;
@@ -22,6 +24,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using static LT.DigitalOffice.FileService.Business.AddNewImageCommand;
 
 namespace LT.DigitalOffice.FileService
@@ -39,9 +42,15 @@ namespace LT.DigitalOffice.FileService
         {
             services.AddHealthChecks();
 
+            string connStr = Environment.GetEnvironmentVariable("ConnectionString");
+            if (string.IsNullOrEmpty(connStr))
+            {
+                connStr = Configuration.GetConnectionString("SQLConnectionString");
+            }
+
             services.AddDbContext<FileServiceDbContext>(options =>
             {
-                options.UseSqlServer(Configuration.GetConnectionString("SQLConnectionString"));
+                options.UseSqlServer(connStr);
             });
             services.AddControllers();
 
@@ -54,7 +63,9 @@ namespace LT.DigitalOffice.FileService
 
         private void ConfigureMassTransit(IServiceCollection services)
         {
-            var rabbitMqConfig = Configuration.GetSection(BaseRabbitMqOptions.RabbitMqSectionName).Get<BaseRabbitMqOptions>();
+            var rabbitMqConfig = Configuration
+                .GetSection(BaseRabbitMqOptions.RabbitMqSectionName)
+                .Get<RabbitMqConfig>();
 
             services.AddMassTransit(x =>
             {
@@ -62,17 +73,22 @@ namespace LT.DigitalOffice.FileService
 
                 x.UsingRabbitMq((context, cfg) =>
                 {
-                    cfg.Host("localhost", "/", host =>
+                    cfg.Host(rabbitMqConfig.Host, "/", host =>
                     {
                         host.Username($"{rabbitMqConfig.Username}_{rabbitMqConfig.Password}");
                         host.Password(rabbitMqConfig.Password);
                     });
 
-                    cfg.ReceiveEndpoint(rabbitMqConfig.Username, ep =>
+                    cfg.ReceiveEndpoint(rabbitMqConfig.GetFileEndpoint, ep =>
                     {
                         ep.ConfigureConsumer<GetFileConsumer>(context);
                     });
                 });
+
+                x.AddRequestClient<ICheckTokenRequest>(
+                  new Uri($"{rabbitMqConfig.BaseUrl}/{rabbitMqConfig.ValidateTokenEndpoint}"));
+
+                x.ConfigureKernelMassTransit(rabbitMqConfig);
             });
 
             services.AddMassTransitHostedService();

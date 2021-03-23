@@ -8,21 +8,22 @@ namespace LT.DigitalOffice.FileService.Mappers.RequestMappers
 {
     public class ImageRequestMapper : IMapper<ImageRequest, DbImage>
     {
-        public DbImage Map(ImageRequest image)
+        public DbImage Map(ImageRequest imageRequest)
         {
-            if (image == null)
+            if (imageRequest == null)
             {
-                throw new ArgumentNullException(nameof(image));
+                throw new ArgumentNullException(nameof(imageRequest));
             }
 
             return new DbImage()
             {
                 Id = Guid.NewGuid(),
                 ParentId = null,
-                Content = Convert.FromBase64String(image.Content),
-                Extension = image.Extension.ToLower(),
-                Name = image.Name,
+                Content = Convert.FromBase64String(imageRequest.Content),
+                Extension = imageRequest.Extension.ToLower(),
+                Name = imageRequest.Name,
                 AddedOn = DateTime.Now,
+                UserId = imageRequest.UserId,
                 ImageType = (int)ImageType.Full,
                 IsActive = true
             };
