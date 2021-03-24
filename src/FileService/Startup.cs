@@ -2,6 +2,8 @@ using FluentValidation;
 using LT.DigitalOffice.Broker.Requests;
 using LT.DigitalOffice.FileService.Broker.Consumers;
 using LT.DigitalOffice.FileService.Business;
+using LT.DigitalOffice.FileService.Business.Helpers;
+using LT.DigitalOffice.FileService.Business.Helpers.Interfaces;
 using LT.DigitalOffice.FileService.Business.Interfaces;
 using LT.DigitalOffice.FileService.Configuration;
 using LT.DigitalOffice.FileService.Data;
@@ -25,7 +27,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using static LT.DigitalOffice.FileService.Business.AddNewImageCommand;
 
 namespace LT.DigitalOffice.FileService
 {

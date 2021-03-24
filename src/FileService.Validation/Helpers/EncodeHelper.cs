@@ -12,6 +12,7 @@ namespace LT.DigitalOffice.FileService.Validation.Helpers
             }
 
             var byteString = new Span<byte>(new byte[base64String.Length]);
+
             return Convert.TryFromBase64String(base64String, byteString, out _);
         }
     }

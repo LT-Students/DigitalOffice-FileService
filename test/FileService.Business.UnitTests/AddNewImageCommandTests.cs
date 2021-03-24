@@ -1,17 +1,15 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
+using LT.DigitalOffice.FileService.Business.Helpers.Interfaces;
 using LT.DigitalOffice.FileService.Business.Interfaces;
 using LT.DigitalOffice.FileService.Data.Interfaces;
 using LT.DigitalOffice.FileService.Mappers.Interfaces;
-using LT.DigitalOffice.FileService.Mappers.ModelMappers.Interfaces;
 using LT.DigitalOffice.FileService.Models.Db;
 using LT.DigitalOffice.FileService.Models.Dto.Requests;
-using Microsoft.AspNetCore.Http;
 using Moq;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using static LT.DigitalOffice.FileService.Business.AddNewImageCommand;
 
 namespace LT.DigitalOffice.FileService.Business.UnitTests
 {
@@ -118,8 +116,6 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
         public void ShouldAddNewImageAndThumbImmage()
         {
             Assert.AreEqual(firstDbImage.Id, command.Execute(imageRequest));
-
-            // Ok: validator -> mapper -> repository -> mapper -> algorithm -> repository
 
             validatorMock.Verify(v => v.Validate(It.IsAny<IValidationContext>()), Times.Once);
             repositoryMock.Verify(r => r.AddNewImage(It.IsAny<DbImage>()), Times.Exactly(2));

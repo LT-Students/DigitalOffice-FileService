@@ -11,8 +11,6 @@ namespace LT.DigitalOffice.FileService.Data.Provider.MsSql.Ef.Migrations
     [Migration("20200714165819_InitialCreate")]
     public class InitialCreate : Migration
     {
-        private const string ColumnIdName = "Id";
-
         #region Create tables
 
         private void CreateTableFiles(MigrationBuilder migrationBuilder)
@@ -71,14 +69,6 @@ namespace LT.DigitalOffice.FileService.Data.Provider.MsSql.Ef.Migrations
             migrationBuilder.DropTable(DbFile.TableName);
 
             migrationBuilder.DropTable(DbImage.TableName);
-        }
-
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
-        {
-            modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.9")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
         }
     }
 }
