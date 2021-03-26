@@ -1,9 +1,12 @@
-﻿using LT.DigitalOffice.FileService.Mappers.Interfaces;
+﻿using LT.DigitalOffice.FileService.Business.Helpers.Interfaces;
+using LT.DigitalOffice.FileService.Mappers.Interfaces;
 using LT.DigitalOffice.FileService.Mappers.RequestMappers;
+using LT.DigitalOffice.FileService.Mappers.RequestMappers.Interfaces;
 using LT.DigitalOffice.FileService.Models.Db;
 using LT.DigitalOffice.FileService.Models.Dto.Enums;
 using LT.DigitalOffice.FileService.Models.Dto.Requests;
 using LT.DigitalOffice.UnitTestKernel;
+using Moq;
 using NUnit.Framework;
 using System;
 
@@ -11,14 +14,17 @@ namespace LT.DigitalOffice.FileService.Mappers.UnitTests
 {
     public class ImageMapperTests
     {
-        private IMapper<ImageRequest, DbImage> requestToDbMapper;
+        private IImageRequestMapper requestToDbMapper;
+        private Mock<IImageResizeAlgorithm> algorithmMock;
 
         private ImageRequest imageRequest;
+        private byte[] resizedImageContent;
 
         [SetUp]
         public void SetUp()
         {
-            requestToDbMapper = new ImageRequestMapper();
+            algorithmMock = new Mock<IImageResizeAlgorithm>();
+            requestToDbMapper = new ImageRequestMapper(algorithmMock.Object);
 
             imageRequest = new ImageRequest
             {
@@ -27,6 +33,12 @@ namespace LT.DigitalOffice.FileService.Mappers.UnitTests
                 Name = "Spartak_Photo",
                 UserId = Guid.NewGuid()
             };
+
+            resizedImageContent = new byte[] { 0, 1, 1, 0 };
+
+            algorithmMock
+                .Setup(x => x.Resize(imageRequest.Content, imageRequest.Extension))
+                .Returns(resizedImageContent);
         }
 
         [Test]
@@ -34,13 +46,14 @@ namespace LT.DigitalOffice.FileService.Mappers.UnitTests
         {
             imageRequest = null;
 
-            Assert.Throws<ArgumentNullException>(() => requestToDbMapper.Map(imageRequest));
+            Assert.Throws<ArgumentNullException>(() => requestToDbMapper.Map(imageRequest, ImageType.Full));
+            algorithmMock.Verify(a => a.Resize(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         }
 
         [Test]
         public void ShouldReturnDbFileWhenMappingFileRequest()
         {
-            var newImage = requestToDbMapper.Map(imageRequest);
+            var newImage = requestToDbMapper.Map(imageRequest, ImageType.Full);
 
             var expectedImage = new DbImage
             {
@@ -54,7 +67,32 @@ namespace LT.DigitalOffice.FileService.Mappers.UnitTests
                 IsActive = true
             };
 
+            algorithmMock.Verify(a => a.Resize(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+
+
             SerializerAssert.AreEqual(expectedImage, newImage);
         }
+
+        [Test]
+        public void ShouldThrowExceptionWhenAlgorithmThrowsExceptionAndImageTypeIsThumbs()
+        {
+            algorithmMock
+                .Setup(x => x.Resize(imageRequest.Content, imageRequest.Extension))
+                .Throws(new Exception());
+
+            Assert.Throws<Exception>(() => requestToDbMapper.Map(imageRequest, ImageType.Thumbs));
+        }
+
+        [Test]
+        public void ShouldNotThrowExceptionWhenAlgorithmThrowsExceptionAndImageTypeIsFull()
+        {
+            algorithmMock
+                .Setup(x => x.Resize(imageRequest.Content, imageRequest.Extension))
+                .Throws(new Exception());
+
+            Assert.Throws<Exception>(() => requestToDbMapper.Map(imageRequest, ImageType.Thumbs));
+        }
+
+        // Add tests
     }
 }

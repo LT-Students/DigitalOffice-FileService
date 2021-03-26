@@ -8,8 +8,8 @@ namespace LT.DigitalOffice.FileService.Validation
 {
     public class ImageRequestValidator : AbstractValidator<ImageRequest>
     {
-        public static List<string> AllowedExtensions { get; } =
-            new List<string> { ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tga" };
+        public readonly static List<string> AllowedExtensions = new()
+            { ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tga" };
 
         public ImageRequestValidator()
         {

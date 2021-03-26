@@ -17,7 +17,7 @@ namespace LT.DigitalOffice.FileService.Business.Helpers
 {
     internal class ImageToSquareAlgorithm : IImageResizeAlgorithm
     {
-        private static readonly Dictionary<string, IImageFormat> formats = new Dictionary<string, IImageFormat>
+        private static readonly Dictionary<string, IImageFormat> imageFormats = new()
         {
             { ".jpg", JpegFormat.Instance },
             { ".jpeg", JpegFormat.Instance },
@@ -29,27 +29,25 @@ namespace LT.DigitalOffice.FileService.Business.Helpers
 
         public byte[] Resize(string base64String, string outputExtension)
         {
+            try
             {
-                try
+                using (Image image = Image.Load(base64String))
                 {
-                    using (Image image = Image.Load(base64String))
-                    {
-                        // Trim the image in the center.
-                        var minSize = Math.Min(image.Width, image.Height);
-                        var offsetX = (image.Width - minSize) / 2;
-                        var offsetY = (image.Height - minSize) / 2;
+                    // Trim the image in the center.
+                    var minSize = Math.Min(image.Width, image.Height);
+                    var offsetX = (image.Width - minSize) / 2;
+                    var offsetY = (image.Height - minSize) / 2;
 
-                        image.Mutate(x => x.Crop(new Rectangle(offsetX, offsetY, minSize, minSize)));
+                    image.Mutate(x => x.Crop(new Rectangle(offsetX, offsetY, minSize, minSize)));
 
-                        image.Mutate(x => x.Resize(150, 150));
+                    image.Mutate(x => x.Resize(150, 150));
 
-                        return Convert.FromBase64String(image.ToBase64String(formats[outputExtension]));
-                    }
+                    return Convert.FromBase64String(image.ToBase64String(imageFormats[outputExtension]));
                 }
-                catch
-                {
-                    throw new BadRequestException("The server couldn't process the image.");
-                }
+            }
+            catch
+            {
+                throw new BadRequestException("The server couldn't process the image.");
             }
         }
     }

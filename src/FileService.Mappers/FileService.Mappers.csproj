@@ -3,6 +3,10 @@
   <Import Project="$(ProjectDir)..\..\Common.Configurations.targets" />
 
   <ItemGroup>
+    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\FileService.Models.Db\FileService.Models.Db.csproj" />
     <ProjectReference Include="..\FileService.Models.Dto\FileService.Models.Dto.csproj" />
   </ItemGroup>

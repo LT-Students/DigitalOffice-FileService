@@ -14,6 +14,7 @@ using LT.DigitalOffice.FileService.Mappers.Interfaces;
 using LT.DigitalOffice.FileService.Mappers.ModelMappers;
 using LT.DigitalOffice.FileService.Mappers.ModelMappers.Interfaces;
 using LT.DigitalOffice.FileService.Mappers.RequestMappers;
+using LT.DigitalOffice.FileService.Mappers.RequestMappers.Interfaces;
 using LT.DigitalOffice.FileService.Models.Db;
 using LT.DigitalOffice.FileService.Models.Dto.Models;
 using LT.DigitalOffice.FileService.Models.Dto.Requests;
@@ -116,7 +117,7 @@ namespace LT.DigitalOffice.FileService
         private void ConfigureMappers(IServiceCollection services)
         {
             services.AddTransient<IFileMapper, FileMapper>();
-            services.AddTransient<IMapper<ImageRequest, DbImage>, ImageRequestMapper>();
+            services.AddTransient<IImageRequestMapper, ImageRequestMapper>();
         }
 
         private void ConfigureValidators(IServiceCollection services)
