@@ -11,6 +11,6 @@ namespace LT.DigitalOffice.FileService.Mappers.RequestMappers.Interfaces
 {
     public interface IImageRequestMapper
     {
-        public DbImage Map(ImageRequest imageRequest, ImageType imageType);
+        public DbImage Map(ImageRequest imageRequest, ImageType imageType, Guid? parentId = null);
     }
 }

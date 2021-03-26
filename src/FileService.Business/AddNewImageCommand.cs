@@ -39,7 +39,7 @@ namespace LT.DigitalOffice.FileService.Business
 
             repository.AddNewImage(parentDbImage);
 
-            var childDbImage = mapper.Map(request, ImageType.Thumb);
+            var childDbImage = mapper.Map(request, ImageType.Thumb, parentDbImage.Id);
 
             repository.AddNewImage(childDbImage);
 

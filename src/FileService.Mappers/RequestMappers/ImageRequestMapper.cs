@@ -18,7 +18,7 @@ namespace LT.DigitalOffice.FileService.Mappers.RequestMappers
             _resizeAlgotithm = resizeAlgotithm;
         }
 
-        public DbImage Map(ImageRequest imageRequest, ImageType imageType)
+        public DbImage Map(ImageRequest imageRequest, ImageType imageType, Guid? parentId = null)
         {
             if (imageRequest == null)
             {
@@ -26,16 +26,17 @@ namespace LT.DigitalOffice.FileService.Mappers.RequestMappers
             }
 
             byte[] content;
-            Guid? parentId;
-
             if (imageType == ImageType.Full)
             {
-                parentId = null;
                 content = Convert.FromBase64String(imageRequest.Content);
+
+                if (parentId != null)
+                {
+                    throw new ArgumentException("If image type is Full then parentId must be null.");
+                }
             }
             else
             {
-                parentId = imageRequest.UserId;
                 content = _resizeAlgotithm.Resize(imageRequest.Content, imageRequest.Extension);
             }
 

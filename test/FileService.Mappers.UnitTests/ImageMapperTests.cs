@@ -19,6 +19,7 @@ namespace LT.DigitalOffice.FileService.Mappers.UnitTests
 
         private ImageRequest imageRequest;
         private byte[] resizedImageContent;
+        private Guid parentId;
 
         [SetUp]
         public void SetUp()
@@ -35,6 +36,8 @@ namespace LT.DigitalOffice.FileService.Mappers.UnitTests
             };
 
             resizedImageContent = new byte[] { 0, 1, 1, 0 };
+
+            parentId = Guid.NewGuid();
 
             algorithmMock
                 .Setup(x => x.Resize(imageRequest.Content, imageRequest.Extension))
@@ -76,24 +79,31 @@ namespace LT.DigitalOffice.FileService.Mappers.UnitTests
         [Test]
         public void ShouldReturnDbFileWhenMappingFileRequestAndImageTypeIsThumb()
         {
-            var newImage = requestToDbMapper.Map(imageRequest, ImageType.Thumb);
+            var newImage = requestToDbMapper.Map(imageRequest, ImageType.Thumb, parentId);
 
             var expectedImage = new DbImage
             {
                 Id = newImage.Id,
-                Content = Convert.FromBase64String(imageRequest.Content),
+                Content = resizedImageContent,
                 Extension = imageRequest.Extension,
                 Name = imageRequest.Name,
                 UserId = imageRequest.UserId,
-                ImageType = (int)ImageType.Full,
+                ImageType = (int)ImageType.Thumb,
                 AddedOn = newImage.AddedOn,
-                IsActive = true
+                IsActive = true,
+                ParentId = parentId
             };
 
             algorithmMock.Verify(a => a.Resize(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
 
 
             SerializerAssert.AreEqual(expectedImage, newImage);
+        }
+
+        [Test]
+        public void ShouldThrowExceptionWhenImageTypeIsFullButParentIdIsNotNull()
+        {
+            Assert.Throws<ArgumentException>(() => requestToDbMapper.Map(imageRequest, ImageType.Full, parentId));
         }
 
         [Test]
