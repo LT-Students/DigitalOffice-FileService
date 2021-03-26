@@ -51,9 +51,32 @@ namespace LT.DigitalOffice.FileService.Mappers.UnitTests
         }
 
         [Test]
-        public void ShouldReturnDbFileWhenMappingFileRequest()
+        public void ShouldReturnDbFileWhenMappingFileRequestAndImageTypeIsFull()
         {
             var newImage = requestToDbMapper.Map(imageRequest, ImageType.Full);
+
+            var expectedImage = new DbImage
+            {
+                Id = newImage.Id,
+                Content = Convert.FromBase64String(imageRequest.Content),
+                Extension = imageRequest.Extension,
+                Name = imageRequest.Name,
+                UserId = imageRequest.UserId,
+                ImageType = (int)ImageType.Full,
+                AddedOn = newImage.AddedOn,
+                IsActive = true
+            };
+
+            algorithmMock.Verify(a => a.Resize(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+
+
+            SerializerAssert.AreEqual(expectedImage, newImage);
+        }
+
+        [Test]
+        public void ShouldReturnDbFileWhenMappingFileRequestAndImageTypeIsThumb()
+        {
+            var newImage = requestToDbMapper.Map(imageRequest, ImageType.Thumb);
 
             var expectedImage = new DbImage
             {
@@ -80,7 +103,7 @@ namespace LT.DigitalOffice.FileService.Mappers.UnitTests
                 .Setup(x => x.Resize(imageRequest.Content, imageRequest.Extension))
                 .Throws(new Exception());
 
-            Assert.Throws<Exception>(() => requestToDbMapper.Map(imageRequest, ImageType.Thumbs));
+            Assert.Throws<Exception>(() => requestToDbMapper.Map(imageRequest, ImageType.Thumb));
         }
 
         [Test]
@@ -90,9 +113,7 @@ namespace LT.DigitalOffice.FileService.Mappers.UnitTests
                 .Setup(x => x.Resize(imageRequest.Content, imageRequest.Extension))
                 .Throws(new Exception());
 
-            Assert.Throws<Exception>(() => requestToDbMapper.Map(imageRequest, ImageType.Thumbs));
+            Assert.Throws<Exception>(() => requestToDbMapper.Map(imageRequest, ImageType.Thumb));
         }
-
-        // Add tests
     }
 }

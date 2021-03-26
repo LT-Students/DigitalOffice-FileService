@@ -17,18 +17,15 @@ namespace LT.DigitalOffice.FileService.Business
 {
     public class AddNewImageCommand : IAddNewImageCommand
     {
-        private readonly HttpContext httpContext;
         private readonly IImageRepository repository;
         private readonly IValidator<ImageRequest> validator;
         private readonly IImageRequestMapper mapper;
 
         public AddNewImageCommand(
-            [FromServices] IHttpContextAccessor httpContextAccessor,
             [FromServices] IImageRepository repository,
             [FromServices] IValidator<ImageRequest> validator,
             [FromServices] IImageRequestMapper mapper)
         {
-            this.httpContext = httpContextAccessor.HttpContext;
             this.repository = repository;
             this.validator = validator;
             this.mapper = mapper;
@@ -36,15 +33,13 @@ namespace LT.DigitalOffice.FileService.Business
 
         public Guid Execute(ImageRequest request)
         {
-            request.UserId = httpContext.GetUserId();
-
             validator.ValidateAndThrowCustom(request);
 
             var parentDbImage = mapper.Map(request, ImageType.Full);
 
             repository.AddNewImage(parentDbImage);
 
-            var childDbImage = mapper.Map(request, ImageType.Thumbs);
+            var childDbImage = mapper.Map(request, ImageType.Thumb);
 
             repository.AddNewImage(childDbImage);
 

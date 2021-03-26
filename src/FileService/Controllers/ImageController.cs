@@ -1,5 +1,7 @@
 ﻿using LT.DigitalOffice.FileService.Business.Interfaces;
 using LT.DigitalOffice.FileService.Models.Dto.Requests;
+using LT.DigitalOffice.Kernel.Extensions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
@@ -12,8 +14,11 @@ namespace LT.DigitalOffice.FileService.Controllers
         [HttpPost("addNewImage")]
         public Guid AddNewImage(
             [FromBody] ImageRequest request,
-            [FromServices] IAddNewImageCommand command)
+            [FromServices] IAddNewImageCommand command,
+            [FromServices] IHttpContextAccessor httpContextAccessor)
         {
+            request.UserId = httpContextAccessor.HttpContext.GetUserId();
+
             return command.Execute(request);
         }
     }

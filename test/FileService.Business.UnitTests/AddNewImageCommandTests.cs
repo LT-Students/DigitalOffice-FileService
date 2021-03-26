@@ -20,7 +20,6 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
     public class AddNewImageCommandTests
     {
         private IAddNewImageCommand command;
-        private Mock<IHttpContextAccessor> httpContextAccessor;
         private Mock<IImageRepository> repositoryMock;
         private Mock<IValidator<ImageRequest>> validatorMock;
         private Mock<IImageRequestMapper> mapperMock;
@@ -56,22 +55,18 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
         [SetUp]
         public void SetUp()
         {
-            httpContextAccessor = new Mock<IHttpContextAccessor>();
             repositoryMock = new Mock<IImageRepository>();
             validatorMock = new Mock<IValidator<ImageRequest>>();
             mapperMock = new Mock<IImageRequestMapper>();
 
             var userId = Guid.NewGuid();
 
-            httpContextAccessor
-                .Setup(x => x.HttpContext.GetUserId())
-                .Returns(userId);
-
             imageRequest = new ImageRequest
             {
                 Content = "RGlnaXRhbCBPZmA5Y2U=",
                 Extension = ".png",
                 Name = "Spartak_OnePixel",
+                UserId = userId
             };
 
             validatorMock
@@ -114,7 +109,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
                 .Setup(x => x.AddNewImage(firstDbImage))
                 .Returns(firstDbImage.Id);
 
-            command = new AddNewImageCommand(httpContextAccessor.Object, repositoryMock.Object, validatorMock.Object, mapperMock.Object);
+            command = new AddNewImageCommand(repositoryMock.Object, validatorMock.Object, mapperMock.Object);
         }
 
         [Test]
@@ -125,7 +120,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
             validatorMock.Verify(v => v.Validate(It.IsAny<IValidationContext>()), Times.Once);
             repositoryMock.Verify(r => r.AddNewImage(It.IsAny<DbImage>()), Times.Exactly(2));
             mapperMock.Verify(m => m.Map(It.IsAny<ImageRequest>(), ImageType.Full), Times.Once);
-            mapperMock.Verify(m => m.Map(It.IsAny<ImageRequest>(), ImageType.Thumbs), Times.Once);
+            mapperMock.Verify(m => m.Map(It.IsAny<ImageRequest>(), ImageType.Thumb), Times.Once);
         }
 
         [Test]
@@ -145,7 +140,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
         }
 
         [Test]
-        public void ShouldThrowExceptionWhenImageRequestIsNull1()
+        public void ShouldThrowExceptionWhenImageRequestIsNullAndImageTypeIsFull()
         {
             mapperMock
                  .Setup(x => x.Map(It.IsAny<ImageRequest>(), ImageType.Full))
@@ -155,10 +150,10 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
         }
 
         [Test]
-        public void ShouldThrowExceptionWhenImageRequestIsNull2()
+        public void ShouldThrowExceptionWhenImageRequestIsNullAndImageTypeIsThumb()
         {
             mapperMock
-                 .Setup(x => x.Map(It.IsAny<ImageRequest>(), ImageType.Thumbs))
+                 .Setup(x => x.Map(It.IsAny<ImageRequest>(), ImageType.Thumb))
                  .Throws(new NullReferenceException());
 
             Assert.Throws<NullReferenceException>(() => command.Execute(imageRequest));

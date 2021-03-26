@@ -3,6 +3,6 @@
     public enum ImageType
     {
         Full,
-        Thumbs
+        Thumb
     }
 }
