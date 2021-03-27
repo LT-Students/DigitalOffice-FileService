@@ -1,5 +1,4 @@
 ﻿using LT.DigitalOffice.FileService.Business.Helpers.Interfaces;
-using LT.DigitalOffice.FileService.Mappers.Interfaces;
 using LT.DigitalOffice.FileService.Mappers.RequestMappers.Interfaces;
 using LT.DigitalOffice.FileService.Models.Db;
 using LT.DigitalOffice.FileService.Models.Dto.Enums;
@@ -26,6 +25,7 @@ namespace LT.DigitalOffice.FileService.Mappers.RequestMappers
             }
 
             byte[] content;
+
             if (imageType == ImageType.Full)
             {
                 content = Convert.FromBase64String(imageRequest.Content);
@@ -51,7 +51,7 @@ namespace LT.DigitalOffice.FileService.Mappers.RequestMappers
                 UserId = imageRequest.UserId,
                 ImageType = (int)imageType,
                 IsActive = true
-            }; ;
+            };
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using LT.DigitalOffice.FileService.Business.Helpers.Interfaces;
-using LT.DigitalOffice.FileService.Mappers.Interfaces;
 using LT.DigitalOffice.FileService.Mappers.RequestMappers;
 using LT.DigitalOffice.FileService.Mappers.RequestMappers.Interfaces;
 using LT.DigitalOffice.FileService.Models.Db;
@@ -95,7 +94,6 @@ namespace LT.DigitalOffice.FileService.Mappers.UnitTests
             };
 
             algorithmMock.Verify(a => a.Resize(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
-
 
             SerializerAssert.AreEqual(expectedImage, newImage);
         }

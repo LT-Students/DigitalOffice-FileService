@@ -1,15 +1,10 @@
 ﻿using FluentValidation;
-using LT.DigitalOffice.FileService.Business.Helpers.Interfaces;
 using LT.DigitalOffice.FileService.Business.Interfaces;
 using LT.DigitalOffice.FileService.Data.Interfaces;
-using LT.DigitalOffice.FileService.Mappers.Interfaces;
 using LT.DigitalOffice.FileService.Mappers.RequestMappers.Interfaces;
-using LT.DigitalOffice.FileService.Models.Db;
 using LT.DigitalOffice.FileService.Models.Dto.Enums;
 using LT.DigitalOffice.FileService.Models.Dto.Requests;
-using LT.DigitalOffice.Kernel.Extensions;
 using LT.DigitalOffice.Kernel.FluentValidationExtensions;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
@@ -36,11 +31,9 @@ namespace LT.DigitalOffice.FileService.Business
             validator.ValidateAndThrowCustom(request);
 
             var parentDbImage = mapper.Map(request, ImageType.Full);
-
-            repository.AddNewImage(parentDbImage);
-
             var childDbImage = mapper.Map(request, ImageType.Thumb, parentDbImage.Id);
 
+            repository.AddNewImage(parentDbImage);
             repository.AddNewImage(childDbImage);
 
             return parentDbImage.Id;

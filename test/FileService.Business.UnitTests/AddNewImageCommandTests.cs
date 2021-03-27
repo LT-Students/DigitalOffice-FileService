@@ -1,15 +1,11 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
-using LT.DigitalOffice.FileService.Business.Helpers.Interfaces;
 using LT.DigitalOffice.FileService.Business.Interfaces;
 using LT.DigitalOffice.FileService.Data.Interfaces;
-using LT.DigitalOffice.FileService.Mappers.Interfaces;
 using LT.DigitalOffice.FileService.Mappers.RequestMappers.Interfaces;
 using LT.DigitalOffice.FileService.Models.Db;
 using LT.DigitalOffice.FileService.Models.Dto.Enums;
 using LT.DigitalOffice.FileService.Models.Dto.Requests;
-using LT.DigitalOffice.Kernel.Extensions;
-using Microsoft.AspNetCore.Http;
 using Moq;
 using NUnit.Framework;
 using System;
