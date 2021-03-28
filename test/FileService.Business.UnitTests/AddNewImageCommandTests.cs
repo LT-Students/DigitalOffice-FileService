@@ -62,7 +62,6 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
                 Content = "RGlnaXRhbCBPZmA5Y2U=",
                 Extension = ".png",
                 Name = "Spartak_OnePixel",
-                UserId = userId
             };
 
             validatorMock

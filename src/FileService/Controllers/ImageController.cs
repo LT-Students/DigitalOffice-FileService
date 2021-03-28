@@ -1,7 +1,5 @@
 ﻿using LT.DigitalOffice.FileService.Business.Interfaces;
 using LT.DigitalOffice.FileService.Models.Dto.Requests;
-using LT.DigitalOffice.Kernel.Extensions;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 

@@ -4,34 +4,92 @@ using LT.DigitalOffice.FileService.Mappers.RequestMappers.Interfaces;
 using LT.DigitalOffice.FileService.Models.Db;
 using LT.DigitalOffice.FileService.Models.Dto.Enums;
 using LT.DigitalOffice.FileService.Models.Dto.Requests;
+using LT.DigitalOffice.Kernel.Constants;
 using LT.DigitalOffice.UnitTestKernel;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Authentication;
+using Microsoft.AspNetCore.Http.Features;
 using Moq;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
+using System.Security.Claims;
+using System.Threading;
 
 namespace LT.DigitalOffice.FileService.Mappers.UnitTests
 {
+    public class FakeHttpContextAccessor : IHttpContextAccessor
+    {
+        public HttpContext HttpContext { get; set; }
+
+        public FakeHttpContextAccessor(Guid userId)
+        {
+            HttpContext = new FakeHttpContext(userId);
+        }
+    }
+
+    public class FakeHttpContext : HttpContext
+    {
+        public FakeHttpContext(Guid userId)
+        {
+            Items = new Dictionary<object, object>
+            {
+                {
+                    ConstStrings.UserId, userId.ToString()
+                }
+            };
+        }
+
+        public override IDictionary<object, object> Items { get; set; }
+
+        public override IFeatureCollection Features => throw new NotImplementedException();
+
+        public override HttpRequest Request => throw new NotImplementedException();
+
+        public override HttpResponse Response => throw new NotImplementedException();
+
+        public override ConnectionInfo Connection => throw new NotImplementedException();
+
+        public override WebSocketManager WebSockets => throw new NotImplementedException();
+
+        public override AuthenticationManager Authentication => throw new NotImplementedException();
+
+        public override ClaimsPrincipal User { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public override IServiceProvider RequestServices { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public override CancellationToken RequestAborted { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public override string TraceIdentifier { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public override ISession Session { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        public override void Abort()
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     public class ImageMapperTests
     {
         private IImageRequestMapper requestToDbMapper;
         private Mock<IImageResizeAlgorithm> algorithmMock;
+        private FakeHttpContextAccessor fakeHttpContextAccessor;
 
         private ImageRequest imageRequest;
         private byte[] resizedImageContent;
         private Guid parentId;
+        private Guid userId;
 
         [SetUp]
         public void SetUp()
         {
+            userId = Guid.NewGuid();
             algorithmMock = new Mock<IImageResizeAlgorithm>();
-            requestToDbMapper = new ImageRequestMapper(algorithmMock.Object);
+            fakeHttpContextAccessor = new FakeHttpContextAccessor(userId);
+            requestToDbMapper = new ImageRequestMapper(algorithmMock.Object, fakeHttpContextAccessor);
 
             imageRequest = new ImageRequest
             {
                 Content = "RGlnaXRhbCBPZmA5Y2U=",
                 Extension = ".png",
                 Name = "Spartak_Photo",
-                UserId = Guid.NewGuid()
             };
 
             resizedImageContent = new byte[] { 0, 1, 1, 0 };
@@ -63,7 +121,7 @@ namespace LT.DigitalOffice.FileService.Mappers.UnitTests
                 Content = Convert.FromBase64String(imageRequest.Content),
                 Extension = imageRequest.Extension,
                 Name = imageRequest.Name,
-                UserId = imageRequest.UserId,
+                UserId = userId,
                 ImageType = (int)ImageType.Full,
                 AddedOn = newImage.AddedOn,
                 IsActive = true
@@ -86,7 +144,7 @@ namespace LT.DigitalOffice.FileService.Mappers.UnitTests
                 Content = resizedImageContent,
                 Extension = imageRequest.Extension,
                 Name = imageRequest.Name,
-                UserId = imageRequest.UserId,
+                UserId = userId,
                 ImageType = (int)ImageType.Thumb,
                 AddedOn = newImage.AddedOn,
                 IsActive = true,
