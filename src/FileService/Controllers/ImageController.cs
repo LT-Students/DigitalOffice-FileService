@@ -14,11 +14,8 @@ namespace LT.DigitalOffice.FileService.Controllers
         [HttpPost("addNewImage")]
         public Guid AddNewImage(
             [FromBody] ImageRequest request,
-            [FromServices] IAddNewImageCommand command,
-            [FromServices] IHttpContextAccessor httpContextAccessor)
+            [FromServices] IAddNewImageCommand command)
         {
-            request.UserId = httpContextAccessor.HttpContext.GetUserId();
-
             return command.Execute(request);
         }
     }
