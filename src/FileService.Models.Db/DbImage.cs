@@ -4,24 +4,27 @@ using System;
 
 namespace LT.DigitalOffice.FileService.Models.Db
 {
-    public class DbFile
+    public class DbImage
     {
-        public const string TableName = "Files";
+        public const string TableName = "Images";
 
         public Guid Id { get; set; }
+        public Guid? ParentId { get; set; }
         public byte[] Content { get; set; }
         public string Extension { get; set; }
         public string Name { get; set; }
         public DateTime AddedOn { get; set; }
+        public Guid UserId { get; set; }
+        public int ImageType { get; set; }
         public bool IsActive { get; set; }
     }
 
-    public class DbFileConfiguration : IEntityTypeConfiguration<DbFile>
+    public class DbImageConfiguration : IEntityTypeConfiguration<DbImage>
     {
-        public void Configure(EntityTypeBuilder<DbFile> builder)
+        public void Configure(EntityTypeBuilder<DbImage> builder)
         {
             builder
-                .ToTable(DbFile.TableName);
+                .ToTable(DbImage.TableName);
 
             builder
                 .HasKey(p => p.Id);

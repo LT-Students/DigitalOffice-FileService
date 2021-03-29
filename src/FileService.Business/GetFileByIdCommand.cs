@@ -7,7 +7,6 @@ using System;
 
 namespace LT.DigitalOffice.FileService.Business
 {
-    /// <inheritdoc cref="IGetFileByIdCommand"/>
     public class GetFileByIdCommand : IGetFileByIdCommand
     {
         private readonly IFileRepository repository;
