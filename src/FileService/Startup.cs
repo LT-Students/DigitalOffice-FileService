@@ -157,7 +157,7 @@ namespace LT.DigitalOffice.FileService
             {
                 endpoints.MapControllers();
 
-                endpoints.MapHealthChecks($"/{rabbitMqConfig.Password}/hñ", new HealthCheckOptions
+                endpoints.MapHealthChecks($"/{rabbitMqConfig.Password}/hc", new HealthCheckOptions
                 {
                     Predicate = _ => true,
                     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
