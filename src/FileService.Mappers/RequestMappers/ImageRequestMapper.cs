@@ -5,7 +5,6 @@ using LT.DigitalOffice.FileService.Models.Dto.Enums;
 using LT.DigitalOffice.FileService.Models.Dto.Requests;
 using LT.DigitalOffice.Kernel.Extensions;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using System;
 
 namespace LT.DigitalOffice.FileService.Mappers.RequestMappers
@@ -16,8 +15,8 @@ namespace LT.DigitalOffice.FileService.Mappers.RequestMappers
         public HttpContext _httpContext;
 
         public ImageRequestMapper(
-            [FromServices] IImageResizeAlgorithm resizeAlgotithm,
-            [FromServices] IHttpContextAccessor httpContextAccessor)
+            IImageResizeAlgorithm resizeAlgotithm,
+            IHttpContextAccessor httpContextAccessor)
         {
             _resizeAlgotithm = resizeAlgotithm;
             _httpContext = httpContextAccessor.HttpContext;

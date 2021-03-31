@@ -1,7 +1,7 @@
 ﻿using LT.DigitalOffice.FileService.Data.Interfaces;
 using LT.DigitalOffice.FileService.Data.Provider;
 using LT.DigitalOffice.FileService.Models.Db;
-using LT.DigitalOffice.Kernel.Exceptions;
+using LT.DigitalOffice.Kernel.Exceptions.Models;
 using System;
 using System.Linq;
 
