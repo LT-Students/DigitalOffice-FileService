@@ -18,15 +18,16 @@ using LT.DigitalOffice.FileService.Mappers.RequestMappers.Interfaces;
 using LT.DigitalOffice.FileService.Models.Dto.Models;
 using LT.DigitalOffice.FileService.Models.Dto.Requests;
 using LT.DigitalOffice.FileService.Validation;
-using LT.DigitalOffice.Kernel;
 using LT.DigitalOffice.Kernel.Broker;
+using LT.DigitalOffice.Kernel.Extensions;
+using LT.DigitalOffice.Kernel.Middlewares.Token;
 using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 
 namespace LT.DigitalOffice.FileService
@@ -43,6 +44,10 @@ namespace LT.DigitalOffice.FileService
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddHttpContextAccessor();
+
+            services.AddKernelExtensions();
+
+            services.AddHealthChecks();
 
             string connStr = Environment.GetEnvironmentVariable("ConnectionString");
             if (string.IsNullOrEmpty(connStr))
@@ -75,6 +80,7 @@ namespace LT.DigitalOffice.FileService
             services.AddMassTransit(x =>
             {
                 x.AddConsumer<GetFileConsumer>();
+                x.AddConsumer<AddImageConsumer>();
 
                 x.UsingRabbitMq((context, cfg) =>
                 {
@@ -87,6 +93,11 @@ namespace LT.DigitalOffice.FileService
                     cfg.ReceiveEndpoint(rabbitMqConfig.GetFileEndpoint, ep =>
                     {
                         ep.ConfigureConsumer<GetFileConsumer>(context);
+                    });
+
+                    cfg.ReceiveEndpoint(rabbitMqConfig.AddImageEndpoint, ep =>
+                    {
+                        ep.ConfigureConsumer<AddImageConsumer>(context);
                     });
                 });
 
@@ -129,11 +140,13 @@ namespace LT.DigitalOffice.FileService
             services.AddTransient<IValidator<ImageRequest>, ImageRequestValidator>();
         }
 
-        public void Configure(IApplicationBuilder app)
+        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
         {
-            app.UseExceptionHandler(tempApp => tempApp.Run(CustomExceptionHandler.HandleCustomException));
-
             UpdateDatabase(app);
+
+            app.AddExceptionsHandler(loggerFactory);
+
+            app.UseMiddleware<TokenMiddleware>();
 
 #if RELEASE
             app.UseHttpsRedirection();
@@ -170,7 +183,9 @@ namespace LT.DigitalOffice.FileService
             using var serviceScope = app.ApplicationServices
                 .GetRequiredService<IServiceScopeFactory>()
                 .CreateScope();
+
             using var context = serviceScope.ServiceProvider.GetService<FileServiceDbContext>();
+
             context.Database.Migrate();
         }
     }
