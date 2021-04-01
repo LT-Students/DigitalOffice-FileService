@@ -1,4 +1,5 @@
 using FluentValidation;
+using HealthChecks.UI.Client;
 using LT.DigitalOffice.Broker.Requests;
 using LT.DigitalOffice.FileService.Broker.Consumers;
 using LT.DigitalOffice.FileService.Business;
@@ -22,6 +23,7 @@ using LT.DigitalOffice.Kernel.Extensions;
 using LT.DigitalOffice.Kernel.Middlewares.Token;
 using MassTransit;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -41,6 +43,8 @@ namespace LT.DigitalOffice.FileService
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHttpContextAccessor();
+
             services.AddKernelExtensions();
 
             services.AddHealthChecks();
@@ -56,6 +60,9 @@ namespace LT.DigitalOffice.FileService
                 options.UseSqlServer(connStr);
             });
             services.AddControllers();
+
+            services.AddHealthChecks()
+                .AddSqlServer(connStr);
 
             ConfigureCommands(services);
             ConfigureMappers(services);
@@ -137,8 +144,6 @@ namespace LT.DigitalOffice.FileService
         {
             UpdateDatabase(app);
 
-            app.UseHealthChecks("/api/healthcheck");
-
             app.AddExceptionsHandler(loggerFactory);
 
             app.UseMiddleware<TokenMiddleware>();
@@ -157,9 +162,19 @@ namespace LT.DigitalOffice.FileService
                     .AllowAnyHeader()
                     .AllowAnyMethod());
 
+            var rabbitMqConfig = Configuration
+                .GetSection(BaseRabbitMqOptions.RabbitMqSectionName)
+                .Get<RabbitMqConfig>();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+
+                endpoints.MapHealthChecks($"/{rabbitMqConfig.Password}/hc", new HealthCheckOptions
+                {
+                    Predicate = _ => true,
+                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                });
             });
         }
 
