@@ -38,8 +38,7 @@ namespace LT.DigitalOffice.FileService.Broker.UnitTests
                 new GetFileConsumer(repository.Object));
 
             fileId = Guid.NewGuid();
-            contentByte = Convert.FromBase64String("RGlnaXRhbCBPZmA5Y2U=");
-            contentString = Convert.ToBase64String(contentByte);
+            contentString = "RGlnaXRhbCBPZmA5Y2U=";
             extension = ".jpg";
             name = "File";
         }
@@ -53,7 +52,7 @@ namespace LT.DigitalOffice.FileService.Broker.UnitTests
                 .Setup(x => x.GetFileById(It.IsAny<Guid>()))
                 .Returns(new DbFile
                 {
-                    Content = contentByte,
+                    Content = contentString,
                     Extension = extension,
                     Name = name
                 });

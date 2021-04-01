@@ -73,7 +73,7 @@ namespace LT.DigitalOffice.FileService.Mappers.UnitTests
         private FakeHttpContextAccessor fakeHttpContextAccessor;
 
         private ImageRequest imageRequest;
-        private byte[] resizedImageContent;
+        private string resizedImageContent;
         private Guid parentId;
         private Guid userId;
 
@@ -92,7 +92,7 @@ namespace LT.DigitalOffice.FileService.Mappers.UnitTests
                 Name = "Spartak_Photo",
             };
 
-            resizedImageContent = new byte[] { 0, 1, 1, 0 };
+            resizedImageContent = "abracadabra";
 
             parentId = Guid.NewGuid();
 
@@ -118,7 +118,7 @@ namespace LT.DigitalOffice.FileService.Mappers.UnitTests
         //    var expectedImage = new DbImage
         //    {
         //        Id = newImage.Id,
-        //        Content = Convert.FromBase64String(imageRequest.Content),
+        //        Content = imageRequest.Content,
         //        Extension = imageRequest.Extension,
         //        Name = imageRequest.Name,
         //        UserId = userId,

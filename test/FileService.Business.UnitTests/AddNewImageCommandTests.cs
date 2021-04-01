@@ -72,7 +72,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
             firstDbImage = new DbImage
             {
                 Id = Guid.NewGuid(),
-                Content = Convert.FromBase64String(imageRequest.Content),
+                Content = imageRequest.Content,
                 Extension = ".png",
                 IsActive = true,
                 Name = "Spartak_OnePixel",
@@ -82,7 +82,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
             secondDbImage = new DbImage
             {
                 Id = Guid.NewGuid(),
-                Content = Convert.FromBase64String(imageRequest.Content),
+                Content = imageRequest.Content,
                 Extension = ".png",
                 IsActive = true,
                 Name = "Spartak_OnePixel",

@@ -31,7 +31,7 @@ namespace LT.DigitalOffice.FileService.Broker.Consumers
 
             return new
             {
-                Content = Convert.ToBase64String(dbFile.Content),
+                Content = dbFile.Content,
                 Extension = dbFile.Extension,
                 Name = dbFile.Name
             };

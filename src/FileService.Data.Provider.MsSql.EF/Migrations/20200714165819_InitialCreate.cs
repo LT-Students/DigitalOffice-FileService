@@ -19,7 +19,7 @@ namespace LT.DigitalOffice.FileService.Data.Provider.MsSql.Ef.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Content = table.Column<byte[]>(nullable: false),
+                    Content = table.Column<string>(nullable: false),
                     Extension = table.Column<string>(nullable: false),
                     Name = table.Column<string>(nullable: true),
                     AddedOn = table.Column<DateTime>(nullable: false),
@@ -40,7 +40,7 @@ namespace LT.DigitalOffice.FileService.Data.Provider.MsSql.Ef.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     ParentId = table.Column<Guid>(nullable: true),
-                    Content = table.Column<byte[]>(nullable: false),
+                    Content = table.Column<string>(nullable: false),
                     Extension = table.Column<string>(nullable: false),
                     Name = table.Column<string>(nullable: true),
                     AddedOn = table.Column<DateTime>(nullable: false),

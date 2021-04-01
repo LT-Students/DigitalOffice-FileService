@@ -31,7 +31,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
             {
                 Id = fileId,
                 Name = "File",
-                Content = Convert.FromBase64String("RGlnaXRhbCBPZmA5Y2U="),
+                Content = "RGlnaXRhbCBPZmA5Y2U=",
                 Extension = ".jpg"
             };
         }
@@ -59,7 +59,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
             {
                 Id = file.Id,
                 Name = file.Name,
-                Content = Convert.ToBase64String(file.Content),
+                Content = file.Content,
                 Extension = file.Extension
             };
 

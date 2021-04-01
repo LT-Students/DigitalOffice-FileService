@@ -27,7 +27,7 @@ namespace LT.DigitalOffice.FileService.Data.UnitTests
             newImage = new DbImage
             {
                 Id = Guid.NewGuid(),
-                Content = Convert.FromBase64String("RGlnaXRhbCBPZmA5Y2U="),
+                Content = "RGlnaXRhbCBPZmA5Y2U=",
                 Extension = ".png",
                 IsActive = true,
                 Name = "Spartak_Photo"

@@ -2,6 +2,6 @@
 {
     public interface IImageResizeAlgorithm
     {
-        public byte[] Resize(string base64String, string outputExtension);
+        public string Resize(string base64String, string outputExtension);
     }
 }

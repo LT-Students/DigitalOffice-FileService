@@ -29,11 +29,11 @@ namespace LT.DigitalOffice.FileService.Mappers.RequestMappers
                 throw new ArgumentNullException(nameof(imageRequest));
             }
 
-            byte[] content;
+            string content;
 
             if (imageType == ImageType.Full)
             {
-                content = Convert.FromBase64String(imageRequest.Content);
+                content = imageRequest.Content;
 
                 if (parentId != null)
                 {
