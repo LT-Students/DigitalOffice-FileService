@@ -17,12 +17,10 @@ namespace LT.DigitalOffice.FileService.Broker.UnitTests
 {
     internal class GetFileConsumerTests
     {
-        private static byte[] contentByte;
         private string contentString;
         private string extension;
         private string name;
         private Guid fileId;
-        private ConsumerTestHarness<GetFileConsumer> consumerTestHarness;
 
         private InMemoryTestHarness harness;
         private Mock<IFileRepository> repository;
@@ -34,7 +32,7 @@ namespace LT.DigitalOffice.FileService.Broker.UnitTests
             repository = new Mock<IFileRepository>();
 
             harness = new InMemoryTestHarness();
-            consumerTestHarness = harness.Consumer(() =>
+            var consumerTestHarness = harness.Consumer(() =>
                 new GetFileConsumer(repository.Object));
 
             fileId = Guid.NewGuid();
