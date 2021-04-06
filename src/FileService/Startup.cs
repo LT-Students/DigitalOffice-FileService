@@ -19,7 +19,9 @@ using LT.DigitalOffice.FileService.Models.Dto.Models;
 using LT.DigitalOffice.FileService.Models.Dto.Requests;
 using LT.DigitalOffice.FileService.Validation;
 using LT.DigitalOffice.Kernel.Broker;
+using LT.DigitalOffice.Kernel.Configurations;
 using LT.DigitalOffice.Kernel.Extensions;
+using LT.DigitalOffice.Kernel.Middlewares.ApiInformation;
 using LT.DigitalOffice.Kernel.Middlewares.Token;
 using MassTransit;
 using Microsoft.AspNetCore.Builder;
@@ -32,13 +34,31 @@ using System;
 
 namespace LT.DigitalOffice.FileService
 {
-    public class Startup
+    public class Startup : BaseApiInfo
     {
+        private readonly BaseServiceInfoConfig _serviceInfoConfig;
+        private readonly RabbitMqConfig _rabbitMqConfig;
+
         public IConfiguration Configuration { get; }
+
+        #region public methods
 
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+
+            _serviceInfoConfig = Configuration
+                .GetSection(BaseServiceInfoConfig.SectionName)
+                .Get<BaseServiceInfoConfig>();
+
+            _rabbitMqConfig = Configuration
+                .GetSection(BaseRabbitMqConfig.SectionName)
+                .Get<RabbitMqConfig>();
+
+            Version = "1.2.1";
+            Description = "FileService is an API intended to work with files and images.";
+            StartTime = DateTime.UtcNow;
+            ApiName = $"LT Digital Office - {_serviceInfoConfig.Name}";
         }
 
         public void ConfigureServices(IServiceCollection services)
@@ -46,8 +66,6 @@ namespace LT.DigitalOffice.FileService
             services.AddHttpContextAccessor();
 
             services.AddKernelExtensions();
-
-            services.AddHealthChecks();
 
             string connStr = Environment.GetEnvironmentVariable("ConnectionString");
             if (string.IsNullOrEmpty(connStr))
@@ -71,12 +89,48 @@ namespace LT.DigitalOffice.FileService
             ConfigureMassTransit(services);
         }
 
+        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
+        {
+            UpdateDatabase(app);
+
+            app.UseExceptionsHandler(loggerFactory);
+
+            app.UseApiInformation();
+
+            app.UseMiddleware<TokenMiddleware>();
+
+#if RELEASE
+            app.UseHttpsRedirection();
+#endif
+
+            app.UseRouting();
+
+            string corsUrl = Configuration.GetSection("Settings")["CorsUrl"];
+
+            app.UseCors(builder =>
+                builder
+                    .WithOrigins(corsUrl)
+                    .AllowAnyHeader()
+                    .AllowAnyMethod());
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+
+                endpoints.MapHealthChecks($"/{_serviceInfoConfig.Id}/hc", new HealthCheckOptions
+                {
+                    Predicate = _ => true,
+                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                });
+            });
+        }
+
+        #endregion
+
+        #region private methods
+
         private void ConfigureMassTransit(IServiceCollection services)
         {
-            var rabbitMqConfig = Configuration
-                .GetSection(BaseRabbitMqOptions.RabbitMqSectionName)
-                .Get<RabbitMqConfig>();
-
             services.AddMassTransit(x =>
             {
                 x.AddConsumer<GetFileConsumer>();
@@ -84,27 +138,27 @@ namespace LT.DigitalOffice.FileService
 
                 x.UsingRabbitMq((context, cfg) =>
                 {
-                    cfg.Host(rabbitMqConfig.Host, "/", host =>
+                    cfg.Host(_rabbitMqConfig.Host, "/", host =>
                     {
-                        host.Username($"{rabbitMqConfig.Username}_{rabbitMqConfig.Password}");
-                        host.Password(rabbitMqConfig.Password);
+                        host.Username($"{_serviceInfoConfig.Name}_{_serviceInfoConfig.Id}");
+                        host.Password(_serviceInfoConfig.Id);
                     });
 
-                    cfg.ReceiveEndpoint(rabbitMqConfig.GetFileEndpoint, ep =>
+                    cfg.ReceiveEndpoint(_rabbitMqConfig.GetFileEndpoint, ep =>
                     {
                         ep.ConfigureConsumer<GetFileConsumer>(context);
                     });
 
-                    cfg.ReceiveEndpoint(rabbitMqConfig.AddImageEndpoint, ep =>
+                    cfg.ReceiveEndpoint(_rabbitMqConfig.AddImageEndpoint, ep =>
                     {
                         ep.ConfigureConsumer<AddImageConsumer>(context);
                     });
                 });
 
                 x.AddRequestClient<ICheckTokenRequest>(
-                  new Uri($"{rabbitMqConfig.BaseUrl}/{rabbitMqConfig.ValidateTokenEndpoint}"));
+                  new Uri($"{_rabbitMqConfig.BaseUrl}/{_rabbitMqConfig.ValidateTokenEndpoint}"));
 
-                x.ConfigureKernelMassTransit(rabbitMqConfig);
+                x.ConfigureKernelMassTransit(_rabbitMqConfig);
             });
 
             services.AddMassTransitHostedService();
@@ -140,44 +194,6 @@ namespace LT.DigitalOffice.FileService
             services.AddTransient<IValidator<ImageRequest>, ImageRequestValidator>();
         }
 
-        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
-        {
-            UpdateDatabase(app);
-
-            app.AddExceptionsHandler(loggerFactory);
-
-            app.UseMiddleware<TokenMiddleware>();
-
-#if RELEASE
-            app.UseHttpsRedirection();
-#endif
-
-            app.UseRouting();
-
-            string corsUrl = Configuration.GetSection("Settings")["CorsUrl"];
-
-            app.UseCors(builder =>
-                builder
-                    .WithOrigins(corsUrl)
-                    .AllowAnyHeader()
-                    .AllowAnyMethod());
-
-            var rabbitMqConfig = Configuration
-                .GetSection(BaseRabbitMqOptions.RabbitMqSectionName)
-                .Get<RabbitMqConfig>();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-
-                endpoints.MapHealthChecks($"/{rabbitMqConfig.Password}/hc", new HealthCheckOptions
-                {
-                    Predicate = _ => true,
-                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-                });
-            });
-        }
-
         private void UpdateDatabase(IApplicationBuilder app)
         {
             using var serviceScope = app.ApplicationServices
@@ -188,5 +204,7 @@ namespace LT.DigitalOffice.FileService
 
             context.Database.Migrate();
         }
+
+        #endregion
     }
 }
