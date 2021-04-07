@@ -32,7 +32,7 @@ namespace LT.DigitalOffice.FileService.Mappers.UnitTests
             dbFile = new DbFile
             {
                 Id = Guid.NewGuid(),
-                Content = Convert.FromBase64String("RGlnaXRhbCBPZmA5Y2U="),
+                Content = "RGlnaXRhbCBPZmA5Y2U=",
                 Extension = ".txt",
                 IsActive = true,
                 Name = "DigitalOfficeTestFile"
@@ -63,7 +63,7 @@ namespace LT.DigitalOffice.FileService.Mappers.UnitTests
         //    var expectedFile = new DbFile
         //    {
         //        Id = newFile.Id,
-        //        Content = Convert.FromBase64String(fileRequest.Content),
+        //        Content = fileRequest.Content,
         //        Extension = fileRequest.Extension,
         //        Name = fileRequest.Name,
         //        IsActive = true,
@@ -81,7 +81,7 @@ namespace LT.DigitalOffice.FileService.Mappers.UnitTests
         //    var expectedFileDto = new File
         //    {
         //        Id = newFileDto.Id,
-        //        Content = Convert.ToBase64String(dbFile.Content),
+        //        Content = dbFile.Content,
         //        Extension = dbFile.Extension,
         //        Name = dbFile.Name
         //    };

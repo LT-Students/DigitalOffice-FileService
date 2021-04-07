@@ -27,7 +27,7 @@ namespace LT.DigitalOffice.FileService.Business.Helpers
             { ".tga", TgaFormat.Instance }
         };
 
-        public byte[] Resize(string base64String, string outputExtension)
+        public string Resize(string base64String, string outputExtension)
         {
             try
             {
@@ -42,7 +42,7 @@ namespace LT.DigitalOffice.FileService.Business.Helpers
 
                     image.Mutate(x => x.Resize(150, 150));
 
-                    return Convert.FromBase64String(image.ToBase64String(imageFormats[outputExtension]));
+                    return image.ToBase64String(imageFormats[outputExtension]);
                 }
             }
             catch

@@ -17,7 +17,7 @@ namespace LT.DigitalOffice.FileService.Mappers.ModelMappers
             return new File()
             {
                 Id = dbFile.Id,
-                Content = Convert.ToBase64String(dbFile.Content),
+                Content = dbFile.Content,
                 Extension = dbFile.Extension,
                 Name = dbFile.Name
             };
@@ -32,7 +32,7 @@ namespace LT.DigitalOffice.FileService.Mappers.ModelMappers
 
             return new DbFile()
             {
-                Content = Convert.FromBase64String(file.Content),
+                Content = file.Content,
                 Extension = file.Extension.ToLower(),
                 Name = file.Name,
                 AddedOn = DateTime.UtcNow,

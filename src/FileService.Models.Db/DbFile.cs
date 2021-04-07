@@ -9,7 +9,7 @@ namespace LT.DigitalOffice.FileService.Models.Db
         public const string TableName = "Files";
 
         public Guid Id { get; set; }
-        public byte[] Content { get; set; }
+        public string Content { get; set; }
         public string Extension { get; set; }
         public string Name { get; set; }
         public DateTime AddedOn { get; set; }
@@ -25,6 +25,10 @@ namespace LT.DigitalOffice.FileService.Models.Db
 
             builder
                 .HasKey(p => p.Id);
+
+            builder
+                .Property(p => p.Content)
+                .IsRequired();
 
             builder
                 .Property(p => p.Extension)

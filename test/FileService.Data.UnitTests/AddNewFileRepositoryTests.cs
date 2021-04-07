@@ -27,7 +27,7 @@ namespace LT.DigitalOffice.FileService.Data.UnitTests
             newFile = new DbFile
             {
                 Id = Guid.NewGuid(),
-                Content = Convert.FromBase64String("RGlnaXRhbCBPZmA5Y2U="),
+                Content = "RGlnaXRhbCBPZmA5Y2U=",
                 Extension = ".txt",
                 IsActive = true,
                 Name = "DigitalOfficeTestFile"
