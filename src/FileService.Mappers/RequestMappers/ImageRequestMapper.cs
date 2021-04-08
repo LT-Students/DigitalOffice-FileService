@@ -5,6 +5,7 @@ using LT.DigitalOffice.FileService.Models.Dto.Enums;
 using LT.DigitalOffice.FileService.Models.Dto.Requests;
 using LT.DigitalOffice.Kernel.Extensions;
 using Microsoft.AspNetCore.Http;
+using SixLabors.ImageSharp;
 using System;
 
 namespace LT.DigitalOffice.FileService.Mappers.RequestMappers
@@ -22,7 +23,7 @@ namespace LT.DigitalOffice.FileService.Mappers.RequestMappers
             _httpContext = httpContextAccessor.HttpContext;
         }
 
-        public DbImage Map(ImageRequest imageRequest, ImageType imageType, Guid? parentId = null)
+        public DbImage Map(ImageRequest imageRequest, ImageType imageType, out bool isBigImage, Guid? parentId = null)
         {
             if (imageRequest == null)
             {
@@ -33,6 +34,8 @@ namespace LT.DigitalOffice.FileService.Mappers.RequestMappers
 
             if (imageType == ImageType.Full)
             {
+                using Image image = Image.Load(imageRequest.Content);
+                isBigImage = image.Width > 150 && image.Height > 150;
                 content = imageRequest.Content;
 
                 if (parentId != null)
@@ -42,6 +45,7 @@ namespace LT.DigitalOffice.FileService.Mappers.RequestMappers
             }
             else
             {
+                isBigImage =false;
                 content = _resizeAlgotithm.Resize(imageRequest.Content, imageRequest.Extension);
             }
 

@@ -12,30 +12,34 @@ namespace LT.DigitalOffice.FileService.Business
 {
     public class AddNewImageCommand : IAddNewImageCommand
     {
-        private readonly IImageRepository repository;
-        private readonly IValidator<ImageRequest> validator;
-        private readonly IImageRequestMapper mapper;
-
+        private readonly IImageRepository _repository;
+        private readonly IValidator<ImageRequest> _validator;
+        private readonly IImageRequestMapper _mapper;
         public AddNewImageCommand(
-            [FromServices] IImageRepository repository,
-            [FromServices] IValidator<ImageRequest> validator,
-            [FromServices] IImageRequestMapper mapper)
+               IImageRepository repository,
+               IValidator<ImageRequest> validator,
+               IImageRequestMapper mapper)
         {
-            this.repository = repository;
-            this.validator = validator;
-            this.mapper = mapper;
+            _repository = repository;
+            _validator = validator;
+            _mapper = mapper;
         }
 
         public Guid Execute(ImageRequest request)
         {
-            validator.ValidateAndThrowCustom(request);
+            _validator.ValidateAndThrowCustom(request);
 
-            var parentDbImage = mapper.Map(request, ImageType.Full);
-            var childDbImage = mapper.Map(request, ImageType.Thumb, parentDbImage.Id);
+            var parentDbImage = _mapper.Map(request, ImageType.Full, out bool isBigImage);
 
-            repository.AddNewImage(parentDbImage);
-            repository.AddNewImage(childDbImage);
-
+            if (isBigImage)
+            {
+                var childDbImage = _mapper.Map(request, ImageType.Thumb, out isBigImage, parentDbImage.Id);
+                _repository.AddNewImage(childDbImage);
+            }
+            else
+            {
+                _repository.AddNewImage(parentDbImage);
+            }
             return parentDbImage.Id;
         }
     }
