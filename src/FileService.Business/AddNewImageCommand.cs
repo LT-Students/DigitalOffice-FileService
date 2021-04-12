@@ -38,6 +38,7 @@ namespace LT.DigitalOffice.FileService.Business
             }
             else
             {
+                isBigImage = false;
                 _repository.AddNewImage(parentDbImage);
             }
             return parentDbImage.Id;
