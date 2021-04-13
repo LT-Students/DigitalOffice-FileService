@@ -43,6 +43,7 @@ namespace LT.DigitalOffice.FileService.Mappers.RequestMappers
                     throw new ArgumentException("If image type is Full then parentId must be null.");
                 }
             }
+
             else
             {
                 isBigImage =false;

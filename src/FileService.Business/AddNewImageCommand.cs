@@ -16,9 +16,9 @@ namespace LT.DigitalOffice.FileService.Business
         private readonly IValidator<ImageRequest> _validator;
         private readonly IImageRequestMapper _mapper;
         public AddNewImageCommand(
-               IImageRepository repository,
-               IValidator<ImageRequest> validator,
-               IImageRequestMapper mapper)
+             IImageRepository repository,
+             IValidator<ImageRequest> validator,
+             IImageRequestMapper mapper)
         {
             _repository = repository;
             _validator = validator;

@@ -92,6 +92,8 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
 
             var mapperHelper = new TestMapperHelper();
 
+            isBigImage = false;
+
             mapperMock
                 .Setup(x => x.Map(It.IsAny<ImageRequest>(), ImageType.Full, out isBigImage, null))
                 .Returns(mapperHelper.GetImage());
@@ -112,7 +114,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
         }
 
         [Test]
-        public void ShouldAddThumbImmageWhenImageIsBig()
+        public void ShouldAddThumbImageWhenImageIsBig()
         {
             isBigImage = true;
             var mapperHelper = new TestMapperHelper();
@@ -128,7 +130,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
             Assert.AreEqual(firstDbImage.Id, command.Execute(imageRequest));
 
             validatorMock.Verify(v => v.Validate(It.IsAny<IValidationContext>()), Times.Once);
-            repositoryMock.Verify(r => r.AddNewImage(It.IsAny<DbImage>()), Times.Exactly(1));
+            repositoryMock.Verify(r => r.AddNewImage(It.IsAny<DbImage>()), Times.Once);
             mapperMock.Verify(m => m.Map(It.IsAny<ImageRequest>(), ImageType.Full, out isBigImage, null), Times.Once);
             mapperMock.Verify(m => m.Map(It.IsAny<ImageRequest>(), ImageType.Thumb, out isBigImage, firstDbImage.Id), Times.Once);
         }
@@ -141,7 +143,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
             validatorMock.Verify(v => v.Validate(It.IsAny<IValidationContext>()), Times.Once);
             repositoryMock.Verify(r => r.AddNewImage(It.IsAny<DbImage>()), Times.Exactly(1));
             mapperMock.Verify(m => m.Map(It.IsAny<ImageRequest>(), ImageType.Full, out isBigImage, It.IsAny<Guid?>()), Times.Once);
-            //mapperMock.Verify(m => m.Map(It.IsAny<ImageRequest>(), It.IsAny<ImageType>(), out isBigImage, It.IsAny<Guid?>()), Times.Exactly(1));
+            mapperMock.Verify(m => m.Map(It.IsAny<ImageRequest>(), ImageType.Thumb, out isBigImage, It.IsAny<Guid?>()), Times.Never);
         }
 
         [Test]
@@ -164,17 +166,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
         public void ShouldThrowExceptionWhenImageRequestIsNullAndImageTypeIsFull()
         {
             mapperMock
-                 .Setup(x => x.Map(It.IsAny<ImageRequest>(), ImageType.Full, out isBigImage, It.IsAny<Guid?>()))
-                 .Throws(new NullReferenceException());
-
-            Assert.Throws<NullReferenceException>(() => command.Execute(imageRequest));
-        }
-
-        [Test]
-        public void ShouldThrowExceptionWhenImageRequestIsNullAndImageTypeIsThumb()
-        {
-            mapperMock
-                 .Setup(x => x.Map(It.IsAny<ImageRequest>(), ImageType.Thumb, out isBigImage, firstDbImage.Id))
+                 .Setup(x => x.Map(It.IsAny<ImageRequest>(), ImageType.Full, out isBigImage, null))
                  .Throws(new NullReferenceException());
 
             Assert.Throws<NullReferenceException>(() => command.Execute(imageRequest));
@@ -183,6 +175,8 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
         [Test]
         public void ShouldThrowExceptionWhenRepositoryThrowsException()
         {
+            repositoryMock
+                .Reset();
             repositoryMock
                 .Setup(x => x.AddNewImage(firstDbImage))
                 .Throws(new NullReferenceException());
