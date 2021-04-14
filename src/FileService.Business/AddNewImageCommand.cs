@@ -36,6 +36,7 @@ namespace LT.DigitalOffice.FileService.Business
                 var childDbImage = _mapper.Map(request, ImageType.Thumb, out isBigImage, parentDbImage.Id);
                 _repository.AddNewImage(childDbImage);
             }
+
             else
             {
                 isBigImage = false;
