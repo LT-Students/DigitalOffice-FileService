@@ -120,6 +120,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
             Assert.Throws<NullReferenceException>(() => command.Execute(fileRequest), "Request is null");
         }
 
+        [Test]
         public void ShouldThrowNullReferenceExceptionWhenMapperThrowsIt()
         {
             mapperMock

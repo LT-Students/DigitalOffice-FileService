@@ -9,7 +9,6 @@ using LT.DigitalOffice.FileService.Models.Dto.Requests;
 using Moq;
 using NUnit.Framework;
 using System;
-using System.Collections.Generic;
 
 namespace LT.DigitalOffice.FileService.Business.UnitTests
 {
@@ -22,6 +21,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
 
         private ImageRequest imageRequest;
 
+        private bool isBigImage;
         private static DbImage firstDbImage;
         private static DbImage secondDbImage;
 
@@ -68,7 +68,6 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
                 .Setup(x => x.Validate(It.IsAny<IValidationContext>()).IsValid)
                 .Returns(true);
 
-
             firstDbImage = new DbImage
             {
                 Id = Guid.NewGuid(),
@@ -92,8 +91,14 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
 
             var mapperHelper = new TestMapperHelper();
 
+            isBigImage = false;
+
             mapperMock
-                .Setup(x => x.Map(It.IsAny<ImageRequest>(), ImageType.Full, It.IsAny<Guid?>()))
+                .Setup(x => x.Map(It.IsAny<ImageRequest>(), ImageType.Full, out isBigImage, null))
+                .Returns(mapperHelper.GetImage());
+
+            mapperMock
+                .Setup(x => x.Map(It.IsAny<ImageRequest>(), ImageType.Thumb, out isBigImage, firstDbImage.Id))
                 .Returns(mapperHelper.GetImage());
 
             repositoryMock
@@ -108,48 +113,55 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
         }
 
         [Test]
-        public void ShouldAddNewImageAndThumbImmage()
+        public void ShouldAddThumbImageWhenImageIsBig()
+        {
+            isBigImage = true;
+            var mapperHelper = new TestMapperHelper();
+
+            mapperMock
+                .Setup(x => x.Map(It.IsAny<ImageRequest>(), ImageType.Full, out isBigImage, null))
+                .Returns(mapperHelper.GetImage());
+
+            mapperMock
+                .Setup(x => x.Map(It.IsAny<ImageRequest>(), ImageType.Thumb, out isBigImage, firstDbImage.Id))
+                .Returns(mapperHelper.GetImage());
+
+            Assert.AreEqual(firstDbImage.Id, command.Execute(imageRequest));
+
+            validatorMock.Verify(v => v.Validate(It.IsAny<IValidationContext>()), Times.Once);
+            repositoryMock.Verify(r => r.AddNewImage(It.IsAny<DbImage>()), Times.Once);
+            mapperMock.Verify(m => m.Map(It.IsAny<ImageRequest>(), ImageType.Full, out isBigImage, null), Times.Once);
+            mapperMock.Verify(m => m.Map(It.IsAny<ImageRequest>(), ImageType.Thumb, out isBigImage, firstDbImage.Id), Times.Once);
+        }
+
+        [Test]
+        public void ShouldNotAddNewImageWhenImageIsNotBig()
         {
             Assert.AreEqual(firstDbImage.Id, command.Execute(imageRequest));
 
             validatorMock.Verify(v => v.Validate(It.IsAny<IValidationContext>()), Times.Once);
-            repositoryMock.Verify(r => r.AddNewImage(It.IsAny<DbImage>()), Times.Exactly(2));
-            mapperMock.Verify(m => m.Map(It.IsAny<ImageRequest>(), ImageType.Full, null), Times.Once);
-            mapperMock.Verify(m => m.Map(It.IsAny<ImageRequest>(), ImageType.Thumb, firstDbImage.Id), Times.Once);
-            mapperMock.Verify(m => m.Map(It.IsAny<ImageRequest>(), It.IsAny<ImageType>(), It.IsAny<Guid?>()), Times.Exactly(2));
+            repositoryMock.Verify(r => r.AddNewImage(It.IsAny<DbImage>()), Times.Once);
+            mapperMock.Verify(m => m.Map(It.IsAny<ImageRequest>(), ImageType.Full, out isBigImage, It.IsAny<Guid?>()), Times.Once);
+            mapperMock.Verify(m => m.Map(It.IsAny<ImageRequest>(), ImageType.Thumb, out isBigImage, It.IsAny<Guid?>()), Times.Never);
         }
 
         [Test]
         public void ShouldThrowExceptionWhenValidatorThrowsException()
         {
             validatorMock
-                .Setup(x => x.Validate(It.IsAny<IValidationContext>()))
-                .Returns(new ValidationResult(
-                    new List<ValidationFailure>
-                    {
-                        new ValidationFailure("test", "something", null)
-                    }));
+                .Setup(x => x.Validate(It.IsAny<IValidationContext>()).IsValid)
+                .Returns(false);
 
             Assert.Throws<ValidationException>(() => command.Execute(imageRequest));
             repositoryMock.Verify(r => r.AddNewImage(It.IsAny<DbImage>()), Times.Never);
-            mapperMock.Verify(m => m.Map(It.IsAny<ImageRequest>(), ImageType.Full, It.IsAny<Guid?>()), Times.Never);
+            mapperMock.Verify(m => m.Map(It.IsAny<ImageRequest>(), ImageType.Full, out isBigImage, It.IsAny<Guid?>()), Times.Never);
         }
 
         [Test]
         public void ShouldThrowExceptionWhenImageRequestIsNullAndImageTypeIsFull()
         {
             mapperMock
-                 .Setup(x => x.Map(It.IsAny<ImageRequest>(), ImageType.Full, It.IsAny<Guid?>()))
-                 .Throws(new NullReferenceException());
-
-            Assert.Throws<NullReferenceException>(() => command.Execute(imageRequest));
-        }
-
-        [Test]
-        public void ShouldThrowExceptionWhenImageRequestIsNullAndImageTypeIsThumb()
-        {
-            mapperMock
-                 .Setup(x => x.Map(It.IsAny<ImageRequest>(), ImageType.Thumb, It.IsAny<Guid?>()))
+                 .Setup(x => x.Map(It.IsAny<ImageRequest>(), ImageType.Full, out isBigImage, null))
                  .Throws(new NullReferenceException());
 
             Assert.Throws<NullReferenceException>(() => command.Execute(imageRequest));
@@ -159,10 +171,12 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
         public void ShouldThrowExceptionWhenRepositoryThrowsException()
         {
             repositoryMock
+                .Reset();
+            repositoryMock
                 .Setup(x => x.AddNewImage(firstDbImage))
-                .Throws(new Exception());
+                .Throws(new NullReferenceException());
 
-            Assert.Throws<Exception>(() => command.Execute(imageRequest));
+            Assert.Throws<NullReferenceException>(() => command.Execute(imageRequest));
         }
     }
 }
