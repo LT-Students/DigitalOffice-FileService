@@ -9,7 +9,6 @@ using LT.DigitalOffice.FileService.Models.Dto.Requests;
 using Moq;
 using NUnit.Framework;
 using System;
-using System.Collections.Generic;
 
 namespace LT.DigitalOffice.FileService.Business.UnitTests
 {
@@ -141,7 +140,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
             Assert.AreEqual(firstDbImage.Id, command.Execute(imageRequest));
 
             validatorMock.Verify(v => v.Validate(It.IsAny<IValidationContext>()), Times.Once);
-            repositoryMock.Verify(r => r.AddNewImage(It.IsAny<DbImage>()), Times.Exactly(1));
+            repositoryMock.Verify(r => r.AddNewImage(It.IsAny<DbImage>()), Times.Once);
             mapperMock.Verify(m => m.Map(It.IsAny<ImageRequest>(), ImageType.Full, out isBigImage, It.IsAny<Guid?>()), Times.Once);
             mapperMock.Verify(m => m.Map(It.IsAny<ImageRequest>(), ImageType.Thumb, out isBigImage, It.IsAny<Guid?>()), Times.Never);
         }
@@ -150,12 +149,8 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
         public void ShouldThrowExceptionWhenValidatorThrowsException()
         {
             validatorMock
-                .Setup(x => x.Validate(It.IsAny<IValidationContext>()))
-                .Returns(new ValidationResult(
-                    new List<ValidationFailure>
-                    {
-                        new ValidationFailure("test", "something", null)
-                    }));
+                .Setup(x => x.Validate(It.IsAny<IValidationContext>()).IsValid)
+                .Returns(false);
 
             Assert.Throws<ValidationException>(() => command.Execute(imageRequest));
             repositoryMock.Verify(r => r.AddNewImage(It.IsAny<DbImage>()), Times.Never);
