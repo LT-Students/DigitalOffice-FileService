@@ -3,8 +3,6 @@ using LT.DigitalOffice.FileService.Mappers.RequestMappers.Interfaces;
 using LT.DigitalOffice.FileService.Models.Db;
 using LT.DigitalOffice.FileService.Models.Dto.Enums;
 using LT.DigitalOffice.FileService.Models.Dto.Requests;
-using LT.DigitalOffice.Kernel.Extensions;
-using Microsoft.AspNetCore.Http;
 using System;
 
 namespace LT.DigitalOffice.FileService.Mappers.RequestMappers
@@ -12,17 +10,18 @@ namespace LT.DigitalOffice.FileService.Mappers.RequestMappers
     public class DbImageMapper : IDbImageMapper
     {
         public IImageResizeAlgorithm _resizeAlgotithm;
-        public HttpContext _httpContext;
 
         public DbImageMapper(
-            IImageResizeAlgorithm resizeAlgotithm,
-            IHttpContextAccessor httpContextAccessor)
+            IImageResizeAlgorithm resizeAlgotithm)
         {
             _resizeAlgotithm = resizeAlgotithm;
-            _httpContext = httpContextAccessor.HttpContext;
         }
 
-        public DbImage Map(ImageRequest imageRequest, ImageType imageType, Guid? parentId = null)
+        public DbImage Map(
+            ImageRequest imageRequest,
+            ImageType imageType,
+            Guid userId,
+            Guid? parentId = null)
         {
             if (imageRequest == null)
             {
@@ -53,7 +52,7 @@ namespace LT.DigitalOffice.FileService.Mappers.RequestMappers
                 Extension = imageRequest.Extension.ToLower(),
                 Name = imageRequest.Name,
                 AddedOn = DateTime.Now,
-                UserId = _httpContext.GetUserId(),
+                UserId = userId,
                 ImageType = (int)imageType,
                 IsActive = true
             };

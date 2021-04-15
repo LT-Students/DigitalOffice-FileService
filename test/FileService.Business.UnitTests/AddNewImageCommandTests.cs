@@ -6,6 +6,7 @@ using LT.DigitalOffice.FileService.Mappers.RequestMappers.Interfaces;
 using LT.DigitalOffice.FileService.Models.Db;
 using LT.DigitalOffice.FileService.Models.Dto.Enums;
 using LT.DigitalOffice.FileService.Models.Dto.Requests;
+using Microsoft.AspNetCore.Http;
 using Moq;
 using NUnit.Framework;
 using System;
@@ -15,114 +16,134 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
 {
     public class AddNewImageCommandTests
     {
-        private IAddNewImageCommand command;
-        private Mock<IImageRepository> repositoryMock;
-        private Mock<IValidator<ImageRequest>> validatorMock;
-        private Mock<IDbImageMapper> mapperMock;
+        private IAddNewImageCommand _command;
+        private Mock<IImageRepository> _repositoryMock;
+        private Mock<IValidator<ImageRequest>> _validatorMock;
+        private Mock<IDbImageMapper> _mapperMock;
+        private Mock<IHttpContextAccessor> _accessorMock;
 
-        private ImageRequest imageRequest;
+        private ImageRequest _imageRequest;
 
-        private static DbImage firstDbImage;
-        private static DbImage secondDbImage;
+        private DbImage _fullDbImage;
+        private DbImage _thumbDbImage;
 
-        private class TestMapperHelper
+        private Guid _userId;
+        private const string _name = "Name";
+        private const string _extension = "ext";
+        private const string _content = "content";
+
+        private void ClientRequestUp()
         {
-            private int calls = 0;
+            IDictionary<object, object> httpContextItems = new Dictionary<object, object>();
 
-            public DbImage GetImage()
+            httpContextItems.Add("UserId", _userId);
+
+            _accessorMock = new Mock<IHttpContextAccessor>();
+            _accessorMock
+                .Setup(x => x.HttpContext.Items)
+                .Returns(httpContextItems);
+        }
+
+        [OneTimeSetUp]
+        public void OneTimeSetUp()
+        {
+            _userId = Guid.NewGuid();
+
+            _imageRequest = new ImageRequest
             {
-                calls++;
+                Name = _name,
+                Extension = _extension,
+                Content = _content
+            };
 
-                if (calls == 1)
-                {
-                    return firstDbImage;
-                }
-                else if (calls == 2)
-                {
-                    return secondDbImage;
-                }
-                else
-                {
-                    throw new Exception("Too many calls.");
-                }
-            }
+            _fullDbImage = new DbImage
+            {
+                Id = Guid.NewGuid(),
+                Content = _imageRequest.Content,
+                Extension = _imageRequest.Extension,
+                ImageType = (int)ImageType.Full,
+                IsActive = true,
+                Name = _imageRequest.Name,
+                AddedOn = DateTime.UtcNow,
+                UserId = _userId,
+                ParentId = null
+            };
+
+            _thumbDbImage = new DbImage
+            {
+                Id = Guid.NewGuid(),
+                Content = _imageRequest.Content,
+                Extension = _imageRequest.Extension,
+                ImageType = (int)ImageType.Thumb,
+                IsActive = true,
+                Name = _imageRequest.Name,
+                AddedOn = DateTime.UtcNow,
+                UserId = _userId,
+                ParentId = _fullDbImage.Id
+            };
         }
 
         [SetUp]
         public void SetUp()
         {
-            repositoryMock = new Mock<IImageRepository>();
-            validatorMock = new Mock<IValidator<ImageRequest>>();
-            mapperMock = new Mock<IDbImageMapper>();
+            _repositoryMock = new Mock<IImageRepository>();
+            _repositoryMock
+                .Setup(x => x.AddNewImage(_thumbDbImage))
+                .Returns(_thumbDbImage.Id);
+            _repositoryMock
+                .Setup(x => x.AddNewImage(_fullDbImage))
+                .Returns(_fullDbImage.Id);
 
-            var userId = Guid.NewGuid();
-
-            imageRequest = new ImageRequest
-            {
-                Content = "RGlnaXRhbCBPZmA5Y2U=",
-                Extension = ".png",
-                Name = "Spartak_OnePixel",
-            };
-
-            validatorMock
+            _validatorMock = new Mock<IValidator<ImageRequest>>();
+            _validatorMock
                 .Setup(x => x.Validate(It.IsAny<IValidationContext>()).IsValid)
                 .Returns(true);
 
+            _mapperMock = new Mock<IDbImageMapper>();
+            _mapperMock
+                .Setup(x => x.Map(It.IsAny<ImageRequest>(), ImageType.Full, It.IsAny<Guid>(), It.IsAny<Guid?>()))
+                .Returns(_fullDbImage);
+            _mapperMock
+                .Setup(x => x.Map(It.IsAny<ImageRequest>(), ImageType.Thumb, It.IsAny<Guid>(), It.IsAny<Guid?>()))
+                .Returns(_thumbDbImage);
 
-            firstDbImage = new DbImage
-            {
-                Id = Guid.NewGuid(),
-                Content = imageRequest.Content,
-                Extension = ".png",
-                IsActive = true,
-                Name = "Spartak_OnePixel",
-                AddedOn = DateTime.UtcNow,
-                UserId = userId
-            };
-            secondDbImage = new DbImage
-            {
-                Id = Guid.NewGuid(),
-                Content = imageRequest.Content,
-                Extension = ".png",
-                IsActive = true,
-                Name = "Spartak_OnePixel",
-                AddedOn = DateTime.UtcNow,
-                UserId = userId
-            };
+            ClientRequestUp();
 
-            var mapperHelper = new TestMapperHelper();
-
-            mapperMock
-                .Setup(x => x.Map(It.IsAny<ImageRequest>(), ImageType.Full, It.IsAny<Guid?>()))
-                .Returns(mapperHelper.GetImage());
-
-            repositoryMock
-                .Setup(x => x.AddNewImage(It.IsAny<DbImage>()))
-                .Returns(secondDbImage.Id);
-
-            repositoryMock
-                .Setup(x => x.AddNewImage(firstDbImage))
-                .Returns(firstDbImage.Id);
-
-            command = new AddNewImageCommand(repositoryMock.Object, validatorMock.Object, mapperMock.Object);
+            _command = new AddNewImageCommand(
+                _repositoryMock.Object,
+                _validatorMock.Object,
+                _mapperMock.Object,
+                _accessorMock.Object);
         }
 
         [Test]
-        public void ShouldAddNewImageAndThumbImmage()
+        public void ShouldAddNewImageAndThumbImmageByController()
         {
-            Assert.AreEqual(firstDbImage.Id, command.Execute(imageRequest));
+            Assert.AreEqual(_fullDbImage.Id, _command.Execute(_imageRequest));
 
-            validatorMock.Verify(v => v.Validate(It.IsAny<IValidationContext>()), Times.Once);
-            repositoryMock.Verify(r => r.AddNewImage(It.IsAny<DbImage>()), Times.Exactly(2));
-            mapperMock.Verify(m => m.Map(It.IsAny<ImageRequest>(), ImageType.Full, null), Times.Once);
-            mapperMock.Verify(m => m.Map(It.IsAny<ImageRequest>(), ImageType.Thumb, firstDbImage.Id), Times.Once);
-            mapperMock.Verify(m => m.Map(It.IsAny<ImageRequest>(), It.IsAny<ImageType>(), It.IsAny<Guid?>()), Times.Exactly(2));
+            _validatorMock.Verify(v => v.Validate(It.IsAny<IValidationContext>()), Times.Once);
+            _repositoryMock.Verify(r => r.AddNewImage(It.IsAny<DbImage>()), Times.Exactly(2));
+            _mapperMock.Verify(m => m.Map(It.IsAny<ImageRequest>(), ImageType.Full, _userId, null), Times.Once);
+            _mapperMock.Verify(m => m.Map(It.IsAny<ImageRequest>(), ImageType.Thumb, _userId, _fullDbImage.Id), Times.Once);
+            _mapperMock.Verify(m => m.Map(It.IsAny<ImageRequest>(), It.IsAny<ImageType>(), It.IsAny<Guid>(), It.IsAny<Guid?>()), Times.Exactly(2));
+        }
+
+        [Test]
+        public void ShouldAddNewImageAndThumbImmageByBrokerRequest()
+        {
+            Assert.AreEqual(_fullDbImage.Id, _command.Execute(_imageRequest, _userId));
+
+            _validatorMock.Verify(v => v.Validate(It.IsAny<IValidationContext>()), Times.Once);
+            _repositoryMock.Verify(r => r.AddNewImage(It.IsAny<DbImage>()), Times.Exactly(2));
+            _mapperMock.Verify(m => m.Map(It.IsAny<ImageRequest>(), ImageType.Full, _userId, null), Times.Once);
+            _mapperMock.Verify(m => m.Map(It.IsAny<ImageRequest>(), ImageType.Thumb, _userId, _fullDbImage.Id), Times.Once);
+            _mapperMock.Verify(m => m.Map(It.IsAny<ImageRequest>(), It.IsAny<ImageType>(), It.IsAny<Guid>(), It.IsAny<Guid?>()), Times.Exactly(2));
         }
 
         [Test]
         public void ShouldThrowExceptionWhenValidatorThrowsException()
         {
-            validatorMock
+            _validatorMock
                 .Setup(x => x.Validate(It.IsAny<IValidationContext>()))
                 .Returns(new ValidationResult(
                     new List<ValidationFailure>
@@ -130,39 +151,39 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
                         new ValidationFailure("test", "something", null)
                     }));
 
-            Assert.Throws<ValidationException>(() => command.Execute(imageRequest));
-            repositoryMock.Verify(r => r.AddNewImage(It.IsAny<DbImage>()), Times.Never);
-            mapperMock.Verify(m => m.Map(It.IsAny<ImageRequest>(), ImageType.Full, It.IsAny<Guid?>()), Times.Never);
+            Assert.Throws<ValidationException>(() => _command.Execute(_imageRequest));
+            _repositoryMock.Verify(r => r.AddNewImage(It.IsAny<DbImage>()), Times.Never);
+            _mapperMock.Verify(m => m.Map(It.IsAny<ImageRequest>(), ImageType.Full, It.IsAny<Guid>(), It.IsAny<Guid?>()), Times.Never);
         }
 
         [Test]
         public void ShouldThrowExceptionWhenImageRequestIsNullAndImageTypeIsFull()
         {
-            mapperMock
-                 .Setup(x => x.Map(It.IsAny<ImageRequest>(), ImageType.Full, It.IsAny<Guid?>()))
+            _mapperMock
+                 .Setup(x => x.Map(It.IsAny<ImageRequest>(), ImageType.Full, It.IsAny<Guid>(), It.IsAny<Guid?>()))
                  .Throws(new NullReferenceException());
 
-            Assert.Throws<NullReferenceException>(() => command.Execute(imageRequest));
+            Assert.Throws<NullReferenceException>(() => _command.Execute(_imageRequest));
         }
 
         [Test]
         public void ShouldThrowExceptionWhenImageRequestIsNullAndImageTypeIsThumb()
         {
-            mapperMock
-                 .Setup(x => x.Map(It.IsAny<ImageRequest>(), ImageType.Thumb, It.IsAny<Guid?>()))
+            _mapperMock
+                 .Setup(x => x.Map(It.IsAny<ImageRequest>(), ImageType.Thumb, It.IsAny<Guid>(), It.IsAny<Guid?>()))
                  .Throws(new NullReferenceException());
 
-            Assert.Throws<NullReferenceException>(() => command.Execute(imageRequest));
+            Assert.Throws<NullReferenceException>(() => _command.Execute(_imageRequest));
         }
 
         [Test]
         public void ShouldThrowExceptionWhenRepositoryThrowsException()
         {
-            repositoryMock
-                .Setup(x => x.AddNewImage(firstDbImage))
+            _repositoryMock
+                .Setup(x => x.AddNewImage(_fullDbImage))
                 .Throws(new Exception());
 
-            Assert.Throws<Exception>(() => command.Execute(imageRequest));
+            Assert.Throws<Exception>(() => _command.Execute(_imageRequest));
         }
     }
 }

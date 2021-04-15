@@ -7,6 +7,6 @@ namespace LT.DigitalOffice.FileService.Mappers.RequestMappers.Interfaces
 {
     public interface IDbImageMapper
     {
-        DbImage Map(ImageRequest imageRequest, ImageType imageType, Guid? parentId = null);
+        DbImage Map(ImageRequest imageRequest, ImageType imageType, Guid userId, Guid? parentId = null);
     }
 }
