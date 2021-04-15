@@ -18,7 +18,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
         private IAddNewImageCommand command;
         private Mock<IImageRepository> repositoryMock;
         private Mock<IValidator<ImageRequest>> validatorMock;
-        private Mock<IImageRequestMapper> mapperMock;
+        private Mock<IDbImageMapper> mapperMock;
 
         private ImageRequest imageRequest;
 
@@ -53,7 +53,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
         {
             repositoryMock = new Mock<IImageRepository>();
             validatorMock = new Mock<IValidator<ImageRequest>>();
-            mapperMock = new Mock<IImageRequestMapper>();
+            mapperMock = new Mock<IDbImageMapper>();
 
             var userId = Guid.NewGuid();
 

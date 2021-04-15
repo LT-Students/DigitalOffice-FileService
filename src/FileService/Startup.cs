@@ -185,6 +185,7 @@ namespace LT.DigitalOffice.FileService
         private void ConfigureMappers(IServiceCollection services)
         {
             services.AddTransient<IFileMapper, FileMapper>();
+            services.AddTransient<IDbImageMapper, DbImageMapper>();
             services.AddTransient<IImageRequestMapper, ImageRequestMapper>();
         }
 

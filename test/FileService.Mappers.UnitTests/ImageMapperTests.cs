@@ -68,7 +68,7 @@ namespace LT.DigitalOffice.FileService.Mappers.UnitTests
 
     public class ImageMapperTests
     {
-        private IImageRequestMapper requestToDbMapper;
+        private IDbImageMapper requestToDbMapper;
         private Mock<IImageResizeAlgorithm> algorithmMock;
         private FakeHttpContextAccessor fakeHttpContextAccessor;
 
@@ -83,7 +83,7 @@ namespace LT.DigitalOffice.FileService.Mappers.UnitTests
             userId = Guid.NewGuid();
             algorithmMock = new Mock<IImageResizeAlgorithm>();
             fakeHttpContextAccessor = new FakeHttpContextAccessor(userId);
-            requestToDbMapper = new ImageRequestMapper(algorithmMock.Object, fakeHttpContextAccessor);
+            requestToDbMapper = new DbImageMapper(algorithmMock.Object, fakeHttpContextAccessor);
 
             imageRequest = new ImageRequest
             {

@@ -7,6 +7,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\FileService.Business\FileService.Business.csproj" />
     <ProjectReference Include="..\FileService.Data\FileService.Data.csproj" />
     <ProjectReference Include="..\FileService.Models.Broker\FileService.Models.Broker.csproj" />
   </ItemGroup>

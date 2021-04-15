@@ -1,14 +1,26 @@
-﻿namespace LT.DigitalOffice.Broker.Requests
+﻿using System;
+
+namespace LT.DigitalOffice.Broker.Requests
 {
     public interface IAddImageRequest
     {
-        string Content { get; }
+        public string Name { get; set; }
+        public string Content { get; set; }
+        public string Extension { get; set; }
+        public Guid UserId { get; set; }
 
-        static object CreateObj(string content)
+        static object CreateObj(
+            string name,
+            string content,
+            string extension,
+            Guid userId)
         {
             return new
             {
-                Content = content
+                Name = name,
+                Content = content,
+                Extension = extension,
+                UserId = userId
             };
         }
     }

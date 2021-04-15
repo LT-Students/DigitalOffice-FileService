@@ -14,12 +14,12 @@ namespace LT.DigitalOffice.FileService.Business
     {
         private readonly IImageRepository repository;
         private readonly IValidator<ImageRequest> validator;
-        private readonly IImageRequestMapper mapper;
+        private readonly IDbImageMapper mapper;
 
         public AddNewImageCommand(
             [FromServices] IImageRepository repository,
             [FromServices] IValidator<ImageRequest> validator,
-            [FromServices] IImageRequestMapper mapper)
+            [FromServices] IDbImageMapper mapper)
         {
             this.repository = repository;
             this.validator = validator;
