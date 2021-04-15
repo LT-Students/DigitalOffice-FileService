@@ -24,9 +24,9 @@ namespace LT.DigitalOffice.FileService.Business
             IDbImageMapper mapper,
             IHttpContextAccessor httpContextAccessor)
         {
-            this._repository = repository;
-            this._validator = validator;
-            this._mapper = mapper;
+            _repository = repository;
+            _validator = validator;
+            _mapper = mapper;
             _httpContextAccessor = httpContextAccessor;
         }
 
@@ -36,11 +36,23 @@ namespace LT.DigitalOffice.FileService.Business
 
             Guid requiredUserId = userId ?? _httpContextAccessor.HttpContext.GetUserId();
 
-            var parentDbImage = _mapper.Map(request, ImageType.Full, requiredUserId);
-            _repository.AddNewImage(parentDbImage);
+            var parentDbImage = _mapper.Map(request, ImageType.Full, out bool isBigImage, requiredUserId);
 
-            var childDbImage = _mapper.Map(request, ImageType.Thumb, requiredUserId, parentDbImage.Id);
-            _repository.AddNewImage(childDbImage);
+            if (isBigImage)
+            {
+                var childDbImage = _mapper.Map(request, ImageType.Thumb, out isBigImage, requiredUserId, parentDbImage.Id);
+                _repository.AddNewImage(childDbImage);
+            }
+            else
+            {
+                //isBigImage = false;
+                _repository.AddNewImage(parentDbImage);
+            }
+            //var parentDbImage = _mapper.Map(request, ImageType.Full, requiredUserId);
+            //_repository.AddNewImage(parentDbImage);
+
+            //var childDbImage = _mapper.Map(request, ImageType.Thumb, requiredUserId, parentDbImage.Id);
+            //_repository.AddNewImage(childDbImage);
 
             return parentDbImage.Id;
         }
