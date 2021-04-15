@@ -13,9 +13,9 @@ namespace LT.DigitalOffice.FileService.Business
 {
     public class AddNewImageCommand : IAddNewImageCommand
     {
-        private readonly IImageRepository repository;
-        private readonly IValidator<ImageRequest> validator;
-        private readonly IDbImageMapper mapper;
+        private readonly IImageRepository _repository;
+        private readonly IValidator<ImageRequest> _validator;
+        private readonly IDbImageMapper _mapper;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public AddNewImageCommand(
@@ -24,23 +24,23 @@ namespace LT.DigitalOffice.FileService.Business
             IDbImageMapper mapper,
             IHttpContextAccessor httpContextAccessor)
         {
-            this.repository = repository;
-            this.validator = validator;
-            this.mapper = mapper;
+            this._repository = repository;
+            this._validator = validator;
+            this._mapper = mapper;
             _httpContextAccessor = httpContextAccessor;
         }
 
         public Guid Execute(ImageRequest request, Guid? userId = null)
         {
-            validator.ValidateAndThrowCustom(request);
+            _validator.ValidateAndThrowCustom(request);
 
             Guid requiredUserId = userId ?? _httpContextAccessor.HttpContext.GetUserId();
 
-            var parentDbImage = mapper.Map(request, ImageType.Full, requiredUserId);
-            repository.AddNewImage(parentDbImage);
+            var parentDbImage = _mapper.Map(request, ImageType.Full, requiredUserId);
+            _repository.AddNewImage(parentDbImage);
 
-            var childDbImage = mapper.Map(request, ImageType.Thumb, requiredUserId, parentDbImage.Id);
-            repository.AddNewImage(childDbImage);
+            var childDbImage = _mapper.Map(request, ImageType.Thumb, requiredUserId, parentDbImage.Id);
+            _repository.AddNewImage(childDbImage);
 
             return parentDbImage.Id;
         }
