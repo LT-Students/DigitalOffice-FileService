@@ -6,7 +6,7 @@ using System;
 namespace LT.DigitalOffice.FileService.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class FileController : ControllerBase
     {
         [HttpPost("addNewFile")]

@@ -1,7 +1,6 @@
-﻿using LT.DigitalOffice.Kernel.Broker;
-using LT.DigitalOffice.Kernel.Configurations;
+﻿using LT.DigitalOffice.Kernel.Configurations;
 
-namespace LT.DigitalOffice.FileService.Configuration
+namespace LT.DigitalOffice.FileService.Models.Dto.Configurations
 {
     public class RabbitMqConfig : BaseRabbitMqConfig
     {
