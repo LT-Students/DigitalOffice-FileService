@@ -40,19 +40,11 @@ namespace LT.DigitalOffice.FileService.Business
 
             if (isBigImage)
             {
-                var childDbImage = _mapper.Map(request, ImageType.Thumb, out isBigImage, requiredUserId, parentDbImage.Id);
+                var childDbImage = _mapper.Map(request, ImageType.Thumb, out _, requiredUserId, parentDbImage.Id);
                 _repository.AddNewImage(childDbImage);
             }
-            else
-            {
-                //isBigImage = false;
-                _repository.AddNewImage(parentDbImage);
-            }
-            //var parentDbImage = _mapper.Map(request, ImageType.Full, requiredUserId);
-            //_repository.AddNewImage(parentDbImage);
 
-            //var childDbImage = _mapper.Map(request, ImageType.Thumb, requiredUserId, parentDbImage.Id);
-            //_repository.AddNewImage(childDbImage);
+            _repository.AddNewImage(parentDbImage);
 
             return parentDbImage.Id;
         }

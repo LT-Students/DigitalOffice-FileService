@@ -34,7 +34,9 @@ namespace LT.DigitalOffice.FileService.Mappers.RequestMappers
 
             if (imageType == ImageType.Full)
             {
-                using Image image = Image.Load(imageRequest.Content);
+                byte[] byteString = Convert.FromBase64String(imageRequest.Content);
+
+                Image image = Image.Load(byteString);
                 isBigImage = image.Width > 150 && image.Height > 150;
                 content = imageRequest.Content;
 
