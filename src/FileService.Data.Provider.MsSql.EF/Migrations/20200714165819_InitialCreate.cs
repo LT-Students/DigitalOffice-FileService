@@ -45,7 +45,7 @@ namespace LT.DigitalOffice.FileService.Data.Provider.MsSql.Ef.Migrations
                     Name = table.Column<string>(nullable: true),
                     AddedOn = table.Column<DateTime>(nullable: false),
                     UserId = table.Column<Guid>(nullable: false),
-                    ImageType = table.Column<int>(nullable: false),
+                    ImageType = table.Column<Guid>(nullable: false),
                     IsActive = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
