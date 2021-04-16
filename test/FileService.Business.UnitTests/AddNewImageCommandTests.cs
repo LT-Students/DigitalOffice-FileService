@@ -89,6 +89,8 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
         [SetUp]
         public void SetUp()
         {
+            _isBigImage = false;
+
             _repositoryMock = new Mock<IImageRepository>();
             _repositoryMock
                 .Setup(x => x.AddNewImage(_thumbDbImage))
@@ -119,32 +121,38 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
                 _accessorMock.Object);
         }
 
-        //[Test]
-        //public void ShouldAddOnlyFullAndThumbImage()
-        //{
-        //    _imageRequest.Content = _bigContent;
+        [Test]
+        public void ShouldAddOnlyFullAndThumbImage()
+        {
+           _isBigImage = true;
+            _mapperMock
+                .Setup(x => x.Map(It.IsAny<ImageRequest>(), ImageType.Full, out _isBigImage, It.IsAny<Guid>(), It.IsAny<Guid?>()))
+                .Returns(_fullDbImage);
+            _mapperMock
+                .Setup(x => x.Map(It.IsAny<ImageRequest>(), ImageType.Thumb, out _isBigImage, It.IsAny<Guid>(), It.IsAny<Guid?>()))
+                .Returns(_thumbDbImage);
 
-        //    Assert.AreEqual(_fullDbImage.Id, _command.Execute(_imageRequest));
+            Assert.AreEqual(_fullDbImage.Id, _command.Execute(_imageRequest));
 
-        //    _validatorMock.Verify(v => v.Validate(It.IsAny<IValidationContext>()), Times.Once);
-        //    _repositoryMock.Verify(r => r.AddNewImage(It.IsAny<DbImage>()), Times.Exactly(2));
-        //    _mapperMock.Verify(
-        //        m => m.Map(
-        //            It.IsAny<ImageRequest>(),
-        //            ImageType.Full,
-        //            out _isBigImage,
-        //            _userId,
-        //            null),
-        //        Times.Once);
-        //    _mapperMock.Verify(
-        //        m => m.Map(
-        //            It.IsAny<ImageRequest>(),
-        //            ImageType.Thumb,
-        //            out _isBigImage,
-        //            _userId,
-        //            null),
-        //        Times.Once);
-        //}
+            _validatorMock.Verify(v => v.Validate(It.IsAny<IValidationContext>()), Times.Once);
+            _repositoryMock.Verify(r => r.AddNewImage(It.IsAny<DbImage>()), Times.Exactly(2));
+            _mapperMock.Verify(
+                m => m.Map(
+                    It.IsAny<ImageRequest>(),
+                    ImageType.Full,
+                    out _isBigImage,
+                    _userId,
+                    null),
+                Times.Once);
+            _mapperMock.Verify(
+                m => m.Map(
+                    It.IsAny<ImageRequest>(),
+                    ImageType.Thumb,
+                    out _isBigImage,
+                    _userId,
+                    It.IsAny<Guid>()),
+                Times.Once);
+        }
 
         [Test]
         public void ShouldAddOnlyFullImage()
@@ -163,37 +171,42 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
                 Times.Once);
         }
 
-        //[Test]
-        //public void ShouldAddOnlyFullAndThumbImageFromBrokerRequest()
-        //{
-        //    _imageRequest.Content = _bigContent;
+        [Test]
+        public void ShouldAddOnlyFullAndThumbImageFromBrokerRequest()
+        {
+            _isBigImage = true;
+            _mapperMock
+                .Setup(x => x.Map(It.IsAny<ImageRequest>(), ImageType.Full, out _isBigImage, It.IsAny<Guid>(), It.IsAny<Guid?>()))
+                .Returns(_fullDbImage);
+            _mapperMock
+                .Setup(x => x.Map(It.IsAny<ImageRequest>(), ImageType.Thumb, out _isBigImage, It.IsAny<Guid>(), It.IsAny<Guid?>()))
+                .Returns(_thumbDbImage);
 
-        //    Assert.AreEqual(_fullDbImage.Id, _command.Execute(_imageRequest, _userId));
+            Assert.AreEqual(_fullDbImage.Id, _command.Execute(_imageRequest, _userId));
 
-        //    _validatorMock.Verify(v => v.Validate(It.IsAny<IValidationContext>()), Times.Once);
-        //    _repositoryMock.Verify(r => r.AddNewImage(It.IsAny<DbImage>()), Times.Exactly(2));
-        //    _mapperMock.Verify(
-        //        m => m.Map(
-        //            It.IsAny<ImageRequest>(),
-        //            ImageType.Full,
-        //            out _isBigImage,
-        //            _userId,
-        //            null),
-        //        Times.Once);
-        //    _mapperMock.Verify(
-        //        m => m.Map(
-        //            It.IsAny<ImageRequest>(),
-        //            ImageType.Thumb,
-        //            out _isBigImage,
-        //            _userId,
-        //            null),
-        //        Times.Once);
-        //}
+            _validatorMock.Verify(v => v.Validate(It.IsAny<IValidationContext>()), Times.Once);
+            _repositoryMock.Verify(r => r.AddNewImage(It.IsAny<DbImage>()), Times.Exactly(2));
+            _mapperMock.Verify(
+                m => m.Map(
+                    It.IsAny<ImageRequest>(),
+                    ImageType.Full,
+                    out _isBigImage,
+                    _userId,
+                    null),
+                Times.Once);
+            _mapperMock.Verify(
+                m => m.Map(
+                    It.IsAny<ImageRequest>(),
+                    ImageType.Thumb,
+                    out _isBigImage,
+                    _userId,
+                    It.IsAny<Guid>()),
+                Times.Once);
+        }
 
         [Test]
         public void ShouldAddOnlyFullImageFromBrokerRequest()
         {
-            _isBigImage = true;
             Assert.AreEqual(_fullDbImage.Id, _command.Execute(_imageRequest, _userId));
 
             _validatorMock.Verify(v => v.Validate(It.IsAny<IValidationContext>()), Times.Once);
