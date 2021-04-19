@@ -14,7 +14,7 @@ namespace LT.DigitalOffice.FileService.Broker.Consumers
         private readonly IAddNewImageCommand _command;
         private readonly IImageRequestMapper _mapper;
 
-        private object GetImage(IAddImageRequest request)
+        private object GetImageId(IAddImageRequest request)
         {
             var imageRequest = _mapper.Map(request);
 
@@ -36,7 +36,7 @@ namespace LT.DigitalOffice.FileService.Broker.Consumers
 
         public async Task Consume(ConsumeContext<IAddImageRequest> context)
         {
-            var response = OperationResultWrapper.CreateResponse(GetImage, context.Message);
+            var response = OperationResultWrapper.CreateResponse(GetImageId, context.Message);
 
             await context.RespondAsync<IOperationResult<IAddImageResponse>>(response);
         }
