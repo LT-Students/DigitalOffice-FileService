@@ -12,25 +12,25 @@ namespace LT.DigitalOffice.FileService.Data.Provider.MsSql.Ef.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: nameof(DbImage.ImageType),
+                name: "ImageType",
                 table: DbImage.TableName);
 
             migrationBuilder.AddColumn<int>(
-               name: nameof(DbImage.ImageType),
-               table: DbImage.TableName,
-               nullable: false);
+                name: "ImageType",
+                table: DbImage.TableName,
+                nullable: false);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: nameof(DbImage.ImageType),
+                name: "ImageType",
                 table: DbImage.TableName);
 
             migrationBuilder.AddColumn<Guid>(
-               name: nameof(DbImage.ImageType),
-               table: DbImage.TableName,
-               nullable: false);
+                name: "ImageType",
+                table: DbImage.TableName,
+                nullable: false);
         }
     }
 }

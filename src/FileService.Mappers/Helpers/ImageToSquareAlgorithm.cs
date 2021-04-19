@@ -1,4 +1,4 @@
-﻿using LT.DigitalOffice.FileService.Business.Helpers.Interfaces;
+﻿using LT.DigitalOffice.FileService.Mappers.Helpers.Interfaces;
 using LT.DigitalOffice.Kernel.Exceptions.Models;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats;
@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("LT.DigitalOffice.FileService")]
-namespace LT.DigitalOffice.FileService.Business.Helpers
+namespace LT.DigitalOffice.FileService.Mappers.Helpers
 {
     internal class ImageToSquareAlgorithm : IImageResizeAlgorithm
     {
@@ -31,19 +31,18 @@ namespace LT.DigitalOffice.FileService.Business.Helpers
         {
             try
             {
-                using (Image image = Image.Load(base64String))
-                {
-                    // Trim the image in the center.
-                    var minSize = Math.Min(image.Width, image.Height);
-                    var offsetX = (image.Width - minSize) / 2;
-                    var offsetY = (image.Height - minSize) / 2;
+                byte[] byteString = Convert.FromBase64String(base64String);
+                Image image = Image.Load(byteString);
 
-                    image.Mutate(x => x.Crop(new Rectangle(offsetX, offsetY, minSize, minSize)));
+                var minSize = Math.Min(image.Width, image.Height);
+                var offsetX = (image.Width - minSize) / 2;
+                var offsetY = (image.Height - minSize) / 2;
 
-                    image.Mutate(x => x.Resize(150, 150));
+                image.Mutate(x => x.Crop(new Rectangle(offsetX, offsetY, minSize, minSize)));
 
-                    return image.ToBase64String(imageFormats[outputExtension]);
-                }
+                image.Mutate(x => x.Resize(150, 150));
+
+                return image.ToBase64String(imageFormats[outputExtension]);
             }
             catch
             {

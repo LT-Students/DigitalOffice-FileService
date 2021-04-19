@@ -1,4 +1,4 @@
-﻿using LT.DigitalOffice.FileService.Business.Helpers.Interfaces;
+﻿using LT.DigitalOffice.FileService.Mappers.Helpers.Interfaces;
 using LT.DigitalOffice.FileService.Mappers.RequestMappers.Interfaces;
 using LT.DigitalOffice.FileService.Models.Db;
 using LT.DigitalOffice.FileService.Models.Dto.Enums;
