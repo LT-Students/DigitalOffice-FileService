@@ -42,7 +42,7 @@ namespace LT.DigitalOffice.FileService.Mappers.Helpers
 
                 image.Mutate(x => x.Resize(150, 150));
 
-                return image.ToBase64String(imageFormats[outputExtension]);
+                return image.ToBase64String(imageFormats[outputExtension]).Split(',')[1];
             }
             catch
             {
