@@ -23,7 +23,7 @@ namespace LT.DigitalOffice.FileService.Mappers.UnitTests
         private string _bigContent = Properties.Resources.BigImageContent;
         private Guid _parentId;
         private Guid _userId;
-        private bool isBigImage;
+        private bool _isBigImage;
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
@@ -71,14 +71,14 @@ namespace LT.DigitalOffice.FileService.Mappers.UnitTests
             var result = _mapper.Map(
                 _imageRequest,
                 ImageType.Full,
-                out isBigImage,
+                out _isBigImage,
                 _userId);
 
             _dbImage.Id = result.Id;
             _dbImage.AddedOn = result.AddedOn;
 
             SerializerAssert.AreEqual(_dbImage, result);
-            Assert.IsFalse(isBigImage);
+            Assert.IsFalse(_isBigImage);
         }
 
         [Test]
@@ -89,7 +89,7 @@ namespace LT.DigitalOffice.FileService.Mappers.UnitTests
             var result = _mapper.Map(
                 _imageRequest,
                 ImageType.Full,
-                out isBigImage,
+                out _isBigImage,
                 _userId);
 
             _dbImage.Id = result.Id;
@@ -97,7 +97,7 @@ namespace LT.DigitalOffice.FileService.Mappers.UnitTests
             _dbImage.Content = _bigContent;
 
             SerializerAssert.AreEqual(_dbImage, result);
-            Assert.IsTrue(isBigImage);
+            Assert.IsTrue(_isBigImage);
         }
 
         [Test]
@@ -106,7 +106,7 @@ namespace LT.DigitalOffice.FileService.Mappers.UnitTests
             Assert.Throws<ArgumentException>(() => _mapper.Map(
                 _imageRequest,
                 ImageType.Full,
-                out isBigImage,
+                out _isBigImage,
                 _userId,
                 _parentId));
         }
@@ -117,7 +117,7 @@ namespace LT.DigitalOffice.FileService.Mappers.UnitTests
             Assert.Throws<ArgumentNullException>(() => _mapper.Map(
                 null,
                 ImageType.Full,
-                out isBigImage,
+                out _isBigImage,
                 _userId,
                 _parentId));
         }
@@ -128,7 +128,7 @@ namespace LT.DigitalOffice.FileService.Mappers.UnitTests
             var result = _mapper.Map(
                 _imageRequest,
                 ImageType.Thumb,
-                out isBigImage,
+                out _isBigImage,
                 _userId,
                 _parentId);
 

@@ -223,12 +223,8 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
         public void ShouldThrowExceptionWhenValidatorThrowsException()
         {
             _validatorMock
-                .Setup(x => x.Validate(It.IsAny<IValidationContext>()))
-                .Returns(new ValidationResult(
-                    new List<ValidationFailure>
-                    {
-                        new ValidationFailure("test", "something", null)
-                    }));
+                .Setup(x => x.Validate(It.IsAny<IValidationContext>()).IsValid)
+                .Returns(false);
 
             Assert.Throws<ValidationException>(() => _command.Execute(_imageRequest));
             _repositoryMock.Verify(r => r.AddNewImage(It.IsAny<DbImage>()), Times.Never);
