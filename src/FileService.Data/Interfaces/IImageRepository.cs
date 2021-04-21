@@ -1,4 +1,5 @@
 ﻿using LT.DigitalOffice.FileService.Models.Db;
+using LT.DigitalOffice.Kernel.Attributes;
 using System;
 
 namespace LT.DigitalOffice.FileService.Data.Interfaces
@@ -7,6 +8,7 @@ namespace LT.DigitalOffice.FileService.Data.Interfaces
     /// Represents interface of repository in repository pattern.
     /// Provides methods for working with the database of FileService.
     /// </summary>
+    [AutoInject]
     public interface IImageRepository
     {
         /// <summary>

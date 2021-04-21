@@ -11,10 +11,10 @@ namespace LT.DigitalOffice.FileService.Data.UnitTests
 {
     public class GetFileByIdRepositoryTests
     {
-        private FileServiceDbContext dbContext;
-        private IFileRepository repository;
+        private FileServiceDbContext _dbContext;
+        private IFileRepository _repository;
 
-        private DbFile dbFile;
+        private DbFile _dbFile;
 
         [SetUp]
         public void Setup()
@@ -22,10 +22,10 @@ namespace LT.DigitalOffice.FileService.Data.UnitTests
             var dbOptions = new DbContextOptionsBuilder<FileServiceDbContext>()
                                     .UseInMemoryDatabase("InMemoryDatabase")
                                     .Options;
-            dbContext = new FileServiceDbContext(dbOptions);
-            repository = new FileRepository(dbContext);
+            _dbContext = new FileServiceDbContext(dbOptions);
+            _repository = new FileRepository(_dbContext);
 
-            dbFile = new DbFile
+            _dbFile = new DbFile
             {
                 Id = Guid.NewGuid(),
                 Content = "RGlnaXRhbCBPZmA5Y2U=",
@@ -34,37 +34,37 @@ namespace LT.DigitalOffice.FileService.Data.UnitTests
                 Name = "DigitalOfficeTestFile"
             };
 
-            dbContext.Files.Add(dbFile);
-            dbContext.SaveChanges();
+            _dbContext.Files.Add(_dbFile);
+            _dbContext.SaveChanges();
         }
 
         [TearDown]
         public void Clean()
         {
-            if (dbContext.Database.IsInMemory())
+            if (_dbContext.Database.IsInMemory())
             {
-                dbContext.Database.EnsureDeleted();
+                _dbContext.Database.EnsureDeleted();
             }
         }
 
         [Test]
         public void ShouldThrowExceptionWhenThereNoFileInDatabaseWithSuchId()
         {
-            Assert.Throws<NotFoundException>(() => repository.GetFileById(Guid.NewGuid()));
+            Assert.Throws<NotFoundException>(() => _repository.GetFileById(Guid.NewGuid()));
         }
 
         [Test]
         public void ShouldReturnFileInfoWhenGettingFileById()
         {
-            var result = repository.GetFileById(dbFile.Id);
+            var result = _repository.GetFileById(_dbFile.Id);
 
             var expected = new DbFile
             {
-                Id = dbFile.Id,
-                Name = dbFile.Name,
-                Content = dbFile.Content,
-                Extension = dbFile.Extension,
-                IsActive = dbFile.IsActive
+                Id = _dbFile.Id,
+                Name = _dbFile.Name,
+                Content = _dbFile.Content,
+                Extension = _dbFile.Extension,
+                IsActive = _dbFile.IsActive
             };
 
             SerializerAssert.AreEqual(expected, result);

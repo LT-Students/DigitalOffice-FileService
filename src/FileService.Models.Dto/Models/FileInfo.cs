@@ -2,7 +2,7 @@ using System;
 
 namespace LT.DigitalOffice.FileService.Models.Dto.Models
 {
-    public class File
+    public class FileInfo
     {
         public Guid? Id { get; set; }
         public string Content { get; set; }

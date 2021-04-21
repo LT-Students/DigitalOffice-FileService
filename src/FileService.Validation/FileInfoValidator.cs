@@ -1,12 +1,13 @@
 ﻿using FluentValidation;
 using LT.DigitalOffice.FileService.Models.Dto.Models;
 using LT.DigitalOffice.FileService.Validation.Helpers;
+using LT.DigitalOffice.FileService.Validation.Interfaces;
 
 namespace LT.DigitalOffice.FileService.Validation
 {
-    public class FileValidator : AbstractValidator<File>
+    public class FileInfoValidator : AbstractValidator<FileInfo>, IFileInfoValidator
     {
-        public FileValidator()
+        public FileInfoValidator()
         {
             RuleFor(file => file.Name)
                 .NotEmpty()

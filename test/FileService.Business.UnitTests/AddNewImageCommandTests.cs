@@ -1,11 +1,12 @@
 ﻿using FluentValidation;
-using FluentValidation.Results;
-using LT.DigitalOffice.FileService.Business.Interfaces;
+using LT.DigitalOffice.FileService.Business.Commands.Image;
+using LT.DigitalOffice.FileService.Business.Commands.Image.Interfaces;
 using LT.DigitalOffice.FileService.Data.Interfaces;
-using LT.DigitalOffice.FileService.Mappers.RequestMappers.Interfaces;
+using LT.DigitalOffice.FileService.Mappers.Db.Interfaces;
 using LT.DigitalOffice.FileService.Models.Db;
 using LT.DigitalOffice.FileService.Models.Dto.Enums;
 using LT.DigitalOffice.FileService.Models.Dto.Requests;
+using LT.DigitalOffice.FileService.Validation.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Moq;
 using NUnit.Framework;
@@ -18,7 +19,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
     {
         private IAddNewImageCommand _command;
         private Mock<IImageRepository> _repositoryMock;
-        private Mock<IValidator<ImageRequest>> _validatorMock;
+        private Mock<IImageRequestValidator> _validatorMock;
         private Mock<IDbImageMapper> _mapperMock;
         private Mock<IHttpContextAccessor> _accessorMock;
 
@@ -97,7 +98,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
                 .Setup(x => x.AddNewImage(_fullDbImage))
                 .Returns(_fullDbImage.Id);
 
-            _validatorMock = new Mock<IValidator<ImageRequest>>();
+            _validatorMock = new Mock<IImageRequestValidator>();
             _validatorMock
                 .Setup(x => x.Validate(It.IsAny<IValidationContext>()).IsValid)
                 .Returns(true);

@@ -1,9 +1,9 @@
 ﻿using LT.DigitalOffice.Broker.Requests;
-using LT.DigitalOffice.FileService.Mappers.RequestMappers.Interfaces;
+using LT.DigitalOffice.FileService.Mappers.Requests.Interfaces;
 using LT.DigitalOffice.FileService.Models.Dto.Requests;
 using System;
 
-namespace LT.DigitalOffice.FileService.Mappers.RequestMappers
+namespace LT.DigitalOffice.FileService.Mappers.Requests
 {
     public class ImageRequestMapper : IImageRequestMapper
     {

@@ -1,6 +1,6 @@
 ﻿using LT.DigitalOffice.Broker.Requests;
-using LT.DigitalOffice.FileService.Mappers.RequestMappers;
-using LT.DigitalOffice.FileService.Mappers.RequestMappers.Interfaces;
+using LT.DigitalOffice.FileService.Mappers.Requests;
+using LT.DigitalOffice.FileService.Mappers.Requests.Interfaces;
 using LT.DigitalOffice.FileService.Models.Dto.Requests;
 using LT.DigitalOffice.UnitTestKernel;
 using Moq;

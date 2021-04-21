@@ -1,41 +1,41 @@
-﻿using FluentValidation;
-using FluentValidation.TestHelper;
+﻿using FluentValidation.TestHelper;
 using LT.DigitalOffice.FileService.Models.Dto.Models;
+using LT.DigitalOffice.FileService.Validation.Interfaces;
 using NUnit.Framework;
 
 namespace LT.DigitalOffice.FileService.Validation.UnitTests
 {
     public class AddNewFileRequestValidatorTests
     {
-        private IValidator<File> validator;
+        private IFileInfoValidator _validator;
 
-        private File fileRequest;
+        private FileInfo _fileRequest;
 
         [SetUp]
         public void SetUp()
         {
-            fileRequest = new File
+            _fileRequest = new FileInfo
             {
                 Content = "RGlnaXRhbCBPZmA5Y2U=",
                 Extension = ".txt",
                 Name = "DigitalOfficeTestFile"
             };
 
-            validator = new FileValidator();
+            _validator = new FileInfoValidator();
         }
 
         [Test]
         public void ShouldNotHaveAnyValidationErrorsWhenFileIsValid()
         {
-            validator.TestValidate(fileRequest).ShouldNotHaveAnyValidationErrors();
+            _validator.TestValidate(_fileRequest).ShouldNotHaveAnyValidationErrors();
         }
 
         [Test]
         public void ShouldHaveValidationErrorWhenContentIsInWrongEncoding()
         {
-            fileRequest.Content = "T 1 ! * & ? Z :C ; _____";
+            _fileRequest.Content = "T 1 ! * & ? Z :C ; _____";
 
-            var fileValidationResult = validator.TestValidate(fileRequest);
+            var fileValidationResult = _validator.TestValidate(_fileRequest);
 
             fileValidationResult.ShouldHaveValidationErrorFor(f => f.Content);
         }
@@ -43,9 +43,9 @@ namespace LT.DigitalOffice.FileService.Validation.UnitTests
         [Test]
         public void ShouldHaveValidationErrorWhenNameIsTooLong()
         {
-            fileRequest.Name += fileRequest.Name.PadLeft(244);
+            _fileRequest.Name += _fileRequest.Name.PadLeft(244);
 
-            var fileValidationResult = validator.TestValidate(fileRequest);
+            var fileValidationResult = _validator.TestValidate(_fileRequest);
 
             fileValidationResult.ShouldHaveValidationErrorFor(f => f.Name);
         }
@@ -53,25 +53,25 @@ namespace LT.DigitalOffice.FileService.Validation.UnitTests
         [Test]
         public void ShouldHaveValidationErrorWhenNameIsEmpty()
         {
-            fileRequest.Name = "";
+            _fileRequest.Name = "";
 
-            validator.TestValidate(fileRequest).ShouldHaveValidationErrorFor(request => request.Name);
+            _validator.TestValidate(_fileRequest).ShouldHaveValidationErrorFor(request => request.Name);
         }
 
         [Test]
         public void ShouldHaveValidationErrorWhenContentIsNull()
         {
-            fileRequest.Content = null;
+            _fileRequest.Content = null;
 
-            validator.TestValidate(fileRequest).ShouldHaveValidationErrorFor(request => request.Content);
+            _validator.TestValidate(_fileRequest).ShouldHaveValidationErrorFor(request => request.Content);
         }
 
         [Test]
         public void ShouldHaveValidationErrorWhenNameDoesNotMatchRegularExpression()
         {
-            fileRequest.Name = "???'";
+            _fileRequest.Name = "???'";
 
-            validator.TestValidate(fileRequest).ShouldHaveValidationErrorFor(request => request.Name);
+            _validator.TestValidate(_fileRequest).ShouldHaveValidationErrorFor(request => request.Name);
         }
     }
 }

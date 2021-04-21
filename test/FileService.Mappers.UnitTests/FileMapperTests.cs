@@ -1,5 +1,7 @@
-﻿using LT.DigitalOffice.FileService.Mappers.Interfaces;
-using LT.DigitalOffice.FileService.Mappers.ModelMappers;
+﻿using LT.DigitalOffice.FileService.Mappers.Db;
+using LT.DigitalOffice.FileService.Mappers.Db.Interfaces;
+using LT.DigitalOffice.FileService.Mappers.Models;
+using LT.DigitalOffice.FileService.Mappers.Models.Interfaces;
 using LT.DigitalOffice.FileService.Models.Db;
 using LT.DigitalOffice.FileService.Models.Dto.Models;
 using LT.DigitalOffice.UnitTestKernel;
@@ -10,26 +12,26 @@ namespace LT.DigitalOffice.FileService.Mappers.UnitTests
 {
     public class FileMapperTests
     {
-        private IMapper<DbFile, File> dbToDtoMapper;
-        private IMapper<File, DbFile> requestToDbMapper;
+        private IFileInfoMapper _dbToDtoMapper;
+        private IDbFileMapper _requestToDbMapper;
 
-        private DbFile dbFile;
-        private File fileRequest;
+        private DbFile _dbFile;
+        private FileInfo _fileRequest;
 
         [SetUp]
         public void SetUp()
         {
-            dbToDtoMapper = new FileMapper();
-            requestToDbMapper = new FileMapper();
+            _dbToDtoMapper = new FileInfoMapper();
+            _requestToDbMapper = new DbFileMapper();
 
-            fileRequest = new File
+            _fileRequest = new FileInfo
             {
                 Content = "RGlnaXRhbCBPZmA5Y2U=",
                 Extension = ".txt",
                 Name = "DigitalOfficeTestFile"
             };
 
-            dbFile = new DbFile
+            _dbFile = new DbFile
             {
                 Id = Guid.NewGuid(),
                 Content = "RGlnaXRhbCBPZmA5Y2U=",
@@ -39,55 +41,55 @@ namespace LT.DigitalOffice.FileService.Mappers.UnitTests
             };
         }
 
-        //[Test]
-        //public void ShouldThrowArgumentNullExceptionWhenDbMappingObjectIsNull()
-        //{
-        //    dbFile = null;
+        [Test]
+        public void ShouldThrowArgumentNullExceptionWhenDbMappingObjectIsNull()
+        {
+            _dbFile = null;
 
-        //    Assert.Throws<ArgumentNullException>(() => dbToDtoMapper.Map(dbFile));
-        //}
+            Assert.Throws<ArgumentNullException>(() => _dbToDtoMapper.Map(_dbFile));
+        }
 
-        //[Test]
-        //public void ShouldThrowArgumentNullExceptionWhenRequestMappingObjectIsNull()
-        //{
-        //    fileRequest = null;
+        [Test]
+        public void ShouldThrowArgumentNullExceptionWhenRequestMappingObjectIsNull()
+        {
+            _fileRequest = null;
 
-        //    Assert.Throws<ArgumentNullException>(() => requestToDbMapper.Map(fileRequest));
-        //}
+            Assert.Throws<ArgumentNullException>(() => _requestToDbMapper.Map(_fileRequest));
+        }
 
-        //[Test]
-        //public void ShouldReturnDbFileWhenMappingFileRequest()
-        //{
-        //    var newFile = requestToDbMapper.Map(fileRequest);
+        [Test]
+        public void ShouldReturnDbFileWhenMappingFileRequest()
+        {
+            var newFile = _requestToDbMapper.Map(_fileRequest);
 
-        //    var expectedFile = new DbFile
-        //    {
-        //        Id = newFile.Id,
-        //        Content = fileRequest.Content,
-        //        Extension = fileRequest.Extension,
-        //        Name = fileRequest.Name,
-        //        IsActive = true,
-        //        AddedOn = newFile.AddedOn
-        //    };
+            var expectedFile = new DbFile
+            {
+                Id = newFile.Id,
+                Content = _fileRequest.Content,
+                Extension = _fileRequest.Extension,
+                Name = _fileRequest.Name,
+                IsActive = true,
+                AddedOn = newFile.AddedOn
+            };
 
-        //    SerializerAssert.AreEqual(expectedFile, newFile);
-        //}
+            SerializerAssert.AreEqual(expectedFile, newFile);
+        }
 
-        //[Test]
-        //public void ShouldReturnFileResponseWhenMappingDbFile()
-        //{
-        //    var newFileDto = dbToDtoMapper.Map(dbFile);
+        [Test]
+        public void ShouldReturnFileResponseWhenMappingDbFile()
+        {
+            var newFileDto = _dbToDtoMapper.Map(_dbFile);
 
-        //    var expectedFileDto = new File
-        //    {
-        //        Id = newFileDto.Id,
-        //        Content = dbFile.Content,
-        //        Extension = dbFile.Extension,
-        //        Name = dbFile.Name
-        //    };
+            var expectedFileDto = new FileInfo
+            {
+                Id = newFileDto.Id,
+                Content = _dbFile.Content,
+                Extension = _dbFile.Extension,
+                Name = _dbFile.Name
+            };
 
-        //    Assert.IsInstanceOf<Guid>(newFileDto.Id);
-        //    SerializerAssert.AreEqual(expectedFileDto, newFileDto);
-        //}
+            Assert.IsInstanceOf<Guid>(newFileDto.Id);
+            SerializerAssert.AreEqual(expectedFileDto, newFileDto);
+        }
     }
 }

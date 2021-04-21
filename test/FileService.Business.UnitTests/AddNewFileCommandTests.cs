@@ -1,10 +1,12 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
-using LT.DigitalOffice.FileService.Business.Interfaces;
+using LT.DigitalOffice.FileService.Business.Commands.File;
+using LT.DigitalOffice.FileService.Business.Commands.File.Interfaces;
 using LT.DigitalOffice.FileService.Data.Interfaces;
-using LT.DigitalOffice.FileService.Mappers.ModelMappers.Interfaces;
+using LT.DigitalOffice.FileService.Mappers.Db.Interfaces;
 using LT.DigitalOffice.FileService.Models.Db;
 using LT.DigitalOffice.FileService.Models.Dto.Models;
+using LT.DigitalOffice.FileService.Validation.Interfaces;
 using Moq;
 using NUnit.Framework;
 using System;
@@ -14,22 +16,22 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
 {
     public class AddNewFileCommandTests
     {
-        private IAddNewFileCommand command;
-        private Mock<IFileRepository> repositoryMock;
-        private Mock<IValidator<File>> validatorMock;
-        private Mock<IFileMapper> mapperMock;
+        private IAddNewFileCommand _command;
+        private Mock<IFileRepository> _repositoryMock;
+        private Mock<IFileInfoValidator> _validatorMock;
+        private Mock<IDbFileMapper> _mapperMock;
 
-        private DbFile newFile;
-        private File fileRequest;
+        private DbFile _newFile;
+        private FileInfo _fileRequest;
 
         [SetUp]
         public void SetUp()
         {
-            repositoryMock = new Mock<IFileRepository>();
-            validatorMock = new Mock<IValidator<File>>();
-            mapperMock = new Mock<IFileMapper>();
+            _repositoryMock = new Mock<IFileRepository>();
+            _validatorMock = new Mock<IFileInfoValidator>();
+            _mapperMock = new Mock<IDbFileMapper>();
 
-            newFile = new DbFile
+            _newFile = new DbFile
             {
                 Id = Guid.NewGuid(),
                 Content = "RGlnaXRhbCBPZmA5Y2U=",
@@ -39,17 +41,17 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
                 AddedOn = DateTime.UtcNow
             };
 
-            fileRequest = new File
+            _fileRequest = new FileInfo
             {
                 Content = "RGlnaXRhbCBPZmA5Y2U=",
                 Extension = ".txt",
                 Name = "DigitalOfficeTestFile"
             };
 
-            mapperMock
-                .Setup(f => f.Map(It.IsAny<File>()))
-                .Returns(newFile);
-            command = new AddNewFileCommand(repositoryMock.Object, validatorMock.Object, mapperMock.Object);
+            _mapperMock
+                .Setup(f => f.Map(It.IsAny<FileInfo>()))
+                .Returns(_newFile);
+            _command = new AddNewFileCommand(_repositoryMock.Object, _validatorMock.Object, _mapperMock.Object);
         }
 
         [Test]
@@ -57,24 +59,24 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
         {
             var fileId = Guid.NewGuid();
 
-            validatorMock
+            _validatorMock
                  .Setup(x => x.Validate(It.IsAny<IValidationContext>()).IsValid)
                  .Returns(true);
 
-            repositoryMock
+            _repositoryMock
                 .Setup(x => x.AddNewFile(It.IsAny<DbFile>()))
                 .Returns(fileId);
 
-            Assert.AreEqual(fileId, command.Execute(fileRequest));
-            validatorMock.Verify(v => v.Validate(It.IsAny<IValidationContext>()), Times.Once);
-            repositoryMock.Verify(r => r.AddNewFile(newFile), Times.Once);
-            mapperMock.Verify(m => m.Map(fileRequest), Times.Once);
+            Assert.AreEqual(fileId, _command.Execute(_fileRequest));
+            _validatorMock.Verify(v => v.Validate(It.IsAny<IValidationContext>()), Times.Once);
+            _repositoryMock.Verify(r => r.AddNewFile(_newFile), Times.Once);
+            _mapperMock.Verify(m => m.Map(_fileRequest), Times.Once);
         }
 
         [Test]
         public void ShouldThrowExceptionWhenValidatorThrowsException()
         {
-            validatorMock
+            _validatorMock
                 .Setup(x => x.Validate(It.IsAny<IValidationContext>()))
                 .Returns(new ValidationResult(
                     new List<ValidationFailure>
@@ -82,52 +84,52 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
                         new ValidationFailure("test", "something", null)
                     }));
 
-            Assert.Throws<ValidationException>(() => command.Execute(fileRequest));
-            repositoryMock.Verify(r => r.AddNewFile(newFile), Times.Never);
-            mapperMock.Verify(m => m.Map(fileRequest), Times.Never);
+            Assert.Throws<ValidationException>(() => _command.Execute(_fileRequest));
+            _repositoryMock.Verify(r => r.AddNewFile(_newFile), Times.Never);
+            _mapperMock.Verify(m => m.Map(_fileRequest), Times.Never);
         }
 
         [Test]
         public void ShouldThrowExceptionWhenRepositoryThrowsException()
         {
-            validatorMock
+            _validatorMock
                  .Setup(x => x.Validate(It.IsAny<IValidationContext>()).IsValid)
                  .Returns(true);
 
-            repositoryMock
+            _repositoryMock
                 .Setup(x => x.AddNewFile(It.IsAny<DbFile>()))
                 .Throws(new Exception());
 
-            Assert.Throws<Exception>(() => command.Execute(fileRequest), "GUID duplicated error");
-            validatorMock.Verify(v => v.Validate(It.IsAny<IValidationContext>()), Times.Once);
-            repositoryMock.Verify(r => r.AddNewFile(newFile), Times.Once);
-            mapperMock.Verify(m => m.Map(fileRequest), Times.Once);
+            Assert.Throws<Exception>(() => _command.Execute(_fileRequest), "GUID duplicated error");
+            _validatorMock.Verify(v => v.Validate(It.IsAny<IValidationContext>()), Times.Once);
+            _repositoryMock.Verify(r => r.AddNewFile(_newFile), Times.Once);
+            _mapperMock.Verify(m => m.Map(_fileRequest), Times.Once);
         }
 
         [Test]
         public void ShouldThrowExceptionWhenFileRequestIsNull()
         {
-            validatorMock
+            _validatorMock
                  .Setup(x => x.Validate(It.IsAny<IValidationContext>()).IsValid)
                  .Returns(true);
 
-            mapperMock
-                 .Setup(x => x.Map(It.IsAny<File>()))
+            _mapperMock
+                 .Setup(x => x.Map(It.IsAny<FileInfo>()))
                  .Throws(new NullReferenceException());
 
-            fileRequest = null;
+            _fileRequest = null;
 
-            Assert.Throws<NullReferenceException>(() => command.Execute(fileRequest), "Request is null");
+            Assert.Throws<NullReferenceException>(() => _command.Execute(_fileRequest), "Request is null");
         }
 
         [Test]
         public void ShouldThrowNullReferenceExceptionWhenMapperThrowsIt()
         {
-            mapperMock
-                .Setup(x => x.Map(It.IsAny<File>()))
+            _mapperMock
+                .Setup(x => x.Map(It.IsAny<FileInfo>()))
                 .Throws(new ArgumentNullException());
 
-            Assert.Throws<ArgumentNullException>(() => command.Execute(fileRequest));
+            Assert.Throws<ArgumentNullException>(() => _command.Execute(_fileRequest));
         }
     }
 }

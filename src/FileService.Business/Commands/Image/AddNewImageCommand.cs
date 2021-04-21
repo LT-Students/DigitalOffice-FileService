@@ -1,26 +1,26 @@
-﻿using FluentValidation;
-using LT.DigitalOffice.FileService.Business.Interfaces;
+﻿using LT.DigitalOffice.FileService.Business.Commands.Image.Interfaces;
 using LT.DigitalOffice.FileService.Data.Interfaces;
-using LT.DigitalOffice.FileService.Mappers.RequestMappers.Interfaces;
+using LT.DigitalOffice.FileService.Mappers.Db.Interfaces;
 using LT.DigitalOffice.FileService.Models.Dto.Enums;
 using LT.DigitalOffice.FileService.Models.Dto.Requests;
+using LT.DigitalOffice.FileService.Validation.Interfaces;
 using LT.DigitalOffice.Kernel.Extensions;
 using LT.DigitalOffice.Kernel.FluentValidationExtensions;
 using Microsoft.AspNetCore.Http;
 using System;
 
-namespace LT.DigitalOffice.FileService.Business
+namespace LT.DigitalOffice.FileService.Business.Commands.Image
 {
     public class AddNewImageCommand : IAddNewImageCommand
     {
         private readonly IImageRepository _repository;
-        private readonly IValidator<ImageRequest> _validator;
+        private readonly IImageRequestValidator _validator;
         private readonly IDbImageMapper _mapper;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public AddNewImageCommand(
             IImageRepository repository,
-            IValidator<ImageRequest> validator,
+            IImageRequestValidator validator,
             IDbImageMapper mapper,
             IHttpContextAccessor httpContextAccessor)
         {

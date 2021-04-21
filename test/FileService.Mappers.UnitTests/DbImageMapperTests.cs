@@ -1,6 +1,6 @@
-﻿using LT.DigitalOffice.FileService.Mappers.Helpers.Interfaces;
-using LT.DigitalOffice.FileService.Mappers.RequestMappers;
-using LT.DigitalOffice.FileService.Mappers.RequestMappers.Interfaces;
+﻿using LT.DigitalOffice.FileService.Mappers.Db;
+using LT.DigitalOffice.FileService.Mappers.Db.Interfaces;
+using LT.DigitalOffice.FileService.Mappers.Helpers.Interfaces;
 using LT.DigitalOffice.FileService.Models.Db;
 using LT.DigitalOffice.FileService.Models.Dto.Enums;
 using LT.DigitalOffice.FileService.Models.Dto.Requests;

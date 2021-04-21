@@ -1,12 +1,12 @@
-﻿using LT.DigitalOffice.FileService.Mappers.Helpers.Interfaces;
-using LT.DigitalOffice.FileService.Mappers.RequestMappers.Interfaces;
+﻿using LT.DigitalOffice.FileService.Mappers.Db.Interfaces;
+using LT.DigitalOffice.FileService.Mappers.Helpers.Interfaces;
 using LT.DigitalOffice.FileService.Models.Db;
 using LT.DigitalOffice.FileService.Models.Dto.Enums;
 using LT.DigitalOffice.FileService.Models.Dto.Requests;
 using SixLabors.ImageSharp;
 using System;
 
-namespace LT.DigitalOffice.FileService.Mappers.RequestMappers
+namespace LT.DigitalOffice.FileService.Mappers.Db
 {
     public class DbImageMapper : IDbImageMapper
     {

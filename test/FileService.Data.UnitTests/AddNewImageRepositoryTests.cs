@@ -9,10 +9,10 @@ namespace LT.DigitalOffice.FileService.Data.UnitTests
 {
     public class AddNewImageRepositoryTests
     {
-        private IImageRepository repository;
-        private FileServiceDbContext dbContext;
+        private IImageRepository _repository;
+        private FileServiceDbContext _dbContext;
 
-        private DbImage newImage;
+        private DbImage _newImage;
 
         [SetUp]
         public void SetUp()
@@ -21,10 +21,10 @@ namespace LT.DigitalOffice.FileService.Data.UnitTests
                 .UseInMemoryDatabase("FileServiceTestDatabase")
                 .Options;
 
-            dbContext = new FileServiceDbContext(dbOptionsFileService);
-            repository = new ImageRepository(dbContext);
+            _dbContext = new FileServiceDbContext(dbOptionsFileService);
+            _repository = new ImageRepository(_dbContext);
 
-            newImage = new DbImage
+            _newImage = new DbImage
             {
                 Id = Guid.NewGuid(),
                 Content = "RGlnaXRhbCBPZmA5Y2U=",
@@ -37,25 +37,25 @@ namespace LT.DigitalOffice.FileService.Data.UnitTests
         [Test]
         public void ShouldAddNewImageToDatabase()
         {
-            Assert.AreEqual(newImage.Id, repository.AddNewImage(newImage));
-            Assert.That(dbContext.Images.Find(newImage.Id), Is.EqualTo(newImage));
+            Assert.AreEqual(_newImage.Id, _repository.AddNewImage(_newImage));
+            Assert.That(_dbContext.Images.Find(_newImage.Id), Is.EqualTo(_newImage));
         }
 
         [Test]
         public void ShouldThrowArgumentExceptionWhenAddingImageWithRepeatingId()
         {
-            repository.AddNewImage(newImage);
+            _repository.AddNewImage(_newImage);
 
-            Assert.Throws<ArgumentException>(() => repository.AddNewImage(newImage));
-            Assert.That(dbContext.Images.Find(newImage.Id), Is.EqualTo(newImage));
+            Assert.Throws<ArgumentException>(() => _repository.AddNewImage(_newImage));
+            Assert.That(_dbContext.Images.Find(_newImage.Id), Is.EqualTo(_newImage));
         }
 
         [TearDown]
         public void CleanInMemoryDatabase()
         {
-            if (dbContext.Database.IsInMemory())
+            if (_dbContext.Database.IsInMemory())
             {
-                dbContext.Database.EnsureDeleted();
+                _dbContext.Database.EnsureDeleted();
             }
         }
     }

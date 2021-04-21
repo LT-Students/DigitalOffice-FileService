@@ -4,18 +4,17 @@ using LT.DigitalOffice.FileService.Data.Interfaces;
 using LT.DigitalOffice.Kernel.Broker;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Threading.Tasks;
 
 namespace LT.DigitalOffice.FileService.Broker.Consumers
 {
     public class GetFileConsumer : IConsumer<IGetFileRequest>
     {
-        private readonly IFileRepository repository;
+        private readonly IFileRepository _repository;
 
-        public GetFileConsumer([FromServices] IFileRepository repository)
+        public GetFileConsumer(IFileRepository repository)
         {
-            this.repository = repository;
+            _repository = repository;
         }
 
         public async Task Consume(ConsumeContext<IGetFileRequest> context)
@@ -27,7 +26,7 @@ namespace LT.DigitalOffice.FileService.Broker.Consumers
 
         private object GetFile(IGetFileRequest request)
         {
-            var dbFile = repository.GetFileById(request.FileId);
+            var dbFile = _repository.GetFileById(request.FileId);
 
             return new
             {

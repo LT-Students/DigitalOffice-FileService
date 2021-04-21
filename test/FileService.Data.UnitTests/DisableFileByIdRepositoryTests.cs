@@ -10,10 +10,10 @@ namespace LT.DigitalOffice.FileService.Data.UnitTests
 {
     class DisableFileByIdRepositoryTests
     {
-        private FileServiceDbContext dbContext;
-        private IFileRepository repository;
-        private Guid fileId;
-        private DbFile dbFile;
+        private FileServiceDbContext _dbContext;
+        private IFileRepository _repository;
+        private Guid _fileId;
+        private DbFile _dbFile;
 
         [SetUp]
         public void Setup()
@@ -21,44 +21,44 @@ namespace LT.DigitalOffice.FileService.Data.UnitTests
             var dbOptions = new DbContextOptionsBuilder<FileServiceDbContext>()
                                     .UseInMemoryDatabase("InMemoryDatabase")
                                     .Options;
-            dbContext = new FileServiceDbContext(dbOptions);
-            repository = new FileRepository(dbContext);
+            _dbContext = new FileServiceDbContext(dbOptions);
+            _repository = new FileRepository(_dbContext);
 
-            fileId = Guid.NewGuid();
-            dbFile = new DbFile
+            _fileId = Guid.NewGuid();
+            _dbFile = new DbFile
             {
-                Id = fileId,
+                Id = _fileId,
                 Content = "RGlnaXRhbCBPZmA5Y2U=",
                 Extension = ".txt",
                 IsActive = true,
                 Name = "DigitalOfficeTestFile"
             };
 
-            dbContext.Files.Add(dbFile);
-            dbContext.SaveChanges();
+            _dbContext.Files.Add(_dbFile);
+            _dbContext.SaveChanges();
         }
 
         [TearDown]
         public void Clean()
         {
-            if (dbContext.Database.IsInMemory())
+            if (_dbContext.Database.IsInMemory())
             {
-                dbContext.Database.EnsureDeleted();
+                _dbContext.Database.EnsureDeleted();
             }
         }
 
         [Test]
         public void ShouldThrowExceptionWhenFileWasNotFound()
         {
-            Assert.Throws<NotFoundException>(() => repository.DisableFileById(Guid.NewGuid()));
+            Assert.Throws<NotFoundException>(() => _repository.DisableFileById(Guid.NewGuid()));
         }
 
         [Test]
         public void ShouldDisableFile()
         {
-            repository.DisableFileById(dbFile.Id);
+            _repository.DisableFileById(_dbFile.Id);
 
-            Assert.That(dbContext.Files.Find(fileId).IsActive == false);
+            Assert.That(_dbContext.Files.Find(_fileId).IsActive == false);
         }
     }
 }

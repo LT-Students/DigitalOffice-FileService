@@ -9,10 +9,10 @@ namespace LT.DigitalOffice.FileService.Data.UnitTests
 {
     public class AddNewFileRepositoryTests
     {
-        private IFileRepository repository;
-        private FileServiceDbContext dbContext;
+        private IFileRepository _repository;
+        private FileServiceDbContext _dbContext;
 
-        private DbFile newFile;
+        private DbFile _newFile;
 
         [SetUp]
         public void SetUp()
@@ -21,10 +21,10 @@ namespace LT.DigitalOffice.FileService.Data.UnitTests
                 .UseInMemoryDatabase("FileServiceTestDatabase")
                 .Options;
 
-            dbContext = new FileServiceDbContext(dbOptionsFileService);
-            repository = new FileRepository(dbContext);
+            _dbContext = new FileServiceDbContext(dbOptionsFileService);
+            _repository = new FileRepository(_dbContext);
 
-            newFile = new DbFile
+            _newFile = new DbFile
             {
                 Id = Guid.NewGuid(),
                 Content = "RGlnaXRhbCBPZmA5Y2U=",
@@ -37,25 +37,25 @@ namespace LT.DigitalOffice.FileService.Data.UnitTests
         [Test]
         public void ShouldAddNewFileToDatabase()
         {
-            Assert.AreEqual(newFile.Id, repository.AddNewFile(newFile));
-            Assert.That(dbContext.Files.Find(newFile.Id), Is.EqualTo(newFile));
+            Assert.AreEqual(_newFile.Id, _repository.AddNewFile(_newFile));
+            Assert.That(_dbContext.Files.Find(_newFile.Id), Is.EqualTo(_newFile));
         }
 
         [Test]
         public void ShouldThrowArgumentExceptionWhenAddingFileWithRepeatingId()
         {
-            repository.AddNewFile(newFile);
+            _repository.AddNewFile(_newFile);
 
-            Assert.Throws<ArgumentException>(() => repository.AddNewFile(newFile));
-            Assert.That(dbContext.Files.Find(newFile.Id), Is.EqualTo(newFile));
+            Assert.Throws<ArgumentException>(() => _repository.AddNewFile(_newFile));
+            Assert.That(_dbContext.Files.Find(_newFile.Id), Is.EqualTo(_newFile));
         }
 
         [TearDown]
         public void CleanInMemoryDatabase()
         {
-            if (dbContext.Database.IsInMemory())
+            if (_dbContext.Database.IsInMemory())
             {
-                dbContext.Database.EnsureDeleted();
+                _dbContext.Database.EnsureDeleted();
             }
         }
     }
