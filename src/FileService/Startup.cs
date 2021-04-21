@@ -2,8 +2,8 @@ using FluentValidation;
 using HealthChecks.UI.Client;
 using LT.DigitalOffice.FileService.Broker.Consumers;
 using LT.DigitalOffice.FileService.Business;
-using LT.DigitalOffice.FileService.Business.Helpers;
-using LT.DigitalOffice.FileService.Business.Helpers.Interfaces;
+using LT.DigitalOffice.FileService.Mappers.Helpers;
+using LT.DigitalOffice.FileService.Mappers.Helpers.Interfaces;
 using LT.DigitalOffice.FileService.Business.Interfaces;
 using LT.DigitalOffice.FileService.Data;
 using LT.DigitalOffice.FileService.Data.Interfaces;
@@ -204,6 +204,7 @@ namespace LT.DigitalOffice.FileService
         private void ConfigureMappers(IServiceCollection services)
         {
             services.AddTransient<IFileMapper, FileMapper>();
+            services.AddTransient<IDbImageMapper, DbImageMapper>();
             services.AddTransient<IImageRequestMapper, ImageRequestMapper>();
         }
 

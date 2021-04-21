@@ -1,4 +1,4 @@
-﻿namespace LT.DigitalOffice.FileService.Business.Helpers.Interfaces
+﻿namespace LT.DigitalOffice.FileService.Mappers.Helpers.Interfaces
 {
     public interface IImageResizeAlgorithm
     {
