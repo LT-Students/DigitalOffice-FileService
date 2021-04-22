@@ -15,7 +15,7 @@ using System.Collections.Generic;
 
 namespace LT.DigitalOffice.FileService.Business.UnitTests.Commands.Image
 {
-    public class AddNewImageCommandTests
+    public class AddImageCommandTests
     {
         private IAddImageCommand _command;
         private Mock<IImageRepository> _repositoryMock;

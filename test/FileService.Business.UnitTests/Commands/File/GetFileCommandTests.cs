@@ -11,7 +11,7 @@ using System;
 
 namespace LT.DigitalOffice.FileService.Business.UnitTests.Commands.File
 {
-    public class GetFileByIdCommandTests
+    public class GetFileCommandTests
     {
         private IGetFileCommand _command;
         private Mock<IFileRepository> _repositoryMock;

@@ -7,7 +7,7 @@ using System;
 
 namespace LT.DigitalOffice.FileService.Business.UnitTests.Commands.File
 {
-    public class DisableFileByIdCommandTests
+    public class DisableFileCommandTests
     {
         private IDisableFileCommand _command;
         private Mock<IFileRepository> _repositoryMock;

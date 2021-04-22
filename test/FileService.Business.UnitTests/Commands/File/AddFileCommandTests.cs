@@ -14,7 +14,7 @@ using System.Collections.Generic;
 
 namespace LT.DigitalOffice.FileService.Business.UnitTests.Commands.File
 {
-    public class AddNewFileCommandTests
+    public class AddFileCommandTests
     {
         private IAddFileCommand _command;
         private Mock<IFileRepository> _repositoryMock;
