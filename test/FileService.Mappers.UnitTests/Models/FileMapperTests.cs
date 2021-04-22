@@ -8,7 +8,7 @@ using LT.DigitalOffice.UnitTestKernel;
 using NUnit.Framework;
 using System;
 
-namespace LT.DigitalOffice.FileService.Mappers.UnitTests
+namespace LT.DigitalOffice.FileService.Mappers.UnitTests.Models
 {
     public class FileMapperTests
     {

@@ -10,7 +10,6 @@ using SixLabors.ImageSharp.Formats.Tga;
 using SixLabors.ImageSharp.Processing;
 using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 
 namespace LT.DigitalOffice.FileService.Mappers.Helpers
 {

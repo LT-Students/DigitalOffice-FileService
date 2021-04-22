@@ -9,7 +9,7 @@ namespace LT.DigitalOffice.FileService.Business.Commands.File.Interfaces
     /// Provides method for adding a new file.
     /// </summary>
     [AutoInject]
-    public interface IAddNewFileCommand
+    public interface IAddFileCommand
     {
         /// <summary>
         /// Adds a new file. Returns id of the added file.

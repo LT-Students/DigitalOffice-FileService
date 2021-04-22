@@ -1,15 +1,14 @@
 ﻿using LT.DigitalOffice.FileService.Business.Commands.File.Interfaces;
 using LT.DigitalOffice.FileService.Data.Interfaces;
-using Microsoft.AspNetCore.Mvc;
 using System;
 
 namespace LT.DigitalOffice.FileService.Business.Commands.File
 {
-    public class DisableFileByIdCommand : IDisableFileByIdCommand
+    public class DisableFileCommand : IDisableFileCommand
     {
         private readonly IFileRepository _repository;
 
-        public DisableFileByIdCommand(IFileRepository repository)
+        public DisableFileCommand(IFileRepository repository)
         {
             _repository = repository;
         }

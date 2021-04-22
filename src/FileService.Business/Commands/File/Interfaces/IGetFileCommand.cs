@@ -9,7 +9,7 @@ namespace LT.DigitalOffice.FileService.Business.Commands.File.Interfaces
     /// Provides method for getting file model by id.
     /// </summary>
     [AutoInject]
-    public interface IGetFileByIdCommand
+    public interface IGetFileCommand
     {
         /// <summary>
         /// Returns the file model with the specified id.

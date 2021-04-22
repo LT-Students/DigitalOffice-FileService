@@ -11,14 +11,14 @@ using System;
 
 namespace LT.DigitalOffice.FileService.Business.Commands.Image
 {
-    public class AddNewImageCommand : IAddNewImageCommand
+    public class AddImageCommand : IAddImageCommand
     {
         private readonly IImageRepository _repository;
         private readonly IImageRequestValidator _validator;
         private readonly IDbImageMapper _mapper;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AddNewImageCommand(
+        public AddImageCommand(
             IImageRepository repository,
             IImageRequestValidator validator,
             IDbImageMapper mapper,

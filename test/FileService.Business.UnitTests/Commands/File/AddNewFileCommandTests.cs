@@ -12,11 +12,11 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 
-namespace LT.DigitalOffice.FileService.Business.UnitTests
+namespace LT.DigitalOffice.FileService.Business.UnitTests.Commands.File
 {
     public class AddNewFileCommandTests
     {
-        private IAddNewFileCommand _command;
+        private IAddFileCommand _command;
         private Mock<IFileRepository> _repositoryMock;
         private Mock<IFileInfoValidator> _validatorMock;
         private Mock<IDbFileMapper> _mapperMock;
@@ -51,7 +51,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
             _mapperMock
                 .Setup(f => f.Map(It.IsAny<FileInfo>()))
                 .Returns(_newFile);
-            _command = new AddNewFileCommand(_repositoryMock.Object, _validatorMock.Object, _mapperMock.Object);
+            _command = new AddFileCommand(_repositoryMock.Object, _validatorMock.Object, _mapperMock.Object);
         }
 
         [Test]

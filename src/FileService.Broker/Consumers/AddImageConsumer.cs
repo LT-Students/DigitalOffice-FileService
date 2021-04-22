@@ -10,7 +10,7 @@ namespace LT.DigitalOffice.FileService.Broker.Consumers
 {
     public class AddImageConsumer : IConsumer<IAddImageRequest>
     {
-        private readonly IAddNewImageCommand _command;
+        private readonly IAddImageCommand _command;
         private readonly IImageRequestMapper _mapper;
 
         private object GetImageId(IAddImageRequest request)
@@ -26,7 +26,7 @@ namespace LT.DigitalOffice.FileService.Broker.Consumers
         }
 
         public AddImageConsumer(
-            IAddNewImageCommand command,
+            IAddImageCommand command,
             IImageRequestMapper mapper)
         {
             _command = command;

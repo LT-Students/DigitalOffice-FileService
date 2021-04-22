@@ -9,11 +9,11 @@ using Moq;
 using NUnit.Framework;
 using System;
 
-namespace LT.DigitalOffice.FileService.Business.UnitTests
+namespace LT.DigitalOffice.FileService.Business.UnitTests.Commands.File
 {
     public class GetFileByIdCommandTests
     {
-        private IGetFileByIdCommand _command;
+        private IGetFileCommand _command;
         private Mock<IFileRepository> _repositoryMock;
         private Mock<IFileInfoMapper> _mapperMock;
 
@@ -25,7 +25,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
         {
             _repositoryMock = new Mock<IFileRepository>();
             _mapperMock = new Mock<IFileInfoMapper>();
-            _command = new GetFileByIdCommand(_repositoryMock.Object, _mapperMock.Object);
+            _command = new GetFileCommand(_repositoryMock.Object, _mapperMock.Object);
 
             _fileId = Guid.NewGuid();
             _file = new DbFile

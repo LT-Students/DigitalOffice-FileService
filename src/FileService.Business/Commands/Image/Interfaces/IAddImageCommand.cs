@@ -9,7 +9,7 @@ namespace LT.DigitalOffice.FileService.Business.Commands.Image.Interfaces
     /// Provides method for adding a new image.
     /// </summary>
     [AutoInject]
-    public interface IAddNewImageCommand
+    public interface IAddImageCommand
     {
         /// <summary>
         /// Adds the new image and adds thumb (150*150) image. Returns id of the added original image.

@@ -9,7 +9,7 @@ using Moq;
 using NUnit.Framework;
 using System;
 
-namespace LT.DigitalOffice.FileService.Mappers.UnitTests
+namespace LT.DigitalOffice.FileService.Mappers.UnitTests.Db
 {
     public class DbImageMapperTests
     {

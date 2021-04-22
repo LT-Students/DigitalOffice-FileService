@@ -8,7 +8,7 @@ namespace LT.DigitalOffice.FileService.Business.Commands.File.Interfaces
     /// Provides method for disabling file by id.
     /// </summary>
     [AutoInject]
-    public interface IDisableFileByIdCommand
+    public interface IDisableFileCommand
     {
         /// <summary>
         /// Disable the file with the specified id.

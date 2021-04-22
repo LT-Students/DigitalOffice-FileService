@@ -5,11 +5,11 @@ using Moq;
 using NUnit.Framework;
 using System;
 
-namespace LT.DigitalOffice.FileService.Business.UnitTests
+namespace LT.DigitalOffice.FileService.Business.UnitTests.Commands.File
 {
     public class DisableFileByIdCommandTests
     {
-        private IDisableFileByIdCommand _command;
+        private IDisableFileCommand _command;
         private Mock<IFileRepository> _repositoryMock;
 
         private Guid fileId;
@@ -18,7 +18,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
         public void Setup()
         {
             _repositoryMock = new Mock<IFileRepository>();
-            _command = new DisableFileByIdCommand(_repositoryMock.Object);
+            _command = new DisableFileCommand(_repositoryMock.Object);
 
             fileId = Guid.NewGuid();
         }

@@ -3,7 +3,6 @@ using LT.DigitalOffice.Broker.Responses;
 using LT.DigitalOffice.FileService.Data.Interfaces;
 using LT.DigitalOffice.Kernel.Broker;
 using MassTransit;
-using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace LT.DigitalOffice.FileService.Broker.Consumers

@@ -12,20 +12,20 @@ namespace LT.DigitalOffice.FileService.Controllers
         [HttpPost("add")]
         public Guid AddNewFile(
             [FromBody] FileInfo request,
-            [FromServices] IAddNewFileCommand command)
+            [FromServices] IAddFileCommand command)
         {
             return command.Execute(request);
         }
 
         [HttpGet("get")]
-        public FileInfo GetFileById([FromServices] IGetFileByIdCommand command, [FromQuery] Guid fileId)
+        public FileInfo GetFileById([FromServices] IGetFileCommand command, [FromQuery] Guid fileId)
         {
             return command.Execute(fileId);
         }
 
         [HttpDelete("disable")]
         public void DisableFileById(
-            [FromServices] IDisableFileByIdCommand command,
+            [FromServices] IDisableFileCommand command,
             [FromQuery] Guid fileId)
         {
             command.Execute(fileId);

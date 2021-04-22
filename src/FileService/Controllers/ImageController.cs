@@ -12,7 +12,7 @@ namespace LT.DigitalOffice.FileService.Controllers
         [HttpPost("add")]
         public Guid AddNewImage(
             [FromBody] ImageRequest request,
-            [FromServices] IAddNewImageCommand command)
+            [FromServices] IAddImageCommand command)
         {
             return command.Execute(request);
         }

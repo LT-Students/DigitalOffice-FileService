@@ -7,7 +7,7 @@ using Moq;
 using NUnit.Framework;
 using System;
 
-namespace LT.DigitalOffice.FileService.Mappers.UnitTests
+namespace LT.DigitalOffice.FileService.Mappers.UnitTests.Requests
 {
     public class ImageRequestMapperTests
     {

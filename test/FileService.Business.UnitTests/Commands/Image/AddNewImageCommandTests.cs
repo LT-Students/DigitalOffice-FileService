@@ -13,11 +13,11 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 
-namespace LT.DigitalOffice.FileService.Business.UnitTests
+namespace LT.DigitalOffice.FileService.Business.UnitTests.Commands.Image
 {
     public class AddNewImageCommandTests
     {
-        private IAddNewImageCommand _command;
+        private IAddImageCommand _command;
         private Mock<IImageRepository> _repositoryMock;
         private Mock<IImageRequestValidator> _validatorMock;
         private Mock<IDbImageMapper> _mapperMock;
@@ -113,7 +113,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests
 
             ClientRequestUp();
 
-            _command = new AddNewImageCommand(
+            _command = new AddImageCommand(
                 _repositoryMock.Object,
                 _validatorMock.Object,
                 _mapperMock.Object,
