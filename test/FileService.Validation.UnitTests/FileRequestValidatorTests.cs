@@ -1,5 +1,6 @@
 ﻿using FluentValidation.TestHelper;
 using LT.DigitalOffice.FileService.Models.Dto.Models;
+using LT.DigitalOffice.FileService.Models.Dto.Requests;
 using LT.DigitalOffice.FileService.Validation.Interfaces;
 using NUnit.Framework;
 
@@ -7,21 +8,21 @@ namespace LT.DigitalOffice.FileService.Validation.UnitTests
 {
     public class AddNewFileRequestValidatorTests
     {
-        private IFileInfoValidator _validator;
+        private IFileRequestValidator _validator;
 
-        private FileInfo _fileRequest;
+        private FileRequest _fileRequest;
 
         [SetUp]
         public void SetUp()
         {
-            _fileRequest = new FileInfo
+            _fileRequest = new FileRequest
             {
                 Content = "RGlnaXRhbCBPZmA5Y2U=",
                 Extension = ".txt",
                 Name = "DigitalOfficeTestFile"
             };
 
-            _validator = new FileInfoValidator();
+            _validator = new FileRequestValidator();
         }
 
         [Test]

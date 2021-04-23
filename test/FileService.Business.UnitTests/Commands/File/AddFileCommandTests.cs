@@ -6,6 +6,7 @@ using LT.DigitalOffice.FileService.Data.Interfaces;
 using LT.DigitalOffice.FileService.Mappers.Db.Interfaces;
 using LT.DigitalOffice.FileService.Models.Db;
 using LT.DigitalOffice.FileService.Models.Dto.Models;
+using LT.DigitalOffice.FileService.Models.Dto.Requests;
 using LT.DigitalOffice.FileService.Validation.Interfaces;
 using Moq;
 using NUnit.Framework;
@@ -18,17 +19,17 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests.Commands.File
     {
         private IAddFileCommand _command;
         private Mock<IFileRepository> _repositoryMock;
-        private Mock<IFileInfoValidator> _validatorMock;
+        private Mock<IFileRequestValidator> _validatorMock;
         private Mock<IDbFileMapper> _mapperMock;
 
         private DbFile _newFile;
-        private FileInfo _fileRequest;
+        private FileRequest _fileRequest;
 
         [SetUp]
         public void SetUp()
         {
             _repositoryMock = new Mock<IFileRepository>();
-            _validatorMock = new Mock<IFileInfoValidator>();
+            _validatorMock = new Mock<IFileRequestValidator>();
             _mapperMock = new Mock<IDbFileMapper>();
 
             _newFile = new DbFile
@@ -41,7 +42,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests.Commands.File
                 AddedOn = DateTime.UtcNow
             };
 
-            _fileRequest = new FileInfo
+            _fileRequest = new FileRequest
             {
                 Content = "RGlnaXRhbCBPZmA5Y2U=",
                 Extension = ".txt",
@@ -49,7 +50,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests.Commands.File
             };
 
             _mapperMock
-                .Setup(f => f.Map(It.IsAny<FileInfo>()))
+                .Setup(f => f.Map(It.IsAny<FileRequest>()))
                 .Returns(_newFile);
             _command = new AddFileCommand(_repositoryMock.Object, _validatorMock.Object, _mapperMock.Object);
         }
@@ -114,7 +115,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests.Commands.File
                  .Returns(true);
 
             _mapperMock
-                 .Setup(x => x.Map(It.IsAny<FileInfo>()))
+                 .Setup(x => x.Map(It.IsAny<FileRequest>()))
                  .Throws(new NullReferenceException());
 
             _fileRequest = null;
@@ -126,7 +127,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests.Commands.File
         public void ShouldThrowNullReferenceExceptionWhenMapperThrowsIt()
         {
             _mapperMock
-                .Setup(x => x.Map(It.IsAny<FileInfo>()))
+                .Setup(x => x.Map(It.IsAny<FileRequest>()))
                 .Throws(new ArgumentNullException());
 
             Assert.Throws<ArgumentNullException>(() => _command.Execute(_fileRequest));

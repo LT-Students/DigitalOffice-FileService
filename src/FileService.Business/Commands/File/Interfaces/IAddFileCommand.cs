@@ -1,4 +1,5 @@
 ﻿using LT.DigitalOffice.FileService.Models.Dto.Models;
+using LT.DigitalOffice.FileService.Models.Dto.Requests;
 using LT.DigitalOffice.Kernel.Attributes;
 using System;
 
@@ -17,6 +18,6 @@ namespace LT.DigitalOffice.FileService.Business.Commands.File.Interfaces
         /// <param name="request">File data.</param>
         /// <returns>Id of the added file.</returns>
         /// <exception cref="ValidationException">Thrown when file data is incorrect.</exception>
-        Guid Execute(FileInfo request);
+        Guid Execute(FileRequest request);
     }
 }
