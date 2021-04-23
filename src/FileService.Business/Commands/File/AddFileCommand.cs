@@ -1,7 +1,6 @@
 ﻿using LT.DigitalOffice.FileService.Business.Commands.File.Interfaces;
 using LT.DigitalOffice.FileService.Data.Interfaces;
 using LT.DigitalOffice.FileService.Mappers.Db.Interfaces;
-using LT.DigitalOffice.FileService.Models.Dto.Models;
 using LT.DigitalOffice.FileService.Models.Dto.Requests;
 using LT.DigitalOffice.FileService.Validation.Interfaces;
 using LT.DigitalOffice.Kernel.FluentValidationExtensions;

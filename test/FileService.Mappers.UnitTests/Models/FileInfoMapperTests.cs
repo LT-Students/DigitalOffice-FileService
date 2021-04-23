@@ -1,6 +1,4 @@
-﻿using LT.DigitalOffice.FileService.Mappers.Db;
-using LT.DigitalOffice.FileService.Mappers.Db.Interfaces;
-using LT.DigitalOffice.FileService.Mappers.Models;
+﻿using LT.DigitalOffice.FileService.Mappers.Models;
 using LT.DigitalOffice.FileService.Mappers.Models.Interfaces;
 using LT.DigitalOffice.FileService.Models.Db;
 using LT.DigitalOffice.FileService.Models.Dto.Models;

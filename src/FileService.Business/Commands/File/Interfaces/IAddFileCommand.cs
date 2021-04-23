@@ -1,5 +1,4 @@
-﻿using LT.DigitalOffice.FileService.Models.Dto.Models;
-using LT.DigitalOffice.FileService.Models.Dto.Requests;
+﻿using LT.DigitalOffice.FileService.Models.Dto.Requests;
 using LT.DigitalOffice.Kernel.Attributes;
 using System;
 

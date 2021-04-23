@@ -1,5 +1,4 @@
 ﻿using FluentValidation.TestHelper;
-using LT.DigitalOffice.FileService.Models.Dto.Models;
 using LT.DigitalOffice.FileService.Models.Dto.Requests;
 using LT.DigitalOffice.FileService.Validation.Interfaces;
 using NUnit.Framework;
