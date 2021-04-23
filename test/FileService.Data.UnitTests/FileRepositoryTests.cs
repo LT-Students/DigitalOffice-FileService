@@ -2,6 +2,7 @@
 using LT.DigitalOffice.FileService.Data.Provider.MsSql.Ef;
 using LT.DigitalOffice.FileService.Models.Db;
 using LT.DigitalOffice.Kernel.Exceptions.Models;
+using LT.DigitalOffice.UnitTestKernel;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using System;
@@ -69,6 +70,7 @@ namespace LT.DigitalOffice.FileService.Data.UnitTests
         public void ShouldDisableFile()
         {
             _dbContext.Files.Add(_dbFile);
+            _dbContext.SaveChanges();
 
             _repository.DisableFile(_dbFile.Id);
 
@@ -82,12 +84,18 @@ namespace LT.DigitalOffice.FileService.Data.UnitTests
         [Test]
         public void ShouldThrowExceptionWhenThereNoFileInDatabaseWithSuchId()
         {
+            _dbContext.Files.Add(_dbFile);
+            _dbContext.SaveChanges();
+
             Assert.Throws<NotFoundException>(() => _repository.GetFile(Guid.NewGuid()));
         }
 
         [Test]
         public void ShouldReturnFileInfoWhenGettingFileById()
         {
+            _dbContext.Files.Add(_dbFile);
+            _dbContext.SaveChanges();
+
             var result = _repository.GetFile(_dbFile.Id);
 
             var expected = new DbFile

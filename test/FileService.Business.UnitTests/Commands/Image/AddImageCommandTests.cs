@@ -92,10 +92,10 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests.Commands.Image
 
             _repositoryMock = new Mock<IImageRepository>();
             _repositoryMock
-                .Setup(x => x.AddNewImage(_thumbDbImage))
+                .Setup(x => x.AddImage(_thumbDbImage))
                 .Returns(_thumbDbImage.Id);
             _repositoryMock
-                .Setup(x => x.AddNewImage(_fullDbImage))
+                .Setup(x => x.AddImage(_fullDbImage))
                 .Returns(_fullDbImage.Id);
 
             _validatorMock = new Mock<IImageRequestValidator>();
@@ -134,7 +134,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests.Commands.Image
             Assert.AreEqual(_fullDbImage.Id, _command.Execute(_imageRequest));
 
             _validatorMock.Verify(v => v.Validate(It.IsAny<IValidationContext>()), Times.Once);
-            _repositoryMock.Verify(r => r.AddNewImage(It.IsAny<DbImage>()), Times.Exactly(2));
+            _repositoryMock.Verify(r => r.AddImage(It.IsAny<DbImage>()), Times.Exactly(2));
             _mapperMock.Verify(
                 m => m.Map(
                     It.IsAny<ImageRequest>(),
@@ -159,7 +159,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests.Commands.Image
             Assert.AreEqual(_fullDbImage.Id, _command.Execute(_imageRequest));
 
             _validatorMock.Verify(v => v.Validate(It.IsAny<IValidationContext>()), Times.Once);
-            _repositoryMock.Verify(r => r.AddNewImage(It.IsAny<DbImage>()), Times.Once);
+            _repositoryMock.Verify(r => r.AddImage(It.IsAny<DbImage>()), Times.Once);
             _mapperMock.Verify(
                 m => m.Map(
                     It.IsAny<ImageRequest>(),
@@ -184,7 +184,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests.Commands.Image
             Assert.AreEqual(_fullDbImage.Id, _command.Execute(_imageRequest, _userId));
 
             _validatorMock.Verify(v => v.Validate(It.IsAny<IValidationContext>()), Times.Once);
-            _repositoryMock.Verify(r => r.AddNewImage(It.IsAny<DbImage>()), Times.Exactly(2));
+            _repositoryMock.Verify(r => r.AddImage(It.IsAny<DbImage>()), Times.Exactly(2));
             _mapperMock.Verify(
                 m => m.Map(
                     It.IsAny<ImageRequest>(),
@@ -209,7 +209,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests.Commands.Image
             Assert.AreEqual(_fullDbImage.Id, _command.Execute(_imageRequest, _userId));
 
             _validatorMock.Verify(v => v.Validate(It.IsAny<IValidationContext>()), Times.Once);
-            _repositoryMock.Verify(r => r.AddNewImage(It.IsAny<DbImage>()), Times.Once);
+            _repositoryMock.Verify(r => r.AddImage(It.IsAny<DbImage>()), Times.Once);
             _mapperMock.Verify(
                 m => m.Map(
                     It.IsAny<ImageRequest>(),
@@ -228,7 +228,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests.Commands.Image
                 .Returns(false);
 
             Assert.Throws<ValidationException>(() => _command.Execute(_imageRequest));
-            _repositoryMock.Verify(r => r.AddNewImage(It.IsAny<DbImage>()), Times.Never);
+            _repositoryMock.Verify(r => r.AddImage(It.IsAny<DbImage>()), Times.Never);
             _mapperMock.Verify(m => m.Map(It.IsAny<ImageRequest>(), ImageType.Full, out _isBigImage, It.IsAny<Guid>(), It.IsAny<Guid?>()), Times.Never);
         }
 
@@ -236,7 +236,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests.Commands.Image
         public void ShouldThrowExceptionWhenRepositoryThrowsException()
         {
             _repositoryMock
-                .Setup(x => x.AddNewImage(_fullDbImage))
+                .Setup(x => x.AddImage(_fullDbImage))
                 .Throws(new Exception());
 
             Assert.Throws<Exception>(() => _command.Execute(_imageRequest));
