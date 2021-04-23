@@ -11,7 +11,7 @@ namespace LT.DigitalOffice.FileService.Controllers
     public class FileController : ControllerBase
     {
         [HttpPost("add")]
-        public Guid AddNewFile(
+        public Guid Add(
             [FromBody] FileRequest request,
             [FromServices] IAddFileCommand command)
         {
@@ -19,13 +19,13 @@ namespace LT.DigitalOffice.FileService.Controllers
         }
 
         [HttpGet("get")]
-        public FileInfo GetFile([FromServices] IGetFileCommand command, [FromQuery] Guid fileId)
+        public FileInfo Get([FromServices] IGetFileCommand command, [FromQuery] Guid fileId)
         {
             return command.Execute(fileId);
         }
 
         [HttpDelete("disable")]
-        public void DisableFile(
+        public void Disable(
             [FromServices] IDisableFileCommand command,
             [FromQuery] Guid fileId)
         {

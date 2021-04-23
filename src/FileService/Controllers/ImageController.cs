@@ -10,7 +10,7 @@ namespace LT.DigitalOffice.FileService.Controllers
     public class ImageController : ControllerBase
     {
         [HttpPost("add")]
-        public Guid AddNewImage(
+        public Guid Add(
             [FromBody] ImageRequest request,
             [FromServices] IAddImageCommand command)
         {
