@@ -7,7 +7,7 @@ using System;
 
 namespace LT.DigitalOffice.FileService.Data.UnitTests
 {
-    public class AddNewImageRepositoryTests
+    public class ImageRepositoryTests
     {
         private IImageRepository _repository;
         private FileServiceDbContext _dbContext;
@@ -34,21 +34,25 @@ namespace LT.DigitalOffice.FileService.Data.UnitTests
             };
         }
 
+        #region AddImage
+
         [Test]
-        public void ShouldAddNewImageToDatabase()
+        public void ShouldAddImageToDatabase()
         {
-            Assert.AreEqual(_newImage.Id, _repository.AddNewImage(_newImage));
+            Assert.AreEqual(_newImage.Id, _repository.AddImage(_newImage));
             Assert.That(_dbContext.Images.Find(_newImage.Id), Is.EqualTo(_newImage));
         }
 
         [Test]
         public void ShouldThrowArgumentExceptionWhenAddingImageWithRepeatingId()
         {
-            _repository.AddNewImage(_newImage);
+            _repository.AddImage(_newImage);
 
-            Assert.Throws<ArgumentException>(() => _repository.AddNewImage(_newImage));
+            Assert.Throws<ArgumentException>(() => _repository.AddImage(_newImage));
             Assert.That(_dbContext.Images.Find(_newImage.Id), Is.EqualTo(_newImage));
         }
+
+        #endregion
 
         [TearDown]
         public void CleanInMemoryDatabase()

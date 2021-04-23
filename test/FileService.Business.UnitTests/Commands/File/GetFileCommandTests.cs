@@ -40,7 +40,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests.Commands.File
         [Test]
         public void ShouldThrowExceptionWhenRepositoryThrowsIt()
         {
-            _repositoryMock.Setup(x => x.GetFileById(It.IsAny<Guid>())).Throws(new Exception());
+            _repositoryMock.Setup(x => x.GetFile(It.IsAny<Guid>())).Throws(new Exception());
 
             Assert.Throws<Exception>(() => _command.Execute(_fileId));
         }
@@ -65,7 +65,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests.Commands.File
             };
 
             _repositoryMock
-                .Setup(x => x.GetFileById(It.IsAny<Guid>()))
+                .Setup(x => x.GetFile(It.IsAny<Guid>()))
                 .Returns(_file);
             _mapperMock
                 .Setup(x => x.Map(It.IsAny<DbFile>()))

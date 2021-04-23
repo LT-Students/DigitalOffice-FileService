@@ -25,7 +25,7 @@ namespace LT.DigitalOffice.FileService.Broker.Consumers
 
         private object GetFile(IGetFileRequest request)
         {
-            var dbFile = _repository.GetFileById(request.FileId);
+            var dbFile = _repository.GetFile(request.FileId);
 
             return new
             {

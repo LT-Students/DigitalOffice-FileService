@@ -31,7 +31,7 @@ namespace LT.DigitalOffice.FileService.Business.Commands.File
 
             var newFile = _mapper.Map(request);
 
-            return _repository.AddNewFile(newFile);
+            return _repository.AddFile(newFile);
         }
     }
 }

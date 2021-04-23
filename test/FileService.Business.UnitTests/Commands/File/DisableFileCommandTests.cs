@@ -26,7 +26,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests.Commands.File
         [Test]
         public void ShouldThrowExceptionWhenRepositoryThrowsIt()
         {
-            _repositoryMock.Setup(x => x.DisableFileById(It.IsAny<Guid>())).Throws(new Exception());
+            _repositoryMock.Setup(x => x.DisableFile(It.IsAny<Guid>())).Throws(new Exception());
 
             Assert.Throws<Exception>(() => _command.Execute(fileId));
         }
@@ -35,10 +35,10 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests.Commands.File
         public void ShouldDisableFile()
         {
             _repositoryMock
-                .Setup(x => x.DisableFileById(It.IsAny<Guid>()));
+                .Setup(x => x.DisableFile(It.IsAny<Guid>()));
 
             Assert.DoesNotThrow(() => _command.Execute(fileId));
-            _repositoryMock.Verify(repository => repository.DisableFileById(It.IsAny<Guid>()), Times.Once);
+            _repositoryMock.Verify(repository => repository.DisableFile(It.IsAny<Guid>()), Times.Once);
         }
     }
 }

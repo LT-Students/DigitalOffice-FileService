@@ -47,7 +47,7 @@ namespace LT.DigitalOffice.FileService.Broker.UnitTests
             await _harness.Start();
 
             _repository
-                .Setup(x => x.GetFileById(It.IsAny<Guid>()))
+                .Setup(x => x.GetFile(It.IsAny<Guid>()))
                 .Returns(new DbFile
                 {
                     Content = _contentString,
@@ -90,7 +90,7 @@ namespace LT.DigitalOffice.FileService.Broker.UnitTests
             await _harness.Start();
 
             _repository
-                .Setup(x => x.GetFileById(It.IsAny<Guid>()))
+                .Setup(x => x.GetFile(It.IsAny<Guid>()))
                 .Throws(new Exception("File with this id was not found."));
 
             try

@@ -65,12 +65,12 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests.Commands.File
                  .Returns(true);
 
             _repositoryMock
-                .Setup(x => x.AddNewFile(It.IsAny<DbFile>()))
+                .Setup(x => x.AddFile(It.IsAny<DbFile>()))
                 .Returns(fileId);
 
             Assert.AreEqual(fileId, _command.Execute(_fileRequest));
             _validatorMock.Verify(v => v.Validate(It.IsAny<IValidationContext>()), Times.Once);
-            _repositoryMock.Verify(r => r.AddNewFile(_newFile), Times.Once);
+            _repositoryMock.Verify(r => r.AddFile(_newFile), Times.Once);
             _mapperMock.Verify(m => m.Map(_fileRequest), Times.Once);
         }
 
@@ -86,7 +86,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests.Commands.File
                     }));
 
             Assert.Throws<ValidationException>(() => _command.Execute(_fileRequest));
-            _repositoryMock.Verify(r => r.AddNewFile(_newFile), Times.Never);
+            _repositoryMock.Verify(r => r.AddFile(_newFile), Times.Never);
             _mapperMock.Verify(m => m.Map(_fileRequest), Times.Never);
         }
 
@@ -98,12 +98,12 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests.Commands.File
                  .Returns(true);
 
             _repositoryMock
-                .Setup(x => x.AddNewFile(It.IsAny<DbFile>()))
+                .Setup(x => x.AddFile(It.IsAny<DbFile>()))
                 .Throws(new Exception());
 
             Assert.Throws<Exception>(() => _command.Execute(_fileRequest), "GUID duplicated error");
             _validatorMock.Verify(v => v.Validate(It.IsAny<IValidationContext>()), Times.Once);
-            _repositoryMock.Verify(r => r.AddNewFile(_newFile), Times.Once);
+            _repositoryMock.Verify(r => r.AddFile(_newFile), Times.Once);
             _mapperMock.Verify(m => m.Map(_fileRequest), Times.Once);
         }
 

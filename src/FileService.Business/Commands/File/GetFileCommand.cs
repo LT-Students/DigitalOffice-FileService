@@ -21,7 +21,7 @@ namespace LT.DigitalOffice.FileService.Business.Commands.File
 
         public FileInfo Execute(Guid fileId)
         {
-            return _mapper.Map(_repository.GetFileById(fileId));
+            return _mapper.Map(_repository.GetFile(fileId));
         }
     }
 }

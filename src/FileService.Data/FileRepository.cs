@@ -16,7 +16,7 @@ namespace LT.DigitalOffice.FileService.Data
             this.provider = provider;
         }
 
-        public Guid AddNewFile(DbFile file)
+        public Guid AddFile(DbFile file)
         {
             provider.Files.Add(file);
             provider.Save();
@@ -24,7 +24,7 @@ namespace LT.DigitalOffice.FileService.Data
             return file.Id;
         }
 
-        public void DisableFileById(Guid fileId)
+        public void DisableFile(Guid fileId)
         {
             var dbFile = provider.Files.FirstOrDefault(file => file.Id == fileId);
 
@@ -39,7 +39,7 @@ namespace LT.DigitalOffice.FileService.Data
             provider.Save();
         }
 
-        public DbFile GetFileById(Guid fileId)
+        public DbFile GetFile(Guid fileId)
         {
             var dbFile = provider.Files.FirstOrDefault(file => file.Id == fileId);
 
