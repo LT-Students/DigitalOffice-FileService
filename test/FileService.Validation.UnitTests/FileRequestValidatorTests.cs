@@ -6,7 +6,7 @@ using NUnit.Framework;
 
 namespace LT.DigitalOffice.FileService.Validation.UnitTests
 {
-    public class AddNewFileRequestValidatorTests
+    public class FileRequestValidatorTests
     {
         private IFileRequestValidator _validator;
 
