@@ -1,4 +1,4 @@
-﻿using LT.DigitalOffice.FileService.Business.Interfaces;
+﻿using LT.DigitalOffice.FileService.Business.Commands.Image.Interfaces;
 using LT.DigitalOffice.FileService.Models.Dto.Requests;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -9,10 +9,10 @@ namespace LT.DigitalOffice.FileService.Controllers
     [Route("[controller]")]
     public class ImageController : ControllerBase
     {
-        [HttpPost("addNewImage")]
-        public Guid AddNewImage(
+        [HttpPost("add")]
+        public Guid Add(
             [FromBody] ImageRequest request,
-            [FromServices] IAddNewImageCommand command)
+            [FromServices] IAddImageCommand command)
         {
             return command.Execute(request);
         }

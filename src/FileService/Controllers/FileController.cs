@@ -1,5 +1,6 @@
-﻿using LT.DigitalOffice.FileService.Business.Interfaces;
+﻿using LT.DigitalOffice.FileService.Business.Commands.File.Interfaces;
 using LT.DigitalOffice.FileService.Models.Dto.Models;
+using LT.DigitalOffice.FileService.Models.Dto.Requests;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
@@ -9,23 +10,23 @@ namespace LT.DigitalOffice.FileService.Controllers
     [Route("[controller]")]
     public class FileController : ControllerBase
     {
-        [HttpPost("addNewFile")]
-        public Guid AddNewFile(
-            [FromBody] File request,
-            [FromServices] IAddNewFileCommand command)
+        [HttpPost("add")]
+        public Guid Add(
+            [FromBody] FileRequest request,
+            [FromServices] IAddFileCommand command)
         {
             return command.Execute(request);
         }
 
-        [HttpGet("getFileById")]
-        public File GetFileById([FromServices] IGetFileByIdCommand command, [FromQuery] Guid fileId)
+        [HttpGet("get")]
+        public FileInfo Get([FromServices] IGetFileCommand command, [FromQuery] Guid fileId)
         {
             return command.Execute(fileId);
         }
 
-        [HttpDelete("disableFileById")]
-        public void DisableFileById(
-            [FromServices] IDisableFileByIdCommand command,
+        [HttpDelete("disable")]
+        public void Disable(
+            [FromServices] IDisableFileCommand command,
             [FromQuery] Guid fileId)
         {
             command.Execute(fileId);

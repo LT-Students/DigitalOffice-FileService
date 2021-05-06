@@ -1,8 +1,8 @@
 ﻿using LT.DigitalOffice.Broker.Requests;
 using LT.DigitalOffice.Broker.Responses;
 using LT.DigitalOffice.FileService.Broker.Consumers;
-using LT.DigitalOffice.FileService.Business.Interfaces;
-using LT.DigitalOffice.FileService.Mappers.RequestMappers.Interfaces;
+using LT.DigitalOffice.FileService.Business.Commands.Image.Interfaces;
+using LT.DigitalOffice.FileService.Mappers.Requests.Interfaces;
 using LT.DigitalOffice.FileService.Models.Dto.Requests;
 using LT.DigitalOffice.Kernel.Broker;
 using LT.DigitalOffice.UnitTestKernel;
@@ -19,7 +19,7 @@ namespace LT.DigitalOffice.FileService.Broker.UnitTests
     class AddImageConsumerTests
     {
         private InMemoryTestHarness _harness;
-        private Mock<IAddNewImageCommand> _commandMock;
+        private Mock<IAddImageCommand> _commandMock;
         private Mock<IImageRequestMapper> _mapperMock;
         private IRequestClient<IAddImageRequest> _requestClient;
         private Mock<IAddImageRequest> _addImageRequestMock;
@@ -62,7 +62,7 @@ namespace LT.DigitalOffice.FileService.Broker.UnitTests
         [SetUp]
         public void SetUp()
         {
-            _commandMock = new Mock<IAddNewImageCommand>();
+            _commandMock = new Mock<IAddImageCommand>();
             _commandMock
                 .Setup(x => x.Execute(It.IsAny<ImageRequest>(), It.IsAny<Guid?>()))
                 .Returns(_imageId);

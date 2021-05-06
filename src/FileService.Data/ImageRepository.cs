@@ -14,7 +14,7 @@ namespace LT.DigitalOffice.FileService.Data
             this.provider = provider;
         }
 
-        public Guid AddNewImage(DbImage dbImage)
+        public Guid AddImage(DbImage dbImage)
         {
             provider.Images.Add(dbImage);
             provider.Save();

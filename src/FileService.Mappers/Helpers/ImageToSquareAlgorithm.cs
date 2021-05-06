@@ -10,12 +10,10 @@ using SixLabors.ImageSharp.Formats.Tga;
 using SixLabors.ImageSharp.Processing;
 using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("LT.DigitalOffice.FileService")]
 namespace LT.DigitalOffice.FileService.Mappers.Helpers
 {
-    internal class ImageToSquareAlgorithm : IImageResizeAlgorithm
+    public class ImageToSquareAlgorithm : IImageResizeAlgorithm
     {
         private static readonly Dictionary<string, IImageFormat> imageFormats = new()
         {

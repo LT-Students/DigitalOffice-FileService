@@ -3,13 +3,10 @@
   <Import Project="$(ProjectDir)..\..\Common.Configurations.targets" />
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\FileService.Data\FileService.Data.csproj" />
     <ProjectReference Include="..\FileService.Mappers\FileService.Mappers.csproj" />
     <ProjectReference Include="..\FileService.Models.Dto\FileService.Models.Dto.csproj" />
+    <ProjectReference Include="..\FileService.Validation\FileService.Validation.csproj" />
   </ItemGroup>
 
 </Project>

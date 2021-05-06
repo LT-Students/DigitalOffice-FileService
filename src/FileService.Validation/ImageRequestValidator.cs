@@ -1,12 +1,13 @@
 ﻿using FluentValidation;
 using LT.DigitalOffice.FileService.Models.Dto.Requests;
 using LT.DigitalOffice.FileService.Validation.Helpers;
+using LT.DigitalOffice.FileService.Validation.Interfaces;
 using System;
 using System.Collections.Generic;
 
 namespace LT.DigitalOffice.FileService.Validation
 {
-    public class ImageRequestValidator : AbstractValidator<ImageRequest>
+    public class ImageRequestValidator : AbstractValidator<ImageRequest>, IImageRequestValidator
     {
         public readonly static List<string> AllowedExtensions = new()
             { ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tga" };

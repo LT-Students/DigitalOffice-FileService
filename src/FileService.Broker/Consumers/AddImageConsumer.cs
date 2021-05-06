@@ -1,17 +1,16 @@
 ﻿using LT.DigitalOffice.Broker.Requests;
 using LT.DigitalOffice.Broker.Responses;
-using LT.DigitalOffice.FileService.Business.Interfaces;
-using LT.DigitalOffice.FileService.Mappers.RequestMappers.Interfaces;
+using LT.DigitalOffice.FileService.Business.Commands.Image.Interfaces;
+using LT.DigitalOffice.FileService.Mappers.Requests.Interfaces;
 using LT.DigitalOffice.Kernel.Broker;
 using MassTransit;
-using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 
 namespace LT.DigitalOffice.FileService.Broker.Consumers
 {
     public class AddImageConsumer : IConsumer<IAddImageRequest>
     {
-        private readonly IAddNewImageCommand _command;
+        private readonly IAddImageCommand _command;
         private readonly IImageRequestMapper _mapper;
 
         private object GetImageId(IAddImageRequest request)
@@ -27,7 +26,7 @@ namespace LT.DigitalOffice.FileService.Broker.Consumers
         }
 
         public AddImageConsumer(
-            IAddNewImageCommand command,
+            IAddImageCommand command,
             IImageRequestMapper mapper)
         {
             _command = command;
