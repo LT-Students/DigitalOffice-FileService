@@ -57,13 +57,7 @@ namespace LT.DigitalOffice.FileService
                     builder =>
                     {
                         builder
-                            .WithOrigins(
-                                "https://*.ltdo.xyz",
-                                "http://*.ltdo.xyz",
-                                "http://ltdo.xyz",
-                                "http://ltdo.xyz:9802",
-                                "http://localhost:4200",
-                                "http://localhost:4500")
+                            .AllowAnyOrigin()
                             .AllowAnyHeader()
                             .AllowAnyMethod();
                     });
