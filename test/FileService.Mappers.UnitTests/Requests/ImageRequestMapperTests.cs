@@ -2,6 +2,7 @@
 using LT.DigitalOffice.FileService.Mappers.Requests;
 using LT.DigitalOffice.FileService.Mappers.Requests.Interfaces;
 using LT.DigitalOffice.FileService.Models.Dto.Requests;
+using LT.DigitalOffice.Models.Broker.Requests.File;
 using LT.DigitalOffice.UnitTestKernel;
 using Moq;
 using NUnit.Framework;

@@ -1,10 +1,10 @@
-﻿using LT.DigitalOffice.Broker.Requests;
-using LT.DigitalOffice.Broker.Responses;
-using LT.DigitalOffice.FileService.Broker.Consumers;
+﻿using LT.DigitalOffice.FileService.Broker.Consumers;
 using LT.DigitalOffice.FileService.Business.Commands.Image.Interfaces;
 using LT.DigitalOffice.FileService.Mappers.Requests.Interfaces;
 using LT.DigitalOffice.FileService.Models.Dto.Requests;
 using LT.DigitalOffice.Kernel.Broker;
+using LT.DigitalOffice.Models.Broker.Requests.File;
+using LT.DigitalOffice.Models.Broker.Responses.File;
 using LT.DigitalOffice.UnitTestKernel;
 using MassTransit;
 using MassTransit.Testing;

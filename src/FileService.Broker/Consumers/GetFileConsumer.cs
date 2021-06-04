@@ -1,7 +1,7 @@
-﻿using LT.DigitalOffice.Broker.Requests;
-using LT.DigitalOffice.Broker.Responses;
-using LT.DigitalOffice.FileService.Data.Interfaces;
+﻿using LT.DigitalOffice.FileService.Data.Interfaces;
 using LT.DigitalOffice.Kernel.Broker;
+using LT.DigitalOffice.Models.Broker.Requests.File;
+using LT.DigitalOffice.Models.Broker.Responses.File;
 using MassTransit;
 using System.Threading.Tasks;
 
