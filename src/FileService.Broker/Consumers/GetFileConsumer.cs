@@ -20,19 +20,14 @@ namespace LT.DigitalOffice.FileService.Broker.Consumers
         {
             var response = OperationResultWrapper.CreateResponse(GetFile, context.Message);
 
-            await context.RespondAsync<IOperationResult<IFileResponse>>(response);
+            await context.RespondAsync<IOperationResult<IGetFileResponse>>(response);
         }
 
         private object GetFile(IGetFileRequest request)
         {
             var dbFile = _repository.GetFile(request.FileId);
 
-            return new
-            {
-                Content = dbFile.Content,
-                Extension = dbFile.Extension,
-                Name = dbFile.Name
-            };
+            return IGetFileResponse.CreateObj(dbFile.Id, null, dbFile.Content, dbFile.Extension, dbFile.Name);
         }
     }
 }

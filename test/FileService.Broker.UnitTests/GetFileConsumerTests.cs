@@ -52,31 +52,28 @@ namespace LT.DigitalOffice.FileService.Broker.UnitTests
                 {
                     Content = _contentString,
                     Extension = _extension,
-                    Name = _name
+                    Name = _name,
+                    Id = _fileId
                 });
 
             try
             {
                 _requestClient = await _harness.ConnectRequestClient<IGetFileRequest>();
 
-                var response = await _requestClient.GetResponse<IOperationResult<IFileResponse>>(new
+                var response = await _requestClient.GetResponse<IOperationResult<IGetFileResponse>>(new
                 {
                     FileId = _fileId
                 });
 
-                var expected = new
-                {
-                    IsSuccess = true,
-                    Errors = null as List<string>,
-                    Body = new
-                    {
-                        Content = _contentString,
-                        Extension = _extension,
-                        Name = _name
-                    }
-                };
+                var result = response.Message;
 
-                SerializerAssert.AreEqual(expected, response.Message);
+                Assert.IsTrue(result.IsSuccess);
+                Assert.IsNull(result.Errors);
+                Assert.AreEqual(result.Body.FileId, _fileId);
+                Assert.AreEqual(result.Body.ParentId, null);
+                Assert.AreEqual(result.Body.Content, _contentString);
+                Assert.AreEqual(result.Body.Extension, _extension);
+                Assert.AreEqual(result.Body.Name, _name);
             }
             finally
             {
@@ -97,7 +94,7 @@ namespace LT.DigitalOffice.FileService.Broker.UnitTests
             {
                 _requestClient = await _harness.ConnectRequestClient<IGetFileRequest>();
 
-                var response = await _requestClient.GetResponse<IOperationResult<IFileResponse>>(new
+                var response = await _requestClient.GetResponse<IOperationResult<IGetFileResponse>>(new
                 {
                     FileId = _fileId
                 });
