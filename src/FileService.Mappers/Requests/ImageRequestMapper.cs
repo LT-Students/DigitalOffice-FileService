@@ -1,6 +1,6 @@
-﻿using LT.DigitalOffice.Broker.Requests;
-using LT.DigitalOffice.FileService.Mappers.Requests.Interfaces;
+﻿using LT.DigitalOffice.FileService.Mappers.Requests.Interfaces;
 using LT.DigitalOffice.FileService.Models.Dto.Requests;
+using LT.DigitalOffice.Models.Broker.Requests.File;
 using System;
 
 namespace LT.DigitalOffice.FileService.Mappers.Requests
