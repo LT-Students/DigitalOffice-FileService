@@ -16,6 +16,8 @@ namespace LT.DigitalOffice.FileService.Data.Interfaces
         /// </summary>
         /// <param name="dbImage">Image to add.</param>
         /// <returns>Id of the added image.</returns>
-        Guid AddImage(DbImage dbImage);
+        Guid Add(DbImage dbImage);
+
+        DbImage Get(Guid imageId);
     }
 }

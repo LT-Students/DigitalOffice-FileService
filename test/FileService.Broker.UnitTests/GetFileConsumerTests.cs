@@ -70,7 +70,6 @@ namespace LT.DigitalOffice.FileService.Broker.UnitTests
                 Assert.IsTrue(result.IsSuccess);
                 Assert.IsNull(result.Errors);
                 Assert.AreEqual(result.Body.FileId, _fileId);
-                Assert.AreEqual(result.Body.ParentId, null);
                 Assert.AreEqual(result.Body.Content, _contentString);
                 Assert.AreEqual(result.Body.Extension, _extension);
                 Assert.AreEqual(result.Body.Name, _name);

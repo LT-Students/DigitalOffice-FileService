@@ -1,25 +1,33 @@
 ﻿using LT.DigitalOffice.FileService.Data.Interfaces;
 using LT.DigitalOffice.FileService.Data.Provider;
 using LT.DigitalOffice.FileService.Models.Db;
+using LT.DigitalOffice.Kernel.Exceptions.Models;
 using System;
+using System.Linq;
 
 namespace LT.DigitalOffice.FileService.Data
 {
     public class ImageRepository : IImageRepository
     {
-        private readonly IDataProvider provider;
+        private readonly IDataProvider _provider;
 
         public ImageRepository(IDataProvider provider)
         {
-            this.provider = provider;
+            _provider = provider;
         }
 
-        public Guid AddImage(DbImage dbImage)
+        public Guid Add(DbImage dbImage)
         {
-            provider.Images.Add(dbImage);
-            provider.Save();
+            _provider.Images.Add(dbImage);
+            _provider.Save();
 
             return dbImage.Id;
+        }
+
+        public DbImage Get(Guid imageId)
+        {
+            return _provider.Images.FirstOrDefault(x => x.Id == imageId)
+                ?? throw new NotFoundException($"No image with id {imageId}");
         }
     }
 }

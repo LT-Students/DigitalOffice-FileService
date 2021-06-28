@@ -27,7 +27,7 @@ namespace LT.DigitalOffice.FileService.Broker.Consumers
         {
             var dbFile = _repository.GetFile(request.FileId);
 
-            return IGetFileResponse.CreateObj(dbFile.Id, null, dbFile.Content, dbFile.Extension, dbFile.Name);
+            return IGetFileResponse.CreateObj(dbFile.Id, dbFile.Content, dbFile.Extension, dbFile.Name);
         }
     }
 }

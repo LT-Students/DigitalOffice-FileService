@@ -135,6 +135,7 @@ namespace LT.DigitalOffice.FileService
             {
                 x.AddConsumer<GetFileConsumer>();
                 x.AddConsumer<AddImageConsumer>();
+                x.AddConsumer<GetImageConsumer>();
 
                 x.UsingRabbitMq((context, cfg) =>
                 {
@@ -152,6 +153,11 @@ namespace LT.DigitalOffice.FileService
                     cfg.ReceiveEndpoint(_rabbitMqConfig.AddImageEndpoint, ep =>
                     {
                         ep.ConfigureConsumer<AddImageConsumer>(context);
+                    });
+
+                    cfg.ReceiveEndpoint(_rabbitMqConfig.GetImageEndpoint, ep =>
+                    {
+                        ep.ConfigureConsumer<GetImageConsumer>(context);
                     });
                 });
 
