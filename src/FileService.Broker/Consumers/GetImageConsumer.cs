@@ -17,11 +17,11 @@ namespace LT.DigitalOffice.FileService.Broker.Consumers
             DbImage image = _repository.Get(request.ImageId);
 
             return IGetImageResponse.CreateObj(
-                                        image.Id,
-                                        image.ParentId,
-                                        image.Content,
-                                        image.Extension,
-                                        image.Name);
+                image.Id,
+                image.ParentId,
+                image.Content,
+                image.Extension,
+                image.Name);
         }
 
         public GetImageConsumer(
