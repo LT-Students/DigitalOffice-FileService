@@ -24,8 +24,7 @@ namespace LT.DigitalOffice.FileService.Broker.Consumers
                 image.Name);
         }
 
-        public GetImageConsumer(
-            IImageRepository repository)
+        public GetImageConsumer(IImageRepository repository)
         {
             _repository = repository;
         }
@@ -36,6 +35,5 @@ namespace LT.DigitalOffice.FileService.Broker.Consumers
 
             return context.RespondAsync<IOperationResult<IGetImageResponse>>(response);
         }
-
     }
 }
