@@ -41,10 +41,10 @@ namespace LT.DigitalOffice.FileService.Business.Commands.Image
             if (isBigImage)
             {
                 var childDbImage = _mapper.Map(request, ImageType.Thumb, out _, requiredUserId, parentDbImage.Id);
-                _repository.AddImage(childDbImage);
+                _repository.Add(childDbImage);
             }
 
-            _repository.AddImage(parentDbImage);
+            _repository.Add(parentDbImage);
 
             return parentDbImage.Id;
         }

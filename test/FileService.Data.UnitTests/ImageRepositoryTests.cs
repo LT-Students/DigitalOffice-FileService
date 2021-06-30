@@ -1,6 +1,8 @@
 ﻿using LT.DigitalOffice.FileService.Data.Interfaces;
 using LT.DigitalOffice.FileService.Data.Provider.MsSql.Ef;
 using LT.DigitalOffice.FileService.Models.Db;
+using LT.DigitalOffice.Kernel.Exceptions.Models;
+using LT.DigitalOffice.UnitTestKernel;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using System;
@@ -34,26 +36,6 @@ namespace LT.DigitalOffice.FileService.Data.UnitTests
             };
         }
 
-        #region AddImage
-
-        [Test]
-        public void ShouldAddImageToDatabase()
-        {
-            Assert.AreEqual(_newImage.Id, _repository.AddImage(_newImage));
-            Assert.That(_dbContext.Images.Find(_newImage.Id), Is.EqualTo(_newImage));
-        }
-
-        [Test]
-        public void ShouldThrowArgumentExceptionWhenAddingImageWithRepeatingId()
-        {
-            _repository.AddImage(_newImage);
-
-            Assert.Throws<ArgumentException>(() => _repository.AddImage(_newImage));
-            Assert.That(_dbContext.Images.Find(_newImage.Id), Is.EqualTo(_newImage));
-        }
-
-        #endregion
-
         [TearDown]
         public void CleanInMemoryDatabase()
         {
@@ -62,5 +44,57 @@ namespace LT.DigitalOffice.FileService.Data.UnitTests
                 _dbContext.Database.EnsureDeleted();
             }
         }
+
+        #region AddImage
+
+        [Test]
+        public void ShouldAddImageToDatabase()
+        {
+            Assert.AreEqual(_newImage.Id, _repository.Add(_newImage));
+            Assert.That(_dbContext.Images.Find(_newImage.Id), Is.EqualTo(_newImage));
+        }
+
+        [Test]
+        public void ShouldThrowArgumentExceptionWhenAddingImageWithRepeatingId()
+        {
+            _repository.Add(_newImage);
+
+            Assert.Throws<ArgumentException>(() => _repository.Add(_newImage));
+            Assert.That(_dbContext.Images.Find(_newImage.Id), Is.EqualTo(_newImage));
+        }
+
+        #endregion
+
+        #region Get Tests
+
+        [Test]
+        public void ShouldThrowNotFoundExceptionWhenImageDoesNotExist()
+        {
+            Assert.Throws<NotFoundException>(() => _repository.Get(Guid.NewGuid()));
+        }
+
+        [Test]
+        public void ShouldGetImageSuccessfuly()
+        {
+            DbImage image = new()
+            {
+                Id = Guid.NewGuid(),
+                ParentId = Guid.NewGuid(),
+                Name = "name",
+                Content = "content",
+                Extension = "extansion",
+                AddedOn = DateTime.UtcNow,
+                IsActive = true,
+                ImageType = 0,
+                UserId = Guid.NewGuid()
+            };
+
+            _dbContext.Images.Add(image);
+            _dbContext.SaveChanges();
+
+            SerializerAssert.AreEqual(image, _repository.Get(image.Id));
+        }
+
+        #endregion
     }
 }
