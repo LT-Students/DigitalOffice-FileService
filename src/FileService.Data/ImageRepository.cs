@@ -3,6 +3,7 @@ using LT.DigitalOffice.FileService.Data.Provider;
 using LT.DigitalOffice.FileService.Models.Db;
 using LT.DigitalOffice.Kernel.Exceptions.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace LT.DigitalOffice.FileService.Data
@@ -28,6 +29,11 @@ namespace LT.DigitalOffice.FileService.Data
         {
             return _provider.Images.FirstOrDefault(x => x.Id == imageId)
                 ?? throw new NotFoundException($"No image with id {imageId}");
+        }
+
+        public List<DbImage> Get(List<Guid> imageIds)
+        {
+            return _provider.Images.Where(x => imageIds.Contains(x.Id)).ToList();
         }
     }
 }
