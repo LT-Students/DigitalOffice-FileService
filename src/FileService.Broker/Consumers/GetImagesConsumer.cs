@@ -27,7 +27,7 @@ namespace LT.DigitalOffice.FileService.Broker.Consumers
 
         public async Task Consume(ConsumeContext<IGetImagesRequest> context)
         {
-            var response = OperationResultWrapper.CreateResponse(GetImages, context.Message);
+            object response = OperationResultWrapper.CreateResponse(GetImages, context.Message);
 
             await context.RespondAsync<IOperationResult<IGetImagesResponse>>(response);
         }
