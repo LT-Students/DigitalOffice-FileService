@@ -1,6 +1,7 @@
 ﻿using LT.DigitalOffice.FileService.Models.Db;
 using LT.DigitalOffice.Kernel.Attributes;
 using System;
+using System.Collections.Generic;
 
 namespace LT.DigitalOffice.FileService.Data.Interfaces
 {
@@ -19,5 +20,7 @@ namespace LT.DigitalOffice.FileService.Data.Interfaces
         Guid Add(DbImage dbImage);
 
         DbImage Get(Guid imageId);
+
+        List<DbImage> Get(List<Guid> imageIds);
     }
 }
