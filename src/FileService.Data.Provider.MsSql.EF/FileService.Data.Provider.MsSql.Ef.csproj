@@ -1,0 +1,10 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="$(ProjectDir)..\..\Common.Configurations.targets" />
+
+  <ItemGroup>
+    <ProjectReference Include="..\FileService.Data.Provider\FileService.Data.Provider.csproj" />
+    <ProjectReference Include="..\FileService.Models.Db\FileService.Models.Db.csproj" />
+  </ItemGroup>
+
+</Project>
