@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace LT.DigitalOffice.FileService.Validation
 {
-    public class ImageRequestValidator : AbstractValidator<ImageRequest>, IImageRequestValidator
+    public class ImageRequestValidator : AbstractValidator<AddImageRequest>, IImageRequestValidator
     {
         public readonly static List<string> AllowedExtensions = new()
             { ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tga" };

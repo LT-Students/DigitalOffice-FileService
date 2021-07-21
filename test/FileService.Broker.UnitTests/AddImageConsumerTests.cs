@@ -23,7 +23,7 @@ namespace LT.DigitalOffice.FileService.Broker.UnitTests
         private Mock<IImageRequestMapper> _mapperMock;
         private IRequestClient<IAddImageRequest> _requestClient;
         private Mock<IAddImageRequest> _addImageRequestMock;
-        private ImageRequest _imageRequest;
+        private AddImageRequest _imageRequest;
 
         private Guid _imageId;
         private Guid _userId;
@@ -37,7 +37,7 @@ namespace LT.DigitalOffice.FileService.Broker.UnitTests
             _imageId = Guid.NewGuid();
             _userId = Guid.NewGuid();
 
-            _imageRequest = new ImageRequest
+            _imageRequest = new AddImageRequest
             {
                 Name = _name,
                 Extension = _extension,
@@ -64,7 +64,7 @@ namespace LT.DigitalOffice.FileService.Broker.UnitTests
         {
             _commandMock = new Mock<IAddImageCommand>();
             _commandMock
-                .Setup(x => x.Execute(It.IsAny<ImageRequest>(), It.IsAny<Guid?>()))
+                .Setup(x => x.Execute(It.IsAny<AddImageRequest>(), It.IsAny<Guid?>()))
                 .Returns(_imageId);
 
             _mapperMock = new Mock<IImageRequestMapper>();
@@ -118,7 +118,7 @@ namespace LT.DigitalOffice.FileService.Broker.UnitTests
         public async Task ShouldResponseIOperationResultWithExceptionWhenCommandThrowException()
         {
             _commandMock
-                .Setup(x => x.Execute(It.IsAny<ImageRequest>(), It.IsAny<Guid?>()))
+                .Setup(x => x.Execute(It.IsAny<AddImageRequest>(), It.IsAny<Guid?>()))
                 .Throws(new Exception());
 
             await _harness.Start();

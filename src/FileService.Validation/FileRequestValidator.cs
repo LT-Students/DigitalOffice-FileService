@@ -5,7 +5,7 @@ using LT.DigitalOffice.FileService.Validation.Interfaces;
 
 namespace LT.DigitalOffice.FileService.Validation
 {
-    public class FileRequestValidator : AbstractValidator<FileRequest>, IFileRequestValidator
+    public class FileRequestValidator : AbstractValidator<AddFileRequest>, IFileRequestValidator
     {
         public FileRequestValidator()
         {
