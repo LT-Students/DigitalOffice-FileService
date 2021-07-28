@@ -7,14 +7,14 @@ namespace LT.DigitalOffice.FileService.Mappers.Requests
 {
     public class ImageRequestMapper : IImageRequestMapper
     {
-        public ImageRequest Map(IAddImageRequest imageRequest)
+        public AddImageRequest Map(IAddImageRequest imageRequest)
         {
             if (imageRequest == null)
             {
                 throw new ArgumentNullException(nameof(imageRequest));
             }
 
-            return new ImageRequest
+            return new AddImageRequest
             {
                 Name = imageRequest.Name,
                 Content = imageRequest.Content,

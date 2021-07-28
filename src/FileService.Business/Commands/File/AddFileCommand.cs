@@ -24,7 +24,7 @@ namespace LT.DigitalOffice.FileService.Business.Commands.File
             _mapper = mapper;
         }
 
-        public Guid Execute(FileRequest request)
+        public Guid Execute(AddFileRequest request)
         {
             _validator.ValidateAndThrowCustom(request);
 

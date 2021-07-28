@@ -7,6 +7,6 @@ namespace LT.DigitalOffice.FileService.Mappers.Requests.Interfaces
     [AutoInject]
     public interface IImageRequestMapper
     {
-        ImageRequest Map(IAddImageRequest imageRequest);
+        AddImageRequest Map(IAddImageRequest imageRequest);
     }
 }

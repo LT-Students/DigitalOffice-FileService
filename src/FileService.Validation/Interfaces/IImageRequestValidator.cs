@@ -5,7 +5,7 @@ using LT.DigitalOffice.Kernel.Attributes;
 namespace LT.DigitalOffice.FileService.Validation.Interfaces
 {
     [AutoInject]
-    public interface IImageRequestValidator : IValidator<ImageRequest>
+    public interface IImageRequestValidator : IValidator<AddImageRequest>
     {
     }
 }

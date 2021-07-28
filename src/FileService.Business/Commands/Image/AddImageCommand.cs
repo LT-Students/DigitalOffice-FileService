@@ -30,7 +30,7 @@ namespace LT.DigitalOffice.FileService.Business.Commands.Image
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public Guid Execute(ImageRequest request, Guid? userId = null)
+        public Guid Execute(AddImageRequest request, Guid? userId = null)
         {
             _validator.ValidateAndThrowCustom(request);
 

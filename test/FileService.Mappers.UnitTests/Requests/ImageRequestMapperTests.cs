@@ -15,7 +15,7 @@ namespace LT.DigitalOffice.FileService.Mappers.UnitTests.Requests
         private IImageRequestMapper _mapper;
 
         private Mock<IAddImageRequest> _addImageRequestMock;
-        private ImageRequest _imageRequest;
+        private AddImageRequest _imageRequest;
 
         private Guid _userId;
         private const string _name = "Name";
@@ -43,7 +43,7 @@ namespace LT.DigitalOffice.FileService.Mappers.UnitTests.Requests
                 .Setup(x => x.UserId)
                 .Returns(_userId);
 
-            _imageRequest = new ImageRequest
+            _imageRequest = new AddImageRequest
             {
                 Name = _name,
                 Extension = _extension,

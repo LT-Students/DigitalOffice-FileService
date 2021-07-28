@@ -1,6 +1,6 @@
 ﻿namespace LT.DigitalOffice.FileService.Models.Dto.Requests
 {
-    public class FileRequest
+    public record AddFileRequest
     {
         public string Content { get; set; }
         public string Extension { get; set; }
