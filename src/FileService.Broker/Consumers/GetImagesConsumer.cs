@@ -1,4 +1,5 @@
 ﻿using LT.DigitalOffice.FileService.Data.Interfaces;
+using LT.DigitalOffice.FileService.Models.Dto.Enums;
 using LT.DigitalOffice.Kernel.Broker;
 using LT.DigitalOffice.Models.Broker.Models;
 using LT.DigitalOffice.Models.Broker.Requests.File;
@@ -17,7 +18,13 @@ namespace LT.DigitalOffice.FileService.Broker.Consumers
         {
             return IGetImagesResponse.CreateObj(
                 _repository.Get(requets.ImageIds)
-                    .Select(image => new ImageData(image.Id, image.ParentId, image.Content, image.Extension, image.Name)).ToList());
+                    .Select(image => new ImageData(
+                        image.Id,
+                        image.ParentId,
+                        ((ImageType)image.ImageType).ToString(),
+                        image.Content,
+                        image.Extension,
+                        image.Name)).ToList());
         }
 
         public GetImagesConsumer(IImageRepository imageRepository)
