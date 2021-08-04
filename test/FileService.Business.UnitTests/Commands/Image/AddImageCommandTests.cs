@@ -171,56 +171,6 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests.Commands.Image
         }
 
         [Test]
-        public void ShouldAddOnlyFullAndThumbImageFromBrokerRequest()
-        {
-            _isBigImage = true;
-            _mapperMock
-                .Setup(x => x.Map(It.IsAny<AddImageRequest>(), ImageType.Full, out _isBigImage, It.IsAny<Guid>(), It.IsAny<Guid?>()))
-                .Returns(_fullDbImage);
-            _mapperMock
-                .Setup(x => x.Map(It.IsAny<AddImageRequest>(), ImageType.Thumb, out _isBigImage, It.IsAny<Guid>(), It.IsAny<Guid?>()))
-                .Returns(_thumbDbImage);
-
-            Assert.AreEqual(_fullDbImage.Id, _command.Execute(_imageRequest, _userId));
-
-            _validatorMock.Verify(v => v.Validate(It.IsAny<IValidationContext>()), Times.Once);
-            _repositoryMock.Verify(r => r.Add(It.IsAny<DbImage>()), Times.Exactly(2));
-            _mapperMock.Verify(
-                m => m.Map(
-                    It.IsAny<AddImageRequest>(),
-                    ImageType.Full,
-                    out _isBigImage,
-                    _userId,
-                    null),
-                Times.Once);
-            _mapperMock.Verify(
-                m => m.Map(
-                    It.IsAny<AddImageRequest>(),
-                    ImageType.Thumb,
-                    out _isBigImage,
-                    _userId,
-                    It.IsAny<Guid>()),
-                Times.Once);
-        }
-
-        [Test]
-        public void ShouldAddOnlyFullImageFromBrokerRequest()
-        {
-            Assert.AreEqual(_fullDbImage.Id, _command.Execute(_imageRequest, _userId));
-
-            _validatorMock.Verify(v => v.Validate(It.IsAny<IValidationContext>()), Times.Once);
-            _repositoryMock.Verify(r => r.Add(It.IsAny<DbImage>()), Times.Once);
-            _mapperMock.Verify(
-                m => m.Map(
-                    It.IsAny<AddImageRequest>(),
-                    ImageType.Full,
-                    out _isBigImage,
-                    _userId,
-                    null),
-                Times.Once);
-        }
-
-        [Test]
         public void ShouldThrowExceptionWhenValidatorThrowsException()
         {
             _validatorMock
