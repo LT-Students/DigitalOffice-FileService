@@ -13,14 +13,14 @@ namespace LT.DigitalOffice.FileService.Mappers.UnitTests.Db
         private IDbFileMapper _dbFileMapper;
 
         private DbFile _dbFile;
-        private FileRequest _fileRequest;
+        private AddFileRequest _fileRequest;
 
         [SetUp]
         public void SetUp()
         {
             _dbFileMapper = new DbFileMapper();
 
-            _fileRequest = new FileRequest
+            _fileRequest = new AddFileRequest
             {
                 Content = "RGlnaXRhbCBPZmA5Y2U=",
                 Extension = ".txt",

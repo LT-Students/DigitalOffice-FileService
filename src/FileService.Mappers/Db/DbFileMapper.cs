@@ -7,7 +7,7 @@ namespace LT.DigitalOffice.FileService.Mappers.Db
 {
     public class DbFileMapper : IDbFileMapper
     {
-        public DbFile Map(FileRequest file)
+        public DbFile Map(AddFileRequest file)
         {
             if (file == null)
             {

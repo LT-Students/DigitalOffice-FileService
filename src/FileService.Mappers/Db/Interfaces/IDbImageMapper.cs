@@ -9,6 +9,6 @@ namespace LT.DigitalOffice.FileService.Mappers.Db.Interfaces
     [AutoInject]
     public interface IDbImageMapper
     {
-        DbImage Map(ImageRequest imageRequest, ImageType imageType, out bool isBigImage, Guid userId, Guid? parentId = null);
+        DbImage Map(AddImageRequest imageRequest, ImageType imageType, out bool isBigImage, Guid userId, Guid? parentId = null);
     }
 }

@@ -9,12 +9,12 @@ namespace LT.DigitalOffice.FileService.Validation.UnitTests
     {
         private IImageRequestValidator _validator;
 
-        private ImageRequest _imageRequest;
+        private AddImageRequest _imageRequest;
 
         [SetUp]
         public void SetUp()
         {
-            _imageRequest = new ImageRequest
+            _imageRequest = new AddImageRequest
             {
                 Content = "RGlnaXRhbCBPZmA5Y2U=",
                 Extension = ".png",

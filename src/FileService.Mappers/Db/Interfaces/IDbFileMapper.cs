@@ -7,6 +7,6 @@ namespace LT.DigitalOffice.FileService.Mappers.Db.Interfaces
     [AutoInject]
     public interface IDbFileMapper
     {
-        DbFile Map(FileRequest file);
+        DbFile Map(AddFileRequest file);
     }
 }

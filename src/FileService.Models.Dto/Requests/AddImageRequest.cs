@@ -1,10 +1,7 @@
-using System;
-
-namespace LT.DigitalOffice.FileService.Models.Dto.Models
+﻿namespace LT.DigitalOffice.FileService.Models.Dto.Requests
 {
-    public record FileInfo
+    public record AddImageRequest
     {
-        public Guid? Id { get; set; }
         public string Content { get; set; }
         public string Extension { get; set; }
         public string Name { get; set; }

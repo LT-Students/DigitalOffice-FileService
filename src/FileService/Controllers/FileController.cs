@@ -12,14 +12,16 @@ namespace LT.DigitalOffice.FileService.Controllers
     {
         [HttpPost("add")]
         public Guid Add(
-            [FromBody] FileRequest request,
+            [FromBody] AddFileRequest request,
             [FromServices] IAddFileCommand command)
         {
             return command.Execute(request);
         }
 
         [HttpGet("get")]
-        public FileInfo Get([FromServices] IGetFileCommand command, [FromQuery] Guid fileId)
+        public FileInfo Get(
+            [FromServices] IGetFileCommand command,
+            [FromQuery] Guid fileId)
         {
             return command.Execute(fileId);
         }
