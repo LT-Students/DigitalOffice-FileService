@@ -20,7 +20,7 @@ namespace LT.DigitalOffice.FileService.Mappers.Db
                 Content = file.Content,
                 Extension = file.Extension.ToLower(),
                 Name = file.Name,
-                AddedOn = DateTime.UtcNow,
+                CreatedAtUtc = DateTime.UtcNow,
                 IsActive = true,
             };
         }

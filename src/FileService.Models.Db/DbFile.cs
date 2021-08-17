@@ -12,7 +12,10 @@ namespace LT.DigitalOffice.FileService.Models.Db
         public string Content { get; set; }
         public string Extension { get; set; }
         public string Name { get; set; }
-        public DateTime AddedOn { get; set; }
+        public DateTime CreatedAtUtc { get; set; }
+        public Guid CreatedBy { get; set; }
+        public DateTime? ModifiedAtUtc { get; set; }
+        public Guid? ModifiedBy { get; set; }
         public bool IsActive { get; set; }
     }
 
@@ -32,6 +35,22 @@ namespace LT.DigitalOffice.FileService.Models.Db
 
             builder
                 .Property(p => p.Extension)
+                .IsRequired();
+
+            builder
+                .Property(p => p.CreatedAtUtc)
+                .IsRequired();
+
+            builder
+                .Property(p => p.ModifiedAtUtc)
+                .IsRequired();
+
+            builder
+                .Property(p => p.CreatedBy)
+                .IsRequired();
+
+            builder
+                .Property(p => p.ModifiedBy)
                 .IsRequired();
         }
     }

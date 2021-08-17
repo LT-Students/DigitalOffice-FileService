@@ -38,7 +38,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests.Commands.File
                 Extension = ".txt",
                 IsActive = true,
                 Name = "DigitalOfficeTestFile",
-                AddedOn = DateTime.UtcNow
+                CreatedAtUtc = DateTime.UtcNow
             };
 
             _fileRequest = new AddFileRequest

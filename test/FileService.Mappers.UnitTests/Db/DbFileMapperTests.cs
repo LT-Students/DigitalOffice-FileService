@@ -57,7 +57,7 @@ namespace LT.DigitalOffice.FileService.Mappers.UnitTests.Db
                 Extension = _fileRequest.Extension,
                 Name = _fileRequest.Name,
                 IsActive = true,
-                AddedOn = newFile.AddedOn
+                CreatedAtUtc = newFile.CreatedAtUtc
             };
 
             SerializerAssert.AreEqual(expectedFile, newFile);
