@@ -22,8 +22,6 @@ namespace LT.DigitalOffice.FileService.Data
 
         public Guid AddFile(DbFile file)
         {
-            file.CreatedBy = _httpContextAccessor.HttpContext.GetUserId();
-
             _provider.Files.Add(file);
             _provider.Save();
 
@@ -39,9 +37,7 @@ namespace LT.DigitalOffice.FileService.Data
                 throw new NotFoundException("File with this id was not found.");
             }
 
-            Guid userId = _httpContextAccessor.HttpContext.GetUserId();
-
-            dbFile.ModifiedBy = userId;
+            dbFile.ModifiedBy = _httpContextAccessor.HttpContext.GetUserId();
             dbFile.ModifiedAtUtc = DateTime.UtcNow;
             dbFile.IsActive = false;
 
