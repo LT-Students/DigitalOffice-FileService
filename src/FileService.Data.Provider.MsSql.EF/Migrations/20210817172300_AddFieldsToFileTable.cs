@@ -14,8 +14,7 @@ namespace LT.DigitalOffice.FileService.Data.Provider.MsSql.Ef.Migrations
             migrationBuilder.RenameColumn(
                 name: "AddedOn",
                 table: DbFile.TableName,
-                newName: nameof(DbFile.CreatedAtUtc)
-                );
+                newName: nameof(DbFile.CreatedAtUtc));
 
             migrationBuilder.AddColumn<DateTime>(
                name: nameof(DbFile.ModifiedAtUtc),
@@ -42,8 +41,7 @@ namespace LT.DigitalOffice.FileService.Data.Provider.MsSql.Ef.Migrations
             migrationBuilder.RenameColumn(
                 name: nameof(DbFile.CreatedAtUtc),
                 table: DbFile.TableName,
-                newName: "AddedOn"
-                );
+                newName: "AddedOn");
 
             migrationBuilder.DropColumn(
                name: nameof(DbFile.ModifiedAtUtc),
