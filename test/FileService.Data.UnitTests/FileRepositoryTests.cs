@@ -39,8 +39,6 @@ namespace LT.DigitalOffice.FileService.Data.UnitTests
             _dbContext = new FileServiceDbContext(dbOptionsFileService);
             _repository = new FileRepository(_dbContext, _autoMocker.GetMock<IHttpContextAccessor>().Object);
 
-                      //  _dbFileMapper = _autoMocker.CreateInstance<DbFileMapper>();
-
             _autoMocker
                .Setup<IHttpContextAccessor, IDictionary<object, object>>(x => x.HttpContext.Items)
                .Returns(_items);
