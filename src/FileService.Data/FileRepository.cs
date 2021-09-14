@@ -41,7 +41,7 @@ namespace LT.DigitalOffice.FileService.Data
             dbFile.ModifiedAtUtc = DateTime.UtcNow;
             dbFile.IsActive = false;
 
-            _provider.Files.Update(dbFile);
+      //      _provider.Files.Update(dbFile);
             _provider.Save();
         }
 
