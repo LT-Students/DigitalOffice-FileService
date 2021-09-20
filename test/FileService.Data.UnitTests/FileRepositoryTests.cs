@@ -3,28 +3,45 @@ using LT.DigitalOffice.FileService.Data.Provider.MsSql.Ef;
 using LT.DigitalOffice.FileService.Models.Db;
 using LT.DigitalOffice.Kernel.Exceptions.Models;
 using LT.DigitalOffice.UnitTestKernel;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Moq.AutoMock;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 
 namespace LT.DigitalOffice.FileService.Data.UnitTests
 {
     public class FileRepositoryTests
     {
+        private AutoMocker _autoMocker;
         private IFileRepository _repository;
+        private IDictionary<object, object> _items;
         private FileServiceDbContext _dbContext;
-
+        private Guid _userId;
         private DbFile _dbFile;
 
         [SetUp]
         public void SetUp()
         {
+            _autoMocker = new();
+
+            _userId = Guid.NewGuid();
+            _items = new Dictionary<object, object>();
+            _items.Add("UserId", _userId);
+
+            IHttpContextAccessor httpContextAccessor = new HttpContextAccessor();
+
             var dbOptionsFileService = new DbContextOptionsBuilder<FileServiceDbContext>()
                 .UseInMemoryDatabase("FileServiceTestDatabase")
                 .Options;
 
             _dbContext = new FileServiceDbContext(dbOptionsFileService);
-            _repository = new FileRepository(_dbContext);
+            _repository = new FileRepository(_dbContext, _autoMocker.GetMock<IHttpContextAccessor>().Object);
+
+            _autoMocker
+               .Setup<IHttpContextAccessor, IDictionary<object, object>>(x => x.HttpContext.Items)
+               .Returns(_items);
 
             _dbFile = new DbFile
             {
