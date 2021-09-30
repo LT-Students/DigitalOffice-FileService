@@ -22,7 +22,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests.Commands.File
         private Mock<IDbFileMapper> _mapperMock;
 
         private DbFile _newFile;
-        private FileRequest _fileRequest;
+        private AddFileRequest _fileRequest;
 
         [SetUp]
         public void SetUp()
@@ -38,10 +38,11 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests.Commands.File
                 Extension = ".txt",
                 IsActive = true,
                 Name = "DigitalOfficeTestFile",
-                AddedOn = DateTime.UtcNow
+                CreatedAtUtc = DateTime.UtcNow,
+                CreatedBy = Guid.NewGuid()
             };
 
-            _fileRequest = new FileRequest
+            _fileRequest = new AddFileRequest
             {
                 Content = "RGlnaXRhbCBPZmA5Y2U=",
                 Extension = ".txt",
@@ -49,7 +50,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests.Commands.File
             };
 
             _mapperMock
-                .Setup(f => f.Map(It.IsAny<FileRequest>()))
+                .Setup(f => f.Map(It.IsAny<AddFileRequest>()))
                 .Returns(_newFile);
             _command = new AddFileCommand(_repositoryMock.Object, _validatorMock.Object, _mapperMock.Object);
         }
@@ -114,7 +115,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests.Commands.File
                  .Returns(true);
 
             _mapperMock
-                 .Setup(x => x.Map(It.IsAny<FileRequest>()))
+                 .Setup(x => x.Map(It.IsAny<AddFileRequest>()))
                  .Throws(new NullReferenceException());
 
             _fileRequest = null;
@@ -126,7 +127,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests.Commands.File
         public void ShouldThrowNullReferenceExceptionWhenMapperThrowsIt()
         {
             _mapperMock
-                .Setup(x => x.Map(It.IsAny<FileRequest>()))
+                .Setup(x => x.Map(It.IsAny<AddFileRequest>()))
                 .Throws(new ArgumentNullException());
 
             Assert.Throws<ArgumentNullException>(() => _command.Execute(_fileRequest));

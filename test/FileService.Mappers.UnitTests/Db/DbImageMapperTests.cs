@@ -16,7 +16,7 @@ namespace LT.DigitalOffice.FileService.Mappers.UnitTests.Db
         private IDbImageMapper _mapper;
         private Mock<IImageResizeAlgorithm> _algorithmMock;
 
-        private ImageRequest _imageRequest;
+        private AddImageRequest _imageRequest;
         private DbImage _dbImage;
         private string _resizedImageContent;
         private string _content = Properties.Resources.SmallImageContent;
@@ -44,7 +44,7 @@ namespace LT.DigitalOffice.FileService.Mappers.UnitTests.Db
         [SetUp]
         public void SetUp()
         {
-            _imageRequest = new ImageRequest
+            _imageRequest = new AddImageRequest
             {
                 Content = _content,
                 Extension = ".png",

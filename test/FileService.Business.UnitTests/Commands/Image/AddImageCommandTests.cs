@@ -23,7 +23,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests.Commands.Image
         private Mock<IDbImageMapper> _mapperMock;
         private Mock<IHttpContextAccessor> _accessorMock;
 
-        private ImageRequest _imageRequest;
+        private AddImageRequest _imageRequest;
 
         private bool _isBigImage;
         private DbImage _fullDbImage;
@@ -51,7 +51,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests.Commands.Image
         {
             _userId = Guid.NewGuid();
 
-            _imageRequest = new ImageRequest
+            _imageRequest = new AddImageRequest
             {
                 Name = _name,
                 Extension = _extension,
@@ -105,10 +105,10 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests.Commands.Image
 
             _mapperMock = new Mock<IDbImageMapper>();
             _mapperMock
-                .Setup(x => x.Map(It.IsAny<ImageRequest>(), ImageType.Full, out _isBigImage, It.IsAny<Guid>(), It.IsAny<Guid?>()))
+                .Setup(x => x.Map(It.IsAny<AddImageRequest>(), ImageType.Full, out _isBigImage, It.IsAny<Guid>(), It.IsAny<Guid?>()))
                 .Returns(_fullDbImage);
             _mapperMock
-                .Setup(x => x.Map(It.IsAny<ImageRequest>(), ImageType.Thumb, out _isBigImage, It.IsAny<Guid>(), It.IsAny<Guid?>()))
+                .Setup(x => x.Map(It.IsAny<AddImageRequest>(), ImageType.Thumb, out _isBigImage, It.IsAny<Guid>(), It.IsAny<Guid?>()))
                 .Returns(_thumbDbImage);
 
             ClientRequestUp();
@@ -125,10 +125,10 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests.Commands.Image
         {
            _isBigImage = true;
             _mapperMock
-                .Setup(x => x.Map(It.IsAny<ImageRequest>(), ImageType.Full, out _isBigImage, It.IsAny<Guid>(), It.IsAny<Guid?>()))
+                .Setup(x => x.Map(It.IsAny<AddImageRequest>(), ImageType.Full, out _isBigImage, It.IsAny<Guid>(), It.IsAny<Guid?>()))
                 .Returns(_fullDbImage);
             _mapperMock
-                .Setup(x => x.Map(It.IsAny<ImageRequest>(), ImageType.Thumb, out _isBigImage, It.IsAny<Guid>(), It.IsAny<Guid?>()))
+                .Setup(x => x.Map(It.IsAny<AddImageRequest>(), ImageType.Thumb, out _isBigImage, It.IsAny<Guid>(), It.IsAny<Guid?>()))
                 .Returns(_thumbDbImage);
 
             Assert.AreEqual(_fullDbImage.Id, _command.Execute(_imageRequest));
@@ -137,7 +137,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests.Commands.Image
             _repositoryMock.Verify(r => r.Add(It.IsAny<DbImage>()), Times.Exactly(2));
             _mapperMock.Verify(
                 m => m.Map(
-                    It.IsAny<ImageRequest>(),
+                    It.IsAny<AddImageRequest>(),
                     ImageType.Full,
                     out _isBigImage,
                     _userId,
@@ -145,7 +145,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests.Commands.Image
                 Times.Once);
             _mapperMock.Verify(
                 m => m.Map(
-                    It.IsAny<ImageRequest>(),
+                    It.IsAny<AddImageRequest>(),
                     ImageType.Thumb,
                     out _isBigImage,
                     _userId,
@@ -162,57 +162,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests.Commands.Image
             _repositoryMock.Verify(r => r.Add(It.IsAny<DbImage>()), Times.Once);
             _mapperMock.Verify(
                 m => m.Map(
-                    It.IsAny<ImageRequest>(),
-                    ImageType.Full,
-                    out _isBigImage,
-                    _userId,
-                    null),
-                Times.Once);
-        }
-
-        [Test]
-        public void ShouldAddOnlyFullAndThumbImageFromBrokerRequest()
-        {
-            _isBigImage = true;
-            _mapperMock
-                .Setup(x => x.Map(It.IsAny<ImageRequest>(), ImageType.Full, out _isBigImage, It.IsAny<Guid>(), It.IsAny<Guid?>()))
-                .Returns(_fullDbImage);
-            _mapperMock
-                .Setup(x => x.Map(It.IsAny<ImageRequest>(), ImageType.Thumb, out _isBigImage, It.IsAny<Guid>(), It.IsAny<Guid?>()))
-                .Returns(_thumbDbImage);
-
-            Assert.AreEqual(_fullDbImage.Id, _command.Execute(_imageRequest, _userId));
-
-            _validatorMock.Verify(v => v.Validate(It.IsAny<IValidationContext>()), Times.Once);
-            _repositoryMock.Verify(r => r.Add(It.IsAny<DbImage>()), Times.Exactly(2));
-            _mapperMock.Verify(
-                m => m.Map(
-                    It.IsAny<ImageRequest>(),
-                    ImageType.Full,
-                    out _isBigImage,
-                    _userId,
-                    null),
-                Times.Once);
-            _mapperMock.Verify(
-                m => m.Map(
-                    It.IsAny<ImageRequest>(),
-                    ImageType.Thumb,
-                    out _isBigImage,
-                    _userId,
-                    It.IsAny<Guid>()),
-                Times.Once);
-        }
-
-        [Test]
-        public void ShouldAddOnlyFullImageFromBrokerRequest()
-        {
-            Assert.AreEqual(_fullDbImage.Id, _command.Execute(_imageRequest, _userId));
-
-            _validatorMock.Verify(v => v.Validate(It.IsAny<IValidationContext>()), Times.Once);
-            _repositoryMock.Verify(r => r.Add(It.IsAny<DbImage>()), Times.Once);
-            _mapperMock.Verify(
-                m => m.Map(
-                    It.IsAny<ImageRequest>(),
+                    It.IsAny<AddImageRequest>(),
                     ImageType.Full,
                     out _isBigImage,
                     _userId,
@@ -229,7 +179,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests.Commands.Image
 
             Assert.Throws<ValidationException>(() => _command.Execute(_imageRequest));
             _repositoryMock.Verify(r => r.Add(It.IsAny<DbImage>()), Times.Never);
-            _mapperMock.Verify(m => m.Map(It.IsAny<ImageRequest>(), ImageType.Full, out _isBigImage, It.IsAny<Guid>(), It.IsAny<Guid?>()), Times.Never);
+            _mapperMock.Verify(m => m.Map(It.IsAny<AddImageRequest>(), ImageType.Full, out _isBigImage, It.IsAny<Guid>(), It.IsAny<Guid?>()), Times.Never);
         }
 
         [Test]

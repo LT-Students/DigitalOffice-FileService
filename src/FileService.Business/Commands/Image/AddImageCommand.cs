@@ -30,11 +30,11 @@ namespace LT.DigitalOffice.FileService.Business.Commands.Image
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public Guid Execute(ImageRequest request, Guid? userId = null)
+        public Guid Execute(AddImageRequest request)
         {
             _validator.ValidateAndThrowCustom(request);
 
-            Guid requiredUserId = userId ?? _httpContextAccessor.HttpContext.GetUserId();
+            Guid requiredUserId = _httpContextAccessor.HttpContext.GetUserId();
 
             var parentDbImage = _mapper.Map(request, ImageType.Full, out bool isBigImage, requiredUserId);
 

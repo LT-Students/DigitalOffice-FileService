@@ -19,7 +19,7 @@ namespace LT.DigitalOffice.FileService.Mappers.Db
         }
 
         public DbImage Map(
-            ImageRequest imageRequest,
+            AddImageRequest imageRequest,
             ImageType imageType,
             out bool isBigImage,
             Guid userId,

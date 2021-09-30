@@ -9,12 +9,12 @@ namespace LT.DigitalOffice.FileService.Validation.UnitTests
     {
         private IFileRequestValidator _validator;
 
-        private FileRequest _fileRequest;
+        private AddFileRequest _fileRequest;
 
         [SetUp]
         public void SetUp()
         {
-            _fileRequest = new FileRequest
+            _fileRequest = new AddFileRequest
             {
                 Content = "RGlnaXRhbCBPZmA5Y2U=",
                 Extension = ".txt",
