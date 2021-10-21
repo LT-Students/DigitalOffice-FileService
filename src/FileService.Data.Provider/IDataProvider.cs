@@ -10,6 +10,5 @@ namespace LT.DigitalOffice.FileService.Data.Provider
     public interface IDataProvider : IBaseDataProvider
     {
         DbSet<DbFile> Files { get; set; }
-        DbSet<DbImage> Images { get; set; }
     }
 }
