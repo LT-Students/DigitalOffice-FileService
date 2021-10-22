@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace LT.DigitalOffice.FileService.Broker.UnitTests
 {
-    internal class GetFileConsumerTests
+    /*internal class GetFileConsumerTests
     {
         private string _contentString;
         private string _extension;
@@ -112,5 +112,5 @@ namespace LT.DigitalOffice.FileService.Broker.UnitTests
                 await _harness.Stop();
             }
         }
-    }
+    }*/
 }

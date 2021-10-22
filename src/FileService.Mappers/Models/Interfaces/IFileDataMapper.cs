@@ -1,12 +1,12 @@
 ﻿using LT.DigitalOffice.FileService.Models.Db;
-using LT.DigitalOffice.FileService.Models.Dto.Models;
 using LT.DigitalOffice.Kernel.Attributes;
+using LT.DigitalOffice.Models.Broker.Models.File;
 
 namespace LT.DigitalOffice.FileService.Mappers.Models.Interfaces
 {
     [AutoInject]
-    public interface IFileInfoMapper
+    public interface IFileDataMapper
     {
-        FileInfo Map(DbFile dbFile);
+        FileData Map(DbFile dbFile);
     }
 }

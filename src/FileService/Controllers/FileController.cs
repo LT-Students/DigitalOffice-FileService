@@ -1,8 +1,11 @@
 ﻿using LT.DigitalOffice.FileService.Business.Commands.File.Interfaces;
 using LT.DigitalOffice.FileService.Models.Dto.Models;
 using LT.DigitalOffice.FileService.Models.Dto.Requests;
+using LT.DigitalOffice.Models.Broker.Models.File;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace LT.DigitalOffice.FileService.Controllers
 {
@@ -19,11 +22,11 @@ namespace LT.DigitalOffice.FileService.Controllers
         }
 
         [HttpGet("get")]
-        public FileInfo Get(
+        public async Task<List<FileData>> Get(
             [FromServices] IGetFileCommand command,
-            [FromQuery] Guid fileId)
+            [FromQuery] List<Guid> filesIds)
         {
-            return command.Execute(fileId);
+            return await command.Execute(filesIds);
         }
 
         [HttpDelete("disable")]

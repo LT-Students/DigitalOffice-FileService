@@ -4,8 +4,11 @@ using LT.DigitalOffice.FileService.Models.Db;
 using LT.DigitalOffice.Kernel.Exceptions.Models;
 using LT.DigitalOffice.Kernel.Extensions;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace LT.DigitalOffice.FileService.Data
 {
@@ -44,16 +47,9 @@ namespace LT.DigitalOffice.FileService.Data
             _provider.Save();
         }
 
-        public DbFile GetFile(Guid fileId)
+        public async Task<List<DbFile>> GetAsync(List<Guid> filesIds)
         {
-            var dbFile = _provider.Files.FirstOrDefault(file => file.Id == fileId);
-
-            if (dbFile == null)
-            {
-                throw new NotFoundException("File with this id was not found.");
-            }
-
-            return dbFile;
+            return await _provider.Files.Where(u => filesIds.Contains(u.Id) && u.IsActive).ToListAsync();
         }
     }
 }
