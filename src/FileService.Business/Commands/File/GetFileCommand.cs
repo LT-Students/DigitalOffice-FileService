@@ -2,7 +2,11 @@
 using LT.DigitalOffice.FileService.Data.Interfaces;
 using LT.DigitalOffice.FileService.Mappers.Models.Interfaces;
 using LT.DigitalOffice.FileService.Models.Dto.Models;
+using LT.DigitalOffice.Models.Broker.Models.File;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace LT.DigitalOffice.FileService.Business.Commands.File
 {
@@ -19,9 +23,9 @@ namespace LT.DigitalOffice.FileService.Business.Commands.File
             _mapper = mapper;
         }
 
-        public FileInfo Execute(Guid fileId)
+        public async Task<List<FileInfo>> Execute(List<Guid> filesIds)
         {
-            return _mapper.Map(_repository.GetFile(fileId));
+            return (await _repository.GetAsync(filesIds)).Select(x => _mapper.Map(x)).ToList();
         }
     }
 }

@@ -35,7 +35,7 @@ namespace LT.DigitalOffice.FileService.Data.Provider.MsSql.Ef.Migrations
         private void CreateTableImages(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: DbImage.TableName,
+                name: "Images",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
@@ -67,7 +67,7 @@ namespace LT.DigitalOffice.FileService.Data.Provider.MsSql.Ef.Migrations
         {
             migrationBuilder.DropTable(DbFile.TableName);
 
-            migrationBuilder.DropTable(DbImage.TableName);
+            migrationBuilder.DropTable("Images");
         }
     }
 }

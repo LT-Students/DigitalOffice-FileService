@@ -1,33 +1,43 @@
 ﻿using LT.DigitalOffice.FileService.Data.Interfaces;
+using LT.DigitalOffice.FileService.Mappers.Models.Interfaces;
+using LT.DigitalOffice.FileService.Models.Db;
 using LT.DigitalOffice.Kernel.Broker;
+using LT.DigitalOffice.Models.Broker.Models.File;
 using LT.DigitalOffice.Models.Broker.Requests.File;
 using LT.DigitalOffice.Models.Broker.Responses.File;
 using MassTransit;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace LT.DigitalOffice.FileService.Broker.Consumers
 {
-    public class GetFileConsumer : IConsumer<IGetFileRequest>
+    public class GetFileConsumer : IConsumer<IGetFilesRequest>
     {
         private readonly IFileRepository _repository;
+        private readonly IFileDataMapper _mapper;
 
-        public GetFileConsumer(IFileRepository repository)
+        public GetFileConsumer(
+            IFileRepository repository,
+            IFileDataMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
 
-        public async Task Consume(ConsumeContext<IGetFileRequest> context)
+        public async Task Consume(ConsumeContext<IGetFilesRequest> context)
         {
-            var response = OperationResultWrapper.CreateResponse(GetFile, context.Message);
+            object response = OperationResultWrapper.CreateResponse(GetFile, context.Message);
 
-            await context.RespondAsync<IOperationResult<IGetFileResponse>>(response);
+            await context.RespondAsync<IOperationResult<IGetFilesResponse>>(response);
         }
 
-        private object GetFile(IGetFileRequest request)
+        private async Task<object> GetFile(IGetFilesRequest request)
         {
-            var dbFile = _repository.GetFile(request.FileId);
+            List<FileData> files = (await _repository.GetAsync(request.FilesIds)).Select(x => _mapper.Map(x)).ToList();
 
-            return IGetFileResponse.CreateObj(dbFile.Id, dbFile.Content, dbFile.Extension, dbFile.Name);
+            return IGetFilesResponse.CreateObj(files);
         }
     }
 }

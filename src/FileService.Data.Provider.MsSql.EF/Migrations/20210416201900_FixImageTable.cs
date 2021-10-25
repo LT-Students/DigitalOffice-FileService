@@ -1,5 +1,4 @@
-﻿using LT.DigitalOffice.FileService.Models.Db;
-using Microsoft.EntityFrameworkCore.Infrastructure;
+﻿using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using System;
 
@@ -13,11 +12,11 @@ namespace LT.DigitalOffice.FileService.Data.Provider.MsSql.Ef.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "ImageType",
-                table: DbImage.TableName);
+                table: "Images");
 
             migrationBuilder.AddColumn<int>(
                 name: "ImageType",
-                table: DbImage.TableName,
+                table: "Images",
                 nullable: false);
         }
 
@@ -25,11 +24,11 @@ namespace LT.DigitalOffice.FileService.Data.Provider.MsSql.Ef.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "ImageType",
-                table: DbImage.TableName);
+                table: "Images");
 
             migrationBuilder.AddColumn<Guid>(
                 name: "ImageType",
-                table: DbImage.TableName,
+                table: "Images",
                 nullable: false);
         }
     }

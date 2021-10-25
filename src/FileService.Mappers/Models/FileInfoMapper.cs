@@ -1,4 +1,5 @@
-﻿using LT.DigitalOffice.FileService.Mappers.Models.Interfaces;
+﻿using LT.DigitalOffice.FileService.Mappers.Db.Interfaces;
+using LT.DigitalOffice.FileService.Mappers.Models.Interfaces;
 using LT.DigitalOffice.FileService.Models.Db;
 using LT.DigitalOffice.FileService.Models.Dto.Models;
 using System;
@@ -11,7 +12,7 @@ namespace LT.DigitalOffice.FileService.Mappers.Models
         {
             if (dbFile == null)
             {
-                throw new ArgumentNullException(nameof(dbFile));
+                return null;
             }
 
             return new FileInfo()

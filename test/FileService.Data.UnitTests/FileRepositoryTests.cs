@@ -98,7 +98,7 @@ namespace LT.DigitalOffice.FileService.Data.UnitTests
 
         #region GetFile
 
-        [Test]
+        /*[Test]
         public void ShouldThrowExceptionWhenThereNoFileInDatabaseWithSuchId()
         {
             _dbContext.Files.Add(_dbFile);
@@ -125,7 +125,7 @@ namespace LT.DigitalOffice.FileService.Data.UnitTests
             };
 
             SerializerAssert.AreEqual(expected, result);
-        }
+        }*/
 
         #endregion
 
