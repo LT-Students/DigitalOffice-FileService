@@ -1,7 +1,6 @@
 ﻿using LT.DigitalOffice.FileService.Business.Commands.File.Interfaces;
 using LT.DigitalOffice.FileService.Models.Dto.Models;
 using LT.DigitalOffice.FileService.Models.Dto.Requests;
-using LT.DigitalOffice.Models.Broker.Models.File;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -22,7 +21,7 @@ namespace LT.DigitalOffice.FileService.Controllers
         }
 
         [HttpGet("get")]
-        public async Task<List<FileData>> Get(
+        public async Task<List<FileInfo>> Get(
             [FromServices] IGetFileCommand command,
             [FromQuery] List<Guid> filesIds)
         {

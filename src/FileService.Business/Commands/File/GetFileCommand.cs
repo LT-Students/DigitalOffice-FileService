@@ -13,17 +13,17 @@ namespace LT.DigitalOffice.FileService.Business.Commands.File
     public class GetFileCommand : IGetFileCommand
     {
         private readonly IFileRepository _repository;
-        private readonly IFileDataMapper _mapper;
+        private readonly IFileInfoMapper _mapper;
 
         public GetFileCommand(
             IFileRepository repository,
-            IFileDataMapper mapper)
+            IFileInfoMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
         }
 
-        public async Task<List<FileData>> Execute(List<Guid> filesIds)
+        public async Task<List<FileInfo>> Execute(List<Guid> filesIds)
         {
             return (await _repository.GetAsync(filesIds)).Select(x => _mapper.Map(x)).ToList();
         }
