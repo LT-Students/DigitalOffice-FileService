@@ -55,7 +55,7 @@ namespace LT.DigitalOffice.FileService.Data.UnitTests
 
         #region AddFile
 
-        [Test]
+        /*[Test]
         public void ShouldAddNewFileToDatabase()
         {
             Assert.AreEqual(_dbFile.Id, _repository.AddFile(_dbFile));
@@ -69,7 +69,7 @@ namespace LT.DigitalOffice.FileService.Data.UnitTests
 
             Assert.Throws<ArgumentException>(() => _repository.AddFile(_dbFile));
             Assert.That(_dbContext.Files.Find(_dbFile.Id), Is.EqualTo(_dbFile));
-        }
+        }*/
 
         #endregion
 
