@@ -23,7 +23,7 @@ namespace LT.DigitalOffice.FileService.Data
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<bool> AddFile(List<DbFile> files)
+        public async Task<bool> CreateAsync(List<DbFile> files)
         {
             if (files == null || !files.Any())
             {

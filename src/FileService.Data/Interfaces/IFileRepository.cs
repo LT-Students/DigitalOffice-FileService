@@ -9,7 +9,7 @@ namespace LT.DigitalOffice.FileService.Data.Interfaces
     [AutoInject]
     public interface IFileRepository
     {
-        Task<bool> AddFile(List<DbFile> files);
+        Task<bool> CreateAsync(List<DbFile> files);
 
         Task<List<DbFile>> GetAsync(List<Guid> fileId);
 

@@ -1,7 +1,7 @@
 ﻿using LT.DigitalOffice.FileService.Mappers.Db.Interfaces;
 using LT.DigitalOffice.FileService.Models.Db;
-using LT.DigitalOffice.FileService.Models.Dto.Requests;
 using LT.DigitalOffice.Kernel.Extensions;
+using LT.DigitalOffice.Models.Broker.Models.File;
 using Microsoft.AspNetCore.Http;
 using System;
 
@@ -16,11 +16,11 @@ namespace LT.DigitalOffice.FileService.Mappers.Db
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public DbFile Map(AddFileRequest file)
+        public DbFile Map(FileData file, Guid id)
         {
             if (file == null)
             {
-                throw new ArgumentNullException(nameof(file));
+                return null;
             }
 
             return new DbFile()
@@ -29,7 +29,7 @@ namespace LT.DigitalOffice.FileService.Mappers.Db
                 Content = file.Content,
                 Extension = file.Extension.ToLower(),
                 Name = file.Name,
-                CreatedBy = _httpContextAccessor.HttpContext.GetUserId(),
+                CreatedBy = id,
                 CreatedAtUtc = DateTime.UtcNow,
                 IsActive = true,
             };
