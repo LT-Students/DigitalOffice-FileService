@@ -23,12 +23,17 @@ namespace LT.DigitalOffice.FileService.Data
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public Guid AddFile(DbFile file)
+        public async Task<bool> AddFile(List<DbFile> files)
         {
-            _provider.Files.Add(file);
-            _provider.Save();
+            if (files == null || !files.Any())
+            {
+                return false;
+            }
 
-            return file.Id;
+            _provider.Files.AddRange(files);
+            await _provider.SaveAsync();
+
+            return true;
         }
 
         public void DisableFile(Guid fileId)

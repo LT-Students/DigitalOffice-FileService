@@ -12,14 +12,6 @@ namespace LT.DigitalOffice.FileService.Controllers
     [Route("[controller]")]
     public class FileController : ControllerBase
     {
-        [HttpPost("add")]
-        public Guid Add(
-            [FromBody] AddFileRequest request,
-            [FromServices] IAddFileCommand command)
-        {
-            return command.Execute(request);
-        }
-
         [HttpGet("get")]
         public async Task<List<FileInfo>> Get(
             [FromServices] IGetFileCommand command,

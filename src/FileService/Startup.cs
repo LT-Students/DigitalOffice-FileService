@@ -133,7 +133,7 @@ namespace LT.DigitalOffice.FileService
         {
             services.AddMassTransit(x =>
             {
-                x.AddConsumer<GetFileConsumer>();
+                x.AddConsumer<CreateFilesConsumer>();
 
                 x.UsingRabbitMq((context, cfg) =>
                 {
@@ -145,7 +145,7 @@ namespace LT.DigitalOffice.FileService
 
                     cfg.ReceiveEndpoint(_rabbitMqConfig.GetFileEndpoint, ep =>
                     {
-                        ep.ConfigureConsumer<GetFileConsumer>(context);
+                        ep.ConfigureConsumer<CreateFilesConsumer>(context);
                     });
                 });
 
