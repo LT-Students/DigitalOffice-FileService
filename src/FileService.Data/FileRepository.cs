@@ -47,14 +47,13 @@ namespace LT.DigitalOffice.FileService.Data
 
             dbFile.ModifiedBy = _httpContextAccessor.HttpContext.GetUserId();
             dbFile.ModifiedAtUtc = DateTime.UtcNow;
-            dbFile.IsActive = false;
 
             _provider.Save();
         }
 
         public async Task<List<DbFile>> GetAsync(List<Guid> filesIds)
         {
-            return await _provider.Files.Where(u => filesIds.Contains(u.Id) && u.IsActive).ToListAsync();
+            return await _provider.Files.Where(u => filesIds.Contains(u.Id)).ToListAsync();
         }
     }
 }

@@ -32,7 +32,6 @@ namespace LT.DigitalOffice.FileService.Mappers.UnitTests.Models
                 Id = Guid.NewGuid(),
                 Content = "RGlnaXRhbCBPZmA5Y2U=",
                 Extension = ".txt",
-                IsActive = true,
                 Name = "DigitalOfficeTestFile"
             };
         }
