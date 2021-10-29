@@ -20,7 +20,8 @@ namespace LT.DigitalOffice.FileService.Data.Provider.MsSql.Ef.Migrations
       migrationBuilder.AddColumn<bool>(
         name: "IsActive",
         table: DbFile.TableName,
-        nullable: false);
+        nullable: false,
+        defaultValue: true);
     }
   }
 }
