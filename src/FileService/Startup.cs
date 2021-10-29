@@ -143,7 +143,7 @@ namespace LT.DigitalOffice.FileService
                         host.Password(_serviceInfoConfig.Id);
                     });
 
-                    cfg.ReceiveEndpoint(_rabbitMqConfig.GetFileEndpoint, ep =>
+                    cfg.ReceiveEndpoint(_rabbitMqConfig.CreateFilesEndpoint, ep =>
                     {
                         ep.ConfigureConsumer<CreateFilesConsumer>(context);
                     });
