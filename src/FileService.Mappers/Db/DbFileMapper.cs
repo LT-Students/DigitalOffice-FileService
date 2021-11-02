@@ -17,7 +17,7 @@ namespace LT.DigitalOffice.FileService.Mappers.Db
 
             return new DbFile()
             {
-                Id = Guid.NewGuid(),
+                Id = file.Id,
                 Content = file.Content,
                 Extension = file.Extension.ToLower(),
                 Name = file.Name,
