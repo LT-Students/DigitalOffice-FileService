@@ -15,7 +15,7 @@ namespace LT.DigitalOffice.FileService.Business.Commands.File
 
         public void Execute(Guid fileId)
         {
-            _repository.DisableFile(fileId);
+          //  _repository.DisableFile(fileId);
         }
     }
 }
