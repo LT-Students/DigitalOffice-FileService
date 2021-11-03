@@ -74,13 +74,13 @@ namespace LT.DigitalOffice.FileService.Data.UnitTests
 
         #region DisableFile
 
-        [Test]
+/*        [Test]
         public void ShouldThrowExceptionWhenFileWasNotFound()
         {
             _dbContext.Files.Add(_dbFile);
 
             Assert.Throws<NotFoundException>(() => _repository.DisableFile(Guid.NewGuid()));
-        }
+        }*/
 
         /*[Test]
         public void ShouldDisableFile()

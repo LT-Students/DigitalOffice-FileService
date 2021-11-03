@@ -18,13 +18,5 @@ namespace LT.DigitalOffice.FileService.Controllers
     {
       return await command.Execute(filesIds);
     }
-
-    [HttpDelete("disable")]
-    public void Disable(
-      [FromServices] IDisableFileCommand command,
-      [FromQuery] Guid fileId)
-    {
-      command.Execute(fileId);
-    }
   }
 }

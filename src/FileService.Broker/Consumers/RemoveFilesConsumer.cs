@@ -20,6 +20,7 @@ namespace LT.DigitalOffice.FileService.Broker.Consumers
     {
       _repository = repository;
     }
+
     public async Task Consume(ConsumeContext<IRemoveFilesRequest> context)
     {
       object response = OperationResultWrapper.CreateResponse(RemoveFilesAsync, context.Message);
