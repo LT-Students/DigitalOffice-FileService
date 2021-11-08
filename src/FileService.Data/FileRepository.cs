@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using LT.DigitalOffice.FileService.Data.Interfaces;
 using LT.DigitalOffice.FileService.Data.Provider;
 using LT.DigitalOffice.FileService.Models.Db;
-using LT.DigitalOffice.Kernel.Exceptions.Models;
 using LT.DigitalOffice.Kernel.Extensions;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
 
 namespace LT.DigitalOffice.FileService.Data
@@ -56,6 +56,24 @@ namespace LT.DigitalOffice.FileService.Data
     public async Task<List<DbFile>> GetAsync(List<Guid> filesIds)
     {
       return await _provider.Files.Where(u => filesIds.Contains(u.Id)).ToListAsync();
+    }
+
+    public async Task<bool> EditAsync(Guid fileId, JsonPatchDocument<DbFile> request)
+    {
+      DbFile dbFile = await _provider.Files.FirstOrDefaultAsync(p => p.Id == fileId);
+
+      if (dbFile == null)
+      {
+        return false;
+      }
+
+      request.ApplyTo(dbFile);
+      dbFile.ModifiedBy = _httpContextAccessor.HttpContext.GetUserId();
+      dbFile.ModifiedAtUtc = DateTime.UtcNow;
+
+      await _provider.SaveAsync();
+
+      return true;
     }
   }
 }

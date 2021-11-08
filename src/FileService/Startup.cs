@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using HealthChecks.UI.Client;
 using LT.DigitalOffice.FileService.Broker.Consumers;
 using LT.DigitalOffice.FileService.Data.Provider.MsSql.Ef;
@@ -82,7 +83,13 @@ namespace LT.DigitalOffice.FileService
 
       services.AddBusinessObjects();
 
-      services.AddControllers();
+      services
+        .AddControllers()
+        .AddJsonOptions(options =>
+        {
+          options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+        })
+        .AddNewtonsoftJson();
 
       services.AddHealthChecks()
         .AddSqlServer(connStr)
