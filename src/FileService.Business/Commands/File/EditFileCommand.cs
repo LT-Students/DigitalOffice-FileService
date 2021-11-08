@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using FluentValidation.Results;
 using LT.DigitalOffice.FileService.Business.Commands.File.Interfaces;
 using LT.DigitalOffice.FileService.Data.Interfaces;
 using LT.DigitalOffice.FileService.Mappers.PatchDocument.Interfaces;
 using LT.DigitalOffice.FileService.Models.Dto.Requests;
+using LT.DigitalOffice.FileService.Validation.Interfaces;
 using LT.DigitalOffice.Kernel.AccessValidatorEngine.Interfaces;
 using LT.DigitalOffice.Kernel.Constants;
 using LT.DigitalOffice.Kernel.Enums;
@@ -20,21 +23,24 @@ namespace LT.DigitalOffice.FileService.Business.Commands.File
     private readonly IAccessValidator _accessValidator;
     private readonly IFileRepository _fileRepository;
     private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly IResponseCreater _responseCreater;
+    private readonly IResponseCreater _responseCreator;
     private readonly IPatchDbFileMapper _mapper;
+    private readonly IEditFileRequestValidator _requestValidator;
 
     public EditFileCommand(
       IAccessValidator accessValidator,
       IHttpContextAccessor httpContextAccessor,
-      IResponseCreater responseCreater,
+      IResponseCreater responseCreator,
       IFileRepository fileRepository,
-      IPatchDbFileMapper mapper)
+      IPatchDbFileMapper mapper,
+      IEditFileRequestValidator requestValidator)
     {
       _accessValidator = accessValidator;
       _fileRepository = fileRepository;
       _httpContextAccessor = httpContextAccessor;
-      _responseCreater = responseCreater;
+      _responseCreator = responseCreator;
       _mapper = mapper;
+      _requestValidator = requestValidator;
     }
 
     public async Task<OperationResultResponse<bool>> ExecuteAsync(Guid fileId, JsonPatchDocument<EditFileRequest> request)
@@ -43,7 +49,15 @@ namespace LT.DigitalOffice.FileService.Business.Commands.File
 
       if (!await _accessValidator.HasRightsAsync(Rights.AddEditRemoveProjects))
       {
-        return _responseCreater.CreateFailureResponse<bool>(HttpStatusCode.Forbidden);
+        return _responseCreator.CreateFailureResponse<bool>(HttpStatusCode.Forbidden);
+      }
+
+      ValidationResult result = _requestValidator.Validate(request);
+
+      if (!result.IsValid)
+      {
+        return _responseCreator.CreateFailureResponse<bool>(HttpStatusCode.BadRequest,
+          result.Errors.Select(vf => vf.ErrorMessage).ToList());
       }
 
       response.Body = await _fileRepository.EditAsync(fileId, _mapper.Map(request));
@@ -51,10 +65,7 @@ namespace LT.DigitalOffice.FileService.Business.Commands.File
       response.Status = OperationResultStatusType.FullSuccess;
       if (!response.Body)
       {
-        _httpContextAccessor.HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-
-        response.Status = OperationResultStatusType.Failed;
-        response.Errors.Add("File can not be edit.");
+        response = _responseCreator.CreateFailureResponse<bool>(HttpStatusCode.BadRequest);
       }
 
       return response;

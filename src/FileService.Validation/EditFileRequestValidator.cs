@@ -29,17 +29,6 @@ namespace LT.DigitalOffice.FileService.Validation
       AddСorrectOperations(nameof(EditFileRequest.Content), new List<OperationType> { OperationType.Replace });
 
       #endregion
-
-      #region firstname
-
-      AddFailureForPropertyIf(
-        nameof(EditFileRequest.Name),
-        x => x == OperationType.Replace,
-        new Dictionary<Func<Operation<EditFileRequest>, bool>, string>
-        {
-        });
-
-      #endregion
     }
 
     public EditFileRequestValidator()
