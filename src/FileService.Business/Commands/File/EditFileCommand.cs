@@ -8,7 +8,7 @@ using LT.DigitalOffice.FileService.Data.Interfaces;
 using LT.DigitalOffice.FileService.Mappers.PatchDocument.Interfaces;
 using LT.DigitalOffice.FileService.Models.Dto.Requests;
 using LT.DigitalOffice.FileService.Validation.Interfaces;
-using LT.DigitalOffice.Kernel.AccessValidatorEngine.Interfaces;
+using LT.DigitalOffice.Kernel.BrokerSupport.AccessValidatorEngine.Interfaces;
 using LT.DigitalOffice.Kernel.Constants;
 using LT.DigitalOffice.Kernel.Enums;
 using LT.DigitalOffice.Kernel.Helpers.Interfaces;
@@ -23,14 +23,14 @@ namespace LT.DigitalOffice.FileService.Business.Commands.File
     private readonly IAccessValidator _accessValidator;
     private readonly IFileRepository _fileRepository;
     private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly IResponseCreater _responseCreator;
+    private readonly IResponseCreator _responseCreator;
     private readonly IPatchDbFileMapper _mapper;
     private readonly IEditFileRequestValidator _requestValidator;
 
     public EditFileCommand(
       IAccessValidator accessValidator,
       IHttpContextAccessor httpContextAccessor,
-      IResponseCreater responseCreator,
+      IResponseCreator responseCreator,
       IFileRepository fileRepository,
       IPatchDbFileMapper mapper,
       IEditFileRequestValidator requestValidator)

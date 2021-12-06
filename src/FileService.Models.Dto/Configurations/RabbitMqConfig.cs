@@ -1,4 +1,4 @@
-﻿using LT.DigitalOffice.Kernel.Configurations;
+﻿using LT.DigitalOffice.Kernel.BrokerSupport.Configurations;
 
 namespace LT.DigitalOffice.FileService.Models.Dto.Configurations
 {
