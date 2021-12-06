@@ -1,34 +1,21 @@
-﻿using LT.DigitalOffice.FileService.Models.Db;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using LT.DigitalOffice.FileService.Models.Db;
 using LT.DigitalOffice.Kernel.Attributes;
-using System;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace LT.DigitalOffice.FileService.Data.Interfaces
 {
-    /// <summary>
-    /// Represents interface of repository in repository pattern.
-    /// Provides methods for working with the database of FileService.
-    /// </summary>
-    [AutoInject]
-    public interface IFileRepository
-    {
-        /// <summary>
-        /// Adds new file to the database. Returns the id of the added file.
-        /// </summary>
-        /// <param name="file">File to add.</param>
-        /// <returns>Id of the added file.</returns>
-        Guid AddFile(DbFile file);
+  [AutoInject]
+  public interface IFileRepository
+  {
+    Task<bool> CreateAsync(List<DbFile> files);
 
-        /// <summary>
-        /// Returns the file with the specified id from database.
-        /// </summary>
-        /// <param name="fileId">Specified id of file.</param>
-        /// <returns>File with specified id.</returns>
-        DbFile GetFile(Guid fileId);
+    Task<List<DbFile>> GetAsync(List<Guid> filesIds);
 
-        /// <summary>
-        /// Disable the file with the specified id in the database.
-        /// </summary>
-        /// <param name="fileId">Specified id of file.</param>
-        void DisableFile(Guid fileId);
-    }
+    Task<bool> RemoveAsync(List<Guid> filesIds);
+
+    Task<bool> EditAsync(Guid fileId, JsonPatchDocument<DbFile> request);
+  }
 }

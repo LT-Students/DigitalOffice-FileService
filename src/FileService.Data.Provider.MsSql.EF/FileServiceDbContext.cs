@@ -1,6 +1,7 @@
 ﻿using LT.DigitalOffice.FileService.Models.Db;
 using LT.DigitalOffice.Kernel.Database;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace LT.DigitalOffice.FileService.Data.Provider.MsSql.Ef
 {
@@ -15,7 +16,6 @@ namespace LT.DigitalOffice.FileService.Data.Provider.MsSql.Ef
         }
 
         public DbSet<DbFile> Files { get; set; }
-        public DbSet<DbImage> Images { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -41,6 +41,11 @@ namespace LT.DigitalOffice.FileService.Data.Provider.MsSql.Ef
             Entry(obj).State = EntityState.Detached;
 
             return Entry(obj).State;
+        }
+
+        public async Task SaveAsync()
+        {
+            await SaveChangesAsync();
         }
     }
 }
