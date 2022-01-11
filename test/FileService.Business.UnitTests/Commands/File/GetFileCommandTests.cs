@@ -89,7 +89,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests.Commands.File
       var result = _infoFile;
 
       _autoMocker
-        .Setup<IFileRepository, Task<List<DbFile>>>(x => x.GetAsync(It.IsAny<List<Guid>>()))//!!!
+        .Setup<IFileRepository, Task<List<DbFile>>>(x => x.GetAsync(It.IsAny<List<Guid>>()))
         .ReturnsAsync(_dbFiles);
 
       _autoMocker
