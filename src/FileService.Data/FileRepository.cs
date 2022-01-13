@@ -55,6 +55,11 @@ namespace LT.DigitalOffice.FileService.Data
 
     public async Task<List<DbFile>> GetAsync(List<Guid> filesIds)
     {
+      if (filesIds is null)
+      {
+        return null;
+      }
+
       return await _provider.Files.Where(u => filesIds.Contains(u.Id)).ToListAsync();
     }
 
