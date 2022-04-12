@@ -7,8 +7,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FileService.Business\FileService.Business.csproj" />
     <ProjectReference Include="..\FileService.Data\FileService.Data.csproj" />
+    <ProjectReference Include="..\FileService.Mappers\FileService.Mappers.csproj" />
   </ItemGroup>
 
 </Project>

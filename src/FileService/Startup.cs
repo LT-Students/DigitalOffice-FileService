@@ -79,7 +79,7 @@ namespace LT.DigitalOffice.FileService
       {
         connStr = Configuration.GetConnectionString("SQLConnectionString");
 
-        Log.Information($"SQL connection string from appsettings.json was used. Value '{HidePasswordHelper.HidePassword(connStr)}'.");
+        Log.Information($"SQL connection string from appsettings.json was used. Value '{PasswordHider.Hide(connStr)}'.");
       }
 
       services.AddDbContext<FileServiceDbContext>(options =>
