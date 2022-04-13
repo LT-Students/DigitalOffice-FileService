@@ -41,7 +41,6 @@ namespace LT.DigitalOffice.ProjectService.Broker.Requests
           ICheckProjectFilesAccessesRequest.CreateObj(_httpContextAccessor.HttpContext.GetUserId(), filesIds),
           errors,
           _logger);
-
     }
   }
 }

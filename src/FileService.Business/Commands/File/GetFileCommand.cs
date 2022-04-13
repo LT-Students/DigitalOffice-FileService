@@ -36,9 +36,9 @@ namespace LT.DigitalOffice.FileService.Business.Commands.File
       }
 
       OperationResultResponse<List<FileInfo>> response = new();
-      
+
       response.Body = (await _repository.GetAsync(
-         await _projectService.CheckFilesAsync(filesIds, response.Errors)))?.Select(x => _mapper.Map(x)).ToList();
+          await _projectService.CheckFilesAsync(filesIds, response.Errors)))?.Select(x => _mapper.Map(x)).ToList();
       response.Status = response.Errors.Any() ? OperationResultStatusType.PartialSuccess : OperationResultStatusType.FullSuccess;
 
       return response;
