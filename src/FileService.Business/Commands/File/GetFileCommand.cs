@@ -42,7 +42,6 @@ namespace LT.DigitalOffice.FileService.Business.Commands.File
 
       OperationResultResponse<List<FileInfo>> response = new();
 
-
       if (!await _accessValidator.HasRightsAsync(Rights.AddEditRemoveProjects))
       {
         filesIds = await _projectService.CheckFilesAsync(filesIds, response.Errors);
