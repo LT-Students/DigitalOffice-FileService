@@ -98,7 +98,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests.Commands.File
         .Returns(_infoFile[1])
         .Returns(_infoFile[2]);
 
-      SerializerAssert.AreEqual(result, await _command.Execute(_ids));
+      SerializerAssert.AreEqual(result, (await _command.Execute(_ids)).Body);
 
       _autoMocker.Verify<IFileRepository, Task<List<DbFile>>>(x => x.GetAsync(It.IsAny<List<Guid>>()), Times.Once);
       _autoMocker.Verify<IFileInfoMapper, FileInfo>(x => x.Map(It.IsAny<DbFile>()), Times.Exactly(3));
@@ -114,7 +114,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests.Commands.File
         .Setup<IFileRepository, Task<List<DbFile>>>(x => x.GetAsync(It.IsAny<List<Guid>>()))
         .ReturnsAsync(dblist);
 
-      SerializerAssert.AreEqual(null, await _command.Execute(ids));
+      SerializerAssert.AreEqual(null, (await _command.Execute(ids)).Body);
 
       _autoMocker.Verify<IFileRepository, Task<List<DbFile>>>(x => x.GetAsync(It.IsAny<List<Guid>>()), Times.Once);
       _autoMocker.Verify<IFileInfoMapper, FileInfo>(x => x.Map(It.IsAny<DbFile>()), Times.Never);

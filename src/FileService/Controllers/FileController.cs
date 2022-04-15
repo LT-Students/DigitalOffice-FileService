@@ -15,7 +15,7 @@ namespace LT.DigitalOffice.FileService.Controllers
   public class FileController : ControllerBase
   {
     [HttpGet("get")]
-    public async Task<List<FileInfo>> GetAsync(
+    public async Task<OperationResultResponse<List<FileInfo>>> GetAsync(
       [FromServices] IGetFileCommand command,
       [FromQuery] List<Guid> filesIds)
     {

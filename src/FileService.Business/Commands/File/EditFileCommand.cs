@@ -13,7 +13,6 @@ using LT.DigitalOffice.Kernel.Constants;
 using LT.DigitalOffice.Kernel.Enums;
 using LT.DigitalOffice.Kernel.Helpers.Interfaces;
 using LT.DigitalOffice.Kernel.Responses;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 
 namespace LT.DigitalOffice.FileService.Business.Commands.File
@@ -22,14 +21,12 @@ namespace LT.DigitalOffice.FileService.Business.Commands.File
   {
     private readonly IAccessValidator _accessValidator;
     private readonly IFileRepository _fileRepository;
-    private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IResponseCreator _responseCreator;
     private readonly IPatchDbFileMapper _mapper;
     private readonly IEditFileRequestValidator _requestValidator;
 
     public EditFileCommand(
       IAccessValidator accessValidator,
-      IHttpContextAccessor httpContextAccessor,
       IResponseCreator responseCreator,
       IFileRepository fileRepository,
       IPatchDbFileMapper mapper,
@@ -37,7 +34,6 @@ namespace LT.DigitalOffice.FileService.Business.Commands.File
     {
       _accessValidator = accessValidator;
       _fileRepository = fileRepository;
-      _httpContextAccessor = httpContextAccessor;
       _responseCreator = responseCreator;
       _mapper = mapper;
       _requestValidator = requestValidator;

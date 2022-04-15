@@ -47,7 +47,7 @@ namespace LT.DigitalOffice.FileService
         .GetSection(BaseRabbitMqConfig.SectionName)
         .Get<RabbitMqConfig>();
 
-      Version = "1.1.1.0";
+      Version = "1.1.1.1";
       Description = "FileService is an API intended to work with files and images.";
       StartTime = DateTime.UtcNow;
       ApiName = $"LT Digital Office - {_serviceInfoConfig.Name}";
@@ -79,7 +79,7 @@ namespace LT.DigitalOffice.FileService
       {
         connStr = Configuration.GetConnectionString("SQLConnectionString");
 
-        Log.Information($"SQL connection string from appsettings.json was used. Value '{HidePasswordHelper.HidePassword(connStr)}'.");
+        Log.Information($"SQL connection string from appsettings.json was used. Value '{PasswordHider.Hide(connStr)}'.");
       }
 
       services.AddDbContext<FileServiceDbContext>(options =>
