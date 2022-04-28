@@ -1,16 +1,16 @@
 ﻿using System.Threading.Tasks;
 using LT.DigitalOffice.FileService.Data.Interfaces;
 using LT.DigitalOffice.Kernel.BrokerSupport.Broker;
-using LT.DigitalOffice.Models.Broker.Requests.File;
+using LT.DigitalOffice.Models.Broker.Publishing.Subscriber.File;
 using MassTransit;
 
 namespace LT.DigitalOffice.FileService.Broker.Consumers
 {
-  public class RemoveFilesConsumer : IConsumer<IRemoveFilesRequest>
+  public class RemoveFilesConsumer : IConsumer<IRemoveFilesPublish>
   {
     private readonly IFileRepository _repository;
 
-    private async Task<bool> RemoveFilesAsync(IRemoveFilesRequest request)
+    private async Task<bool> RemoveFilesAsync(IRemoveFilesPublish request)
     {
       return await _repository.RemoveAsync(request.FilesIds);
     }
@@ -21,7 +21,7 @@ namespace LT.DigitalOffice.FileService.Broker.Consumers
       _repository = repository;
     }
 
-    public async Task Consume(ConsumeContext<IRemoveFilesRequest> context)
+    public async Task Consume(ConsumeContext<IRemoveFilesPublish> context)
     {
       object response = OperationResultWrapper.CreateResponse(RemoveFilesAsync, context.Message);
 
