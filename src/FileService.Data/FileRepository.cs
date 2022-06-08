@@ -23,17 +23,12 @@ namespace LT.DigitalOffice.FileService.Data
       _httpContextAccessor = httpContextAccessor;
     }
 
-    public async Task<bool> CreateAsync(List<DbFile> files)
+    public async Task<List<DbFile>> CreateAsync(List<DbFile> files)
     {
-      if (files == null || !files.Any())
-      {
-        return false;
-      }
-
       _provider.Files.AddRange(files);
       await _provider.SaveAsync();
 
-      return true;
+      return files.Where(x => !_provider.Files.Select(f => f.Id).ToList().Contains(x.Id)).ToList();
     }
 
     public async Task<bool> RemoveAsync(List<Guid> filesIds)
