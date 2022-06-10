@@ -9,8 +9,9 @@ using LT.DigitalOffice.Kernel.BrokerSupport.Configurations;
 using LT.DigitalOffice.Kernel.BrokerSupport.Extensions;
 using LT.DigitalOffice.Kernel.BrokerSupport.Middlewares.Token;
 using LT.DigitalOffice.Kernel.Configurations;
+using LT.DigitalOffice.Kernel.EFSupport.Extensions;
+using LT.DigitalOffice.Kernel.EFSupport.Helpers;
 using LT.DigitalOffice.Kernel.Extensions;
-using LT.DigitalOffice.Kernel.Helpers;
 using LT.DigitalOffice.Kernel.Middlewares.ApiInformation;
 using MassTransit;
 using Microsoft.AspNetCore.Builder;
@@ -74,13 +75,7 @@ namespace LT.DigitalOffice.FileService
       services.Configure<BaseServiceInfoConfig>(Configuration.GetSection(BaseServiceInfoConfig.SectionName));
       services.Configure<BaseRabbitMqConfig>(Configuration.GetSection(BaseRabbitMqConfig.SectionName));
 
-      string connStr = Environment.GetEnvironmentVariable("ConnectionString");
-      if (string.IsNullOrEmpty(connStr))
-      {
-        connStr = Configuration.GetConnectionString("SQLConnectionString");
-
-        Log.Information($"SQL connection string from appsettings.json was used. Value '{PasswordHider.Hide(connStr)}'.");
-      }
+      string connStr = ConnectionStringHandler.Get(Configuration);
 
       services.AddDbContext<FileServiceDbContext>(options =>
       {
@@ -106,7 +101,7 @@ namespace LT.DigitalOffice.FileService
 
     public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
     {
-      UpdateDatabase(app);
+      app.UpdateDatabase<FileServiceDbContext>();
 
       app.UseForwardedHeaders();
 
@@ -200,17 +195,6 @@ namespace LT.DigitalOffice.FileService
       });
 
       services.AddMassTransitHostedService();
-    }
-
-    private void UpdateDatabase(IApplicationBuilder app)
-    {
-      using var serviceScope = app.ApplicationServices
-        .GetRequiredService<IServiceScopeFactory>()
-        .CreateScope();
-
-      using var context = serviceScope.ServiceProvider.GetService<FileServiceDbContext>();
-
-      context.Database.Migrate();
     }
 
     #endregion
