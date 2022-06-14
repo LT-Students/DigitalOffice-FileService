@@ -24,13 +24,13 @@ namespace LT.DigitalOffice.FileService.Broker.Consumers
 
     public async Task Consume(ConsumeContext<IRemoveFilesPublish> context)
     {
-      List<Guid> notRemoved = await _repository.RemoveAsync(context.Message.FilesIds);
+      List<Guid> removedFiles = await _repository.RemoveAsync(context.Message.FilesIds);
 
-      if (notRemoved.Any())
+      if (removedFiles.Count != context.Message.FilesIds.Count)
       {
         _logger.LogWarning(
-          "This files wasn't removed from FileServiceDb {notRemoved}.",
-          string.Join(',', notRemoved));
+          "Files ids: {FilesIds} were not removed.",
+          string.Join(",", context.Message.FilesIds.Where(f => !removedFiles.Contains(f))));
       }
     }
   }

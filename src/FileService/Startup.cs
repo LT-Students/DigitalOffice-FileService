@@ -7,6 +7,7 @@ using LT.DigitalOffice.FileService.Data.Provider.MsSql.Ef;
 using LT.DigitalOffice.FileService.Models.Dto.Configurations;
 using LT.DigitalOffice.Kernel.BrokerSupport.Configurations;
 using LT.DigitalOffice.Kernel.BrokerSupport.Extensions;
+using LT.DigitalOffice.Kernel.BrokerSupport.Helpers;
 using LT.DigitalOffice.Kernel.BrokerSupport.Middlewares.Token;
 using LT.DigitalOffice.Kernel.Configurations;
 using LT.DigitalOffice.Kernel.EFSupport.Extensions;
@@ -21,7 +22,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
-using Serilog;
 
 namespace LT.DigitalOffice.FileService
 {
@@ -33,6 +33,44 @@ namespace LT.DigitalOffice.FileService
     private readonly RabbitMqConfig _rabbitMqConfig;
 
     public IConfiguration Configuration { get; }
+
+    #region private methods
+
+    private void ConfigureMassTransit(IServiceCollection services)
+    {
+      (string username, string password) = RabbitMqCredentialsHelper.Get(_rabbitMqConfig, _serviceInfoConfig);
+
+      services.AddMassTransit(x =>
+      {
+        x.AddConsumer<CreateFilesConsumer>();
+        x.AddConsumer<RemoveFilesConsumer>();
+
+        x.UsingRabbitMq((context, cfg) =>
+        {
+          cfg.Host(_rabbitMqConfig.Host, "/", host =>
+          {
+            host.Username(username);
+            host.Password(password);
+          });
+
+          cfg.ReceiveEndpoint(_rabbitMqConfig.CreateFilesEndpoint, ep =>
+          {
+            ep.ConfigureConsumer<CreateFilesConsumer>(context);
+          });
+
+          cfg.ReceiveEndpoint(_rabbitMqConfig.RemoveFilesEndpoint, ep =>
+          {
+            ep.ConfigureConsumer<RemoveFilesConsumer>(context);
+          });
+        });
+
+        x.AddRequestClients(_rabbitMqConfig);
+      });
+
+      services.AddMassTransitHostedService();
+    }
+
+    #endregion
 
     #region public methods
 
@@ -131,70 +169,6 @@ namespace LT.DigitalOffice.FileService
           ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
         });
       });
-    }
-
-    #endregion
-
-    #region private methods
-
-    private (string username, string password) GetRabbitMqCredentials()
-    {
-      static string GetString(string envVar, string formAppsettings, string generated, string fieldName)
-      {
-        string str = Environment.GetEnvironmentVariable(envVar);
-        if (string.IsNullOrEmpty(str))
-        {
-          str = formAppsettings ?? generated;
-
-          Log.Information(
-            formAppsettings == null
-              ? $"Default RabbitMq {fieldName} was used."
-              : $"RabbitMq {fieldName} from appsetings.json was used.");
-        }
-        else
-        {
-          Log.Information($"RabbitMq {fieldName} from environment was used.");
-        }
-
-        return str;
-      }
-
-      return (GetString("RabbitMqUsername", _rabbitMqConfig.Username, $"{_serviceInfoConfig.Name}_{_serviceInfoConfig.Id}", "Username"),
-        GetString("RabbitMqPassword", _rabbitMqConfig.Password, _serviceInfoConfig.Id, "Password"));
-    }
-
-    private void ConfigureMassTransit(IServiceCollection services)
-    {
-      (string username, string password) = GetRabbitMqCredentials();
-
-      services.AddMassTransit(x =>
-      {
-        x.AddConsumer<CreateFilesConsumer>();
-        x.AddConsumer<RemoveFilesConsumer>();
-
-        x.UsingRabbitMq((context, cfg) =>
-          {
-            cfg.Host(_rabbitMqConfig.Host, "/", host =>
-              {
-                host.Username(username);
-                host.Password(password);
-              });
-
-            cfg.ReceiveEndpoint(_rabbitMqConfig.CreateFilesEndpoint, ep =>
-              {
-                ep.ConfigureConsumer<CreateFilesConsumer>(context);
-              });
-
-            cfg.ReceiveEndpoint(_rabbitMqConfig.RemoveFilesEndpoint, ep =>
-              {
-                ep.ConfigureConsumer<RemoveFilesConsumer>(context);
-              });
-          });
-
-        x.AddRequestClients(_rabbitMqConfig);
-      });
-
-      services.AddMassTransitHostedService();
     }
 
     #endregion

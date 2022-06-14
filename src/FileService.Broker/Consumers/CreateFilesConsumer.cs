@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using LT.DigitalOffice.FileService.Data.Interfaces;
 using LT.DigitalOffice.FileService.Mappers.Db.Interfaces;
@@ -28,14 +26,7 @@ namespace LT.DigitalOffice.FileService.Broker.Consumers
 
     public async Task Consume(ConsumeContext<ICreateFilesPublish> context)
     {
-      List<Guid> notAdded = await _repository.CreateAsync(context.Message.Files.Select(x => _mapper.Map(x, context.Message.CreatedBy)).ToList());
-
-      if (notAdded.Any())
-      {
-        _logger.LogWarning(
-          "This files wasn't added to FileServiceDb {notAdded}.",
-          string.Join(',', notAdded));
-      }
+      await _repository.CreateAsync(context.Message.Files.Select(x => _mapper.Map(x, context.Message.CreatedBy)).ToList());
     }
   }
 }
