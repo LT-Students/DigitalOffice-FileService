@@ -25,13 +25,11 @@ namespace LT.DigitalOffice.FileService.Data
 
     public async Task CreateAsync(List<DbFile> files)
     {
-      if (files is null || !files.Any())
-      { 
-         return;
+      if (files is not null && files.Any())
+      {
+        _provider.Files.AddRange(files);
+        _provider.SaveAsync();
       }
-
-      _provider.Files.AddRange(files);
-      await _provider.SaveAsync();
     }
 
     public async Task<List<Guid>> RemoveAsync(List<Guid> filesIds)
