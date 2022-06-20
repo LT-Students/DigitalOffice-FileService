@@ -39,13 +39,13 @@ namespace LT.DigitalOffice.FileService.Data
         return filesIds;
       }
 
-      IEnumerable <DbFile> files = await _provider.Files
+      IEnumerable<DbFile> files = await _provider.Files
         .Where(x => filesIds.Contains(x.Id)).ToListAsync();
 
       _provider.Files.RemoveRange(files);
       await _provider.SaveAsync();
 
-      return filesIds.Where(x => !_provider.Files.Select(f => f.Id).Contains(x)).ToList();
+      return files.Select(f => f.Id).ToList();
     }
 
     public async Task<List<DbFile>> GetAsync(List<Guid> filesIds)
