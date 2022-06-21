@@ -1,5 +1,5 @@
 ﻿using LT.DigitalOffice.FileService.Models.Db;
-using LT.DigitalOffice.Kernel.Database;
+using LT.DigitalOffice.Kernel.EFSupport.Provider;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 

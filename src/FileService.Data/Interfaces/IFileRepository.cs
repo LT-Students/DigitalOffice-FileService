@@ -10,11 +10,11 @@ namespace LT.DigitalOffice.FileService.Data.Interfaces
   [AutoInject]
   public interface IFileRepository
   {
-    Task<bool> CreateAsync(List<DbFile> files);
+    Task CreateAsync(List<DbFile> files);
 
     Task<List<DbFile>> GetAsync(List<Guid> filesIds);
 
-    Task<bool> RemoveAsync(List<Guid> filesIds);
+    Task<List<Guid>> RemoveAsync(List<Guid> filesIds);
 
     Task<bool> EditAsync(Guid fileId, JsonPatchDocument<DbFile> request);
   }
