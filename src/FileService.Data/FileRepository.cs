@@ -35,7 +35,7 @@ namespace LT.DigitalOffice.FileService.Data
     public async Task<List<Guid>> RemoveAsync(List<Guid> filesIds)
     {
       if (filesIds is null)
-      { 
+      {
         return filesIds;
       }
 
