@@ -22,8 +22,11 @@ namespace LT.DigitalOffice.FileService.Broker.Consumers
 
     public async Task Consume(ConsumeContext<ICreateFilesPublish> context)
     {
-      await _repository.CreateAsync(context.Message.Files
-        .Select(x => _mapper.Map(x, context.Message.CreatedBy)).ToList());
+      if (context.Message.Files != null && context.Message.Files.Any())
+      {
+        await _repository.CreateAsync(context.Message.Files
+          .Select(x => _mapper.Map(x, context.Message.CreatedBy)).ToList());
+      }
     }
   }
 }
