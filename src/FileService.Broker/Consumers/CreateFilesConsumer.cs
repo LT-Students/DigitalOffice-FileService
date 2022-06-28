@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using LT.DigitalOffice.FileService.Data.Interfaces;
 using LT.DigitalOffice.FileService.Mappers.Db.Interfaces;
-using LT.DigitalOffice.Kernel.BrokerSupport.Broker;
 using LT.DigitalOffice.Models.Broker.Publishing.Subscriber.File;
 using MassTransit;
 using Microsoft.Extensions.Logging;
@@ -14,11 +13,6 @@ namespace LT.DigitalOffice.FileService.Broker.Consumers
     private readonly IFileRepository _repository;
     private readonly IDbFileMapper _mapper;
 
-    private async Task CreateFilesAsync(ICreateFilesPublish request)
-    {
-      await _repository.CreateAsync(request.Files.Select(x => _mapper.Map(x, request.CreatedBy)).ToList());
-    }
-
     public CreateFilesConsumer(
       IFileRepository repository,
       IDbFileMapper mapper)
@@ -29,9 +23,11 @@ namespace LT.DigitalOffice.FileService.Broker.Consumers
 
     public async Task Consume(ConsumeContext<ICreateFilesPublish> context)
     {
-      object response = OperationResultWrapper.CreateResponse(CreateFilesAsync, context.Message);
-
-      await context.RespondAsync<IOperationResult<bool>>(response);
+      if (context.Message.Files is not null && context.Message.Files.Any())
+      {
+        await _repository.CreateAsync(context.Message.Files
+          .Select(x => _mapper.Map(x, context.Message.CreatedBy)).ToList());
+      }
     }
   }
 }
