@@ -23,34 +23,29 @@ namespace LT.DigitalOffice.FileService.Data
       _httpContextAccessor = httpContextAccessor;
     }
 
-    public async Task<bool> CreateAsync(List<DbFile> files)
+    public async Task CreateAsync(List<DbFile> files)
     {
-      if (files == null || !files.Any())
+      if (files is not null && files.Any())
       {
-        return false;
+        _provider.Files.AddRange(files);
+        _provider.SaveAsync();
       }
-
-      _provider.Files.AddRange(files);
-      await _provider.SaveAsync();
-
-      return true;
     }
 
-    public async Task<bool> RemoveAsync(List<Guid> filesIds)
+    public async Task<List<Guid>> RemoveAsync(List<Guid> filesIds)
     {
-      if (filesIds == null)
+      if (filesIds is null)
       {
-        return false;
+        return filesIds;
       }
 
-      IEnumerable<DbFile> files = _provider.Files
-        .Where(x => filesIds.Contains(x.Id));
+      IEnumerable<DbFile> files = await _provider.Files
+        .Where(x => filesIds.Contains(x.Id)).ToListAsync();
 
       _provider.Files.RemoveRange(files);
-
       await _provider.SaveAsync();
 
-      return true;
+      return files.Select(f => f.Id).ToList();
     }
 
     public async Task<List<DbFile>> GetAsync(List<Guid> filesIds)
@@ -67,7 +62,7 @@ namespace LT.DigitalOffice.FileService.Data
     {
       DbFile dbFile = await _provider.Files.FirstOrDefaultAsync(p => p.Id == fileId);
 
-      if (dbFile == null)
+      if (dbFile is null)
       {
         return false;
       }

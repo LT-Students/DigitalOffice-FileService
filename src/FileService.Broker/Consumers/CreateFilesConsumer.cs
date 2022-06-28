@@ -4,6 +4,7 @@ using LT.DigitalOffice.FileService.Data.Interfaces;
 using LT.DigitalOffice.FileService.Mappers.Db.Interfaces;
 using LT.DigitalOffice.Models.Broker.Publishing.Subscriber.File;
 using MassTransit;
+using Microsoft.Extensions.Logging;
 
 namespace LT.DigitalOffice.FileService.Broker.Consumers
 {
