@@ -7,7 +7,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\DigitalOffice-Models\src\Models\Models.csproj" />
     <ProjectReference Include="..\FileService.Data\FileService.Data.csproj" />
     <ProjectReference Include="..\FileService.Mappers\FileService.Mappers.csproj" />
   </ItemGroup>
