@@ -80,7 +80,7 @@ namespace LT.DigitalOffice.FileService
         .GetSection(BaseRabbitMqConfig.SectionName)
         .Get<RabbitMqConfig>();
 
-      Version = "1.1.1.3";
+      Version = "1.1.1.2";
       Description = "FileService is an API intended to work with files and images.";
       StartTime = DateTime.UtcNow;
       ApiName = $"LT Digital Office - {_serviceInfoConfig.Name}";

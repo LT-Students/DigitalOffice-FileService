@@ -18,7 +18,7 @@ namespace LT.DigitalOffice.FileService.Mappers.Db
 
     public DbFile Map(IFormFile uploadedFile)
     {
-      if (uploadedFile == null)
+      if (uploadedFile is null)
       {
         return null;
       }
