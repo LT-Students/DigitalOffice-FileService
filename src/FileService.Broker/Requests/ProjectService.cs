@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using LT.DigitalOffice.Kernel.BrokerSupport.Helpers;
 using LT.DigitalOffice.Kernel.Extensions;
+using LT.DigitalOffice.Models.Broker.Models.Project;
 using LT.DigitalOffice.Models.Broker.Requests.Project;
+using LT.DigitalOffice.Models.Broker.Responses.Project;
 using LT.DigitalOffice.ProjectService.Broker.Requests.Interfaces;
 using MassTransit;
 using Microsoft.AspNetCore.Http;
@@ -16,15 +18,18 @@ namespace LT.DigitalOffice.ProjectService.Broker.Requests
   {
     private readonly ILogger<ProjectService> _logger;
     private readonly IRequestClient<ICheckProjectFilesAccessesRequest> _rcCheckFiles;
+    private readonly IRequestClient<IGetProjectsUsersRequest> _rcGetProjectUser;
     private readonly IHttpContextAccessor _httpContextAccessor;
 
     public ProjectService(
       ILogger<ProjectService> logger,
       IRequestClient<ICheckProjectFilesAccessesRequest> rcCheckFiles,
+      IRequestClient<IGetProjectsUsersRequest> rcGetProjectUser,
       IHttpContextAccessor httpContextAccessor)
     {
       _logger = logger;
       _rcCheckFiles = rcCheckFiles;
+      _rcGetProjectUser = rcGetProjectUser;
       _httpContextAccessor = httpContextAccessor;
     }
 
@@ -41,6 +46,16 @@ namespace LT.DigitalOffice.ProjectService.Broker.Requests
           ICheckProjectFilesAccessesRequest.CreateObj(_httpContextAccessor.HttpContext.GetUserId(), filesIds),
           errors,
           _logger);
+    }
+
+    public async Task<List<ProjectUserData>> GetProjectUsersAsync(List<Guid> usersIds, List<string> errors)
+    {
+      return (await RequestHandler
+        .ProcessRequest<IGetProjectsUsersRequest, IGetProjectsUsersResponse>(
+          _rcGetProjectUser,
+          IGetProjectsUsersRequest.CreateObj(usersIds: usersIds),
+          errors,
+          _logger))?.Users;
     }
   }
 }

@@ -14,14 +14,14 @@ using LT.DigitalOffice.ProjectService.Broker.Requests.Interfaces;
 
 namespace LT.DigitalOffice.FileService.Business.Commands.File
 {
-  public class GetFileCommand : IGetFileCommand
+  public class GetFilesCommand : IGetFileCommand
   {
     private readonly IFileRepository _repository;
     private readonly IFileInfoMapper _mapper;
     private readonly IProjectService _projectService;
     private readonly IAccessValidator _accessValidator;
 
-    public GetFileCommand(
+    public GetFilesCommand(
         IFileRepository repository,
         IFileInfoMapper mapper,
         IProjectService projectService,
@@ -33,7 +33,7 @@ namespace LT.DigitalOffice.FileService.Business.Commands.File
       _accessValidator = accessValidator;
     }
 
-    public async Task<OperationResultResponse<List<FileInfo>>> Execute(List<Guid> filesIds)
+    public async Task<OperationResultResponse<List<FileInfo>>> ExecuteAsync(List<Guid> filesIds)
     {
       if (filesIds is null)
       {
