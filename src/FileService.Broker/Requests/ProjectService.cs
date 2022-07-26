@@ -48,14 +48,13 @@ namespace LT.DigitalOffice.ProjectService.Broker.Requests
           _logger);
     }
 
-    public async Task<List<ProjectUserData>> GetProjectUsersAsync(List<Guid> usersIds, List<string> errors)
+    public async Task<List<ProjectUserData>> GetProjectUsersAsync(List<Guid> usersIds)
     {
       return (await RequestHandler
         .ProcessRequest<IGetProjectsUsersRequest, IGetProjectsUsersResponse>(
           _rcGetProjectUser,
           IGetProjectsUsersRequest.CreateObj(usersIds: usersIds),
-          errors,
-          _logger))?.Users;
+          logger: _logger))?.Users;
     }
   }
 }

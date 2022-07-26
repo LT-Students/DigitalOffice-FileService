@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Http;
 namespace LT.DigitalOffice.FileService.Business.Commands.File.Interfaces
 {
   [AutoInject]
-  public interface ICreateFileCommand
+  public interface ICreateFilesCommand
   {
     Task<OperationResultResponse<List<Guid>>> ExecuteAsync(Guid entityId, FileAccessType access, IFormFileCollection uploadedFile);
   }

@@ -18,7 +18,7 @@ namespace LT.DigitalOffice.FileService.Controllers
   {
     [HttpPost("create")]
     public async Task<OperationResultResponse<List<Guid>>> CreateAsync(
-      [FromServices] ICreateFileCommand command,
+      [FromServices] ICreateFilesCommand command,
       [FromQuery] Guid entityId,
       [FromQuery] FileAccessType access,
       [FromForm] IFormFileCollection uploadedFiles)

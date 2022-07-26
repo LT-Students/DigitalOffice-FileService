@@ -19,7 +19,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace LT.DigitalOffice.FileService.Business.Commands.File
 {
-  public class CreateFilesCommand : ICreateFileCommand
+  public class CreateFilesCommand : ICreateFilesCommand
   {
     private readonly IFileRepository _fileRepository;
     private readonly IResponseCreator _responseCreator;
@@ -49,7 +49,7 @@ namespace LT.DigitalOffice.FileService.Business.Commands.File
 
     public async Task<OperationResultResponse<List<Guid>>> ExecuteAsync(Guid entityId, FileAccessType access, IFormFileCollection uploadedFiles)
     {
-      List<ProjectUserData> users = await _projectService.GetProjectUsersAsync(new List<Guid>() { _httpContextAccessor.HttpContext.GetUserId() }, new());
+      List<ProjectUserData> users = await _projectService.GetProjectUsersAsync(new List<Guid>() { _httpContextAccessor.HttpContext.GetUserId() });
       if (!await _accessValidator.HasRightsAsync(Rights.AddEditRemoveProjects)
         && !(users.Any() && users.FirstOrDefault().ProjectId == entityId && users.FirstOrDefault().ProjectUserRole == ProjectUserRoleType.Manager))
       {

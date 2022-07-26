@@ -17,9 +17,9 @@ namespace LT.DigitalOffice.FileService.Broker.Publishes
       _bus = bus;
     }
 
-    public async Task CreateFilesAsync(Guid entityId, FileAccessType access, List<Guid> filesIds)
+    public Task CreateFilesAsync(Guid entityId, FileAccessType access, List<Guid> filesIds)
     {
-      await _bus.Publish<ICreateFilesPublish>(ICreateFilesPublish.CreateObj(
+      return _bus.Publish<ICreateFilesPublish>(ICreateFilesPublish.CreateObj(
         filesIds: filesIds,
         access: access,
         projectId: entityId));
