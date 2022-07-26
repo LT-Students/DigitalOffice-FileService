@@ -1,29 +1,40 @@
-﻿using LT.DigitalOffice.FileService.Mappers.Db.Interfaces;
+﻿using System;
+using System.IO;
+using LT.DigitalOffice.FileService.Mappers.Db.Interfaces;
 using LT.DigitalOffice.FileService.Models.Db;
-using LT.DigitalOffice.Models.Broker.Models.File;
+using LT.DigitalOffice.Kernel.Extensions;
 using Microsoft.AspNetCore.Http;
-using System;
 
 namespace LT.DigitalOffice.FileService.Mappers.Db
 {
-    public class DbFileMapper : IDbFileMapper
-    {
-        public DbFile Map(FileData file, Guid createdBy)
-        {
-            if (file == null)
-            {
-                return null;
-            }
+  public class DbFileMapper : IDbFileMapper
+  {
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-            return new DbFile()
-            {
-                Id = file.Id,
-                Content = file.Content,
-                Extension = file.Extension.ToLower(),
-                Name = file.Name,
-                CreatedBy = createdBy,
-                CreatedAtUtc = DateTime.UtcNow
-            };
-        }
+    public DbFileMapper(IHttpContextAccessor httpContextAccessor)
+    {
+      _httpContextAccessor = httpContextAccessor;
     }
+
+    public DbFile Map(IFormFile uploadedFile)
+    {
+      if (uploadedFile is null)
+      {
+        return null;
+      }
+
+      using MemoryStream ms = new();
+      uploadedFile.CopyTo(ms);
+
+      return new DbFile()
+      {
+        Id = Guid.NewGuid(),
+        Content = Convert.ToBase64String(ms.ToArray()),
+        Extension = Path.GetExtension(uploadedFile.FileName),
+        Name = Path.GetFileNameWithoutExtension(uploadedFile.FileName),
+        CreatedBy = _httpContextAccessor.HttpContext.GetUserId(),
+        CreatedAtUtc = DateTime.UtcNow
+      };
+    }
+  }
 }

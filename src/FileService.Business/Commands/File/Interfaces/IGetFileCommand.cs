@@ -10,6 +10,6 @@ namespace LT.DigitalOffice.FileService.Business.Commands.File.Interfaces
     [AutoInject]
     public interface IGetFileCommand
     {
-        Task<OperationResultResponse<List<FileInfo>>> Execute(List<Guid> filesIds);
+        Task<OperationResultResponse<List<FileInfo>>> ExecuteAsync(List<Guid> filesIds);
     }
 }

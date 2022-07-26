@@ -6,12 +6,14 @@ namespace LT.DigitalOffice.FileService.Models.Dto.Configurations
 {
   public class RabbitMqConfig : BaseRabbitMqConfig
   {
-    public string CreateFilesEndpoint { get; set; }
     public string RemoveFilesEndpoint { get; set; }
 
     // project
 
     [AutoInjectRequest(typeof(ICheckProjectFilesAccessesRequest))]
     public string CheckFilesAccessesEndpoint { get; set; }
+
+    [AutoInjectRequest(typeof(IGetProjectsUsersRequest))]
+    public string GetProjectsUsersEndpoint { get; set; }
   }
 }
