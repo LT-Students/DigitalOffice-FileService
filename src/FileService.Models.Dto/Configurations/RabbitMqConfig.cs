@@ -7,6 +7,7 @@ namespace LT.DigitalOffice.FileService.Models.Dto.Configurations
   public class RabbitMqConfig : BaseRabbitMqConfig
   {
     public string RemoveFilesEndpoint { get; set; }
+    public string GetFilesEndpoint { get; set; }
 
     // project
 
