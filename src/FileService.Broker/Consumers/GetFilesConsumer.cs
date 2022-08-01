@@ -23,6 +23,7 @@ namespace LT.DigitalOffice.FileService.Broker.Consumers
        file =>
          new FileCharacteristicsData(
            file.Id,
+           file.Name,
            file.Extension,
            (int)file.Size,
            file.CreatedAtUtc
