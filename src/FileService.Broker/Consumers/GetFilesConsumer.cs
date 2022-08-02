@@ -25,7 +25,7 @@ namespace LT.DigitalOffice.FileService.Broker.Consumers
            file.Id,
            file.Name,
            file.Extension,
-           (int)file.Size,
+           file.Size,
            file.CreatedAtUtc
          )).ToList());
     }
