@@ -43,6 +43,7 @@ namespace LT.DigitalOffice.FileService
       services.AddMassTransit(x =>
       {
         x.AddConsumer<RemoveFilesConsumer>();
+        x.AddConsumer<GetFilesConsumer>();
 
         x.UsingRabbitMq((context, cfg) =>
         {
@@ -55,6 +56,11 @@ namespace LT.DigitalOffice.FileService
           cfg.ReceiveEndpoint(_rabbitMqConfig.RemoveFilesEndpoint, ep =>
           {
             ep.ConfigureConsumer<RemoveFilesConsumer>(context);
+          });
+
+          cfg.ReceiveEndpoint(_rabbitMqConfig.GetFilesEndpoint, ep =>
+          {
+            ep.ConfigureConsumer<GetFilesConsumer>(context);
           });
         });
 

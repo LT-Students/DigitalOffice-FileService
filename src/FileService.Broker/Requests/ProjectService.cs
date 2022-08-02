@@ -12,7 +12,7 @@ using MassTransit;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
-namespace LT.DigitalOffice.ProjectService.Broker.Requests
+namespace LT.DigitalOffice.FileService.Broker.Requests
 {
   public class ProjectService : IProjectService
   {

@@ -32,6 +32,7 @@ namespace LT.DigitalOffice.FileService.Mappers.Db
         Content = Convert.ToBase64String(ms.ToArray()),
         Extension = Path.GetExtension(uploadedFile.FileName),
         Name = Path.GetFileNameWithoutExtension(uploadedFile.FileName),
+        Size = uploadedFile.Length,
         CreatedBy = _httpContextAccessor.HttpContext.GetUserId(),
         CreatedAtUtc = DateTime.UtcNow
       };
