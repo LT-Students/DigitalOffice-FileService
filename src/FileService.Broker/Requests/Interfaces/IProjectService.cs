@@ -12,5 +12,7 @@ namespace LT.DigitalOffice.ProjectService.Broker.Requests.Interfaces
     Task<List<Guid>> CheckFilesAsync(List<Guid> filesIds, List<string> errors);
 
     Task<List<ProjectUserData>> GetProjectUsersAsync(List<Guid> usersIds);
+
+    Task<(bool isProjectExists, bool? isUserManager)> CheckProjectAndUserExistenceAsync(Guid projectId, Guid? userId = null);
   }
 }

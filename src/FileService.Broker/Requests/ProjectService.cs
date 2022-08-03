@@ -19,17 +19,20 @@ namespace LT.DigitalOffice.FileService.Broker.Requests
     private readonly ILogger<ProjectService> _logger;
     private readonly IRequestClient<ICheckProjectFilesAccessesRequest> _rcCheckFiles;
     private readonly IRequestClient<IGetProjectsUsersRequest> _rcGetProjectUser;
+    private readonly IRequestClient<ICheckProjectAndUserExistenceRequest> _rcCheckProjectExistence;
     private readonly IHttpContextAccessor _httpContextAccessor;
 
     public ProjectService(
       ILogger<ProjectService> logger,
       IRequestClient<ICheckProjectFilesAccessesRequest> rcCheckFiles,
       IRequestClient<IGetProjectsUsersRequest> rcGetProjectUser,
+      IRequestClient<ICheckProjectAndUserExistenceRequest> rcCheckProjectExistence,
       IHttpContextAccessor httpContextAccessor)
     {
       _logger = logger;
       _rcCheckFiles = rcCheckFiles;
       _rcGetProjectUser = rcGetProjectUser;
+      _rcCheckProjectExistence = rcCheckProjectExistence;
       _httpContextAccessor = httpContextAccessor;
     }
 
@@ -56,5 +59,17 @@ namespace LT.DigitalOffice.FileService.Broker.Requests
           IGetProjectsUsersRequest.CreateObj(usersIds: usersIds),
           logger: _logger))?.Users;
     }
+
+    public async Task<(bool isProjectExists, bool? isUserManager)> CheckProjectAndUserExistenceAsync(Guid projectId, Guid? userId = null)
+    {
+      ICheckProjectAndUserExistenceResponse result = (await RequestHandler
+        .ProcessRequest<ICheckProjectAndUserExistenceRequest, ICheckProjectAndUserExistenceResponse>(
+          _rcCheckProjectExistence,
+          ICheckProjectAndUserExistenceRequest.CreateObj(projectId: projectId, userId: userId),
+          logger: _logger));
+
+      return (result.IsProjectExists, result.IsUserManager);
+    }
+
   }
 }
