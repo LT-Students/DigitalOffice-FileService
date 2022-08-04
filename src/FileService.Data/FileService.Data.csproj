@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FileService.Data.Provider.MsSql.EF\FileService.Data.Provider.MsSql.Ef.csproj" />
+    <ProjectReference Include="..\FileService.Mappers\FileService.Mappers.csproj" />
     <ProjectReference Include="..\FileService.Models.Db\FileService.Models.Db.csproj" />
   </ItemGroup>
 

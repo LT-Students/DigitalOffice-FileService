@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using LT.DigitalOffice.FileService.Models.Db;
 using LT.DigitalOffice.Kernel.Attributes;
+using LT.DigitalOffice.Models.Broker.Models.File;
 using Microsoft.AspNetCore.JsonPatch;
 
 namespace LT.DigitalOffice.FileService.Data.Interfaces
@@ -13,6 +14,8 @@ namespace LT.DigitalOffice.FileService.Data.Interfaces
     Task<List<Guid>> CreateAsync(List<DbFile> files);
 
     Task<List<DbFile>> GetAsync(List<Guid> filesIds);
+
+    Task<List<FileCharacteristicsData>> GetFileCharacteristicsDataAsync(List<Guid> filesIds);
 
     Task<List<Guid>> RemoveAsync(List<Guid> filesIds);
 
