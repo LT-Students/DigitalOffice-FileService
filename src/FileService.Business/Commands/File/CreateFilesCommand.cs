@@ -50,7 +50,7 @@ namespace LT.DigitalOffice.FileService.Business.Commands.File
     {
       (ProjectStatusType projectStatus, ProjectUserRoleType? projectUserRole) = await _projectService.CheckProjectAndUserExistenceAsync(entityId, _httpContextAccessor.HttpContext.GetUserId());
       if (!projectStatus.Equals(ProjectStatusType.Active)
-        || !projectUserRole.Value.Equals(ProjectUserRoleType.Manager) 
+        || !(projectUserRole.HasValue && projectUserRole.Value.Equals(ProjectUserRoleType.Manager))
         && !await _accessValidator.HasRightsAsync(Rights.AddEditRemoveProjects))
       {
         return _responseCreator.CreateFailureResponse<List<Guid>>(HttpStatusCode.Forbidden);
