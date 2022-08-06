@@ -4,8 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using LT.DigitalOffice.FileService.Data.Interfaces;
 using LT.DigitalOffice.FileService.Data.Provider;
+using LT.DigitalOffice.FileService.Mappers.Models.Interfaces;
 using LT.DigitalOffice.FileService.Models.Db;
 using LT.DigitalOffice.Kernel.Extensions;
+using LT.DigitalOffice.Models.Broker.Models.File;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
@@ -16,11 +18,16 @@ namespace LT.DigitalOffice.FileService.Data
   {
     private readonly IDataProvider _provider;
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IFileCharacteristicsDataMapper _fileCharacteristicsDataMapper;
 
-    public FileRepository(IDataProvider provider, IHttpContextAccessor httpContextAccessor)
+    public FileRepository(
+      IDataProvider provider,
+      IHttpContextAccessor httpContextAccessor,
+      IFileCharacteristicsDataMapper fileCharacteristicsDataMapper)
     {
       _provider = provider;
       _httpContextAccessor = httpContextAccessor;
+      _fileCharacteristicsDataMapper = fileCharacteristicsDataMapper;
     }
 
     public async Task<List<Guid>> CreateAsync(List<DbFile> files)
@@ -58,6 +65,21 @@ namespace LT.DigitalOffice.FileService.Data
       }
 
       return await _provider.Files.Where(u => filesIds.Contains(u.Id)).ToListAsync();
+    }
+
+    public async Task<List<FileCharacteristicsData>> GetFileCharacteristicsDataAsync(List<Guid> filesIds)
+    {
+      if (filesIds is null)
+      {
+        return null;
+      }
+
+      return await _provider.Files.Where(u => filesIds.Contains(u.Id)).Select(x => _fileCharacteristicsDataMapper.Map(
+        x.Id,
+        x.Name,
+        x.Extension,
+        x.Size,
+        x.CreatedAtUtc)).ToListAsync();
     }
 
     public async Task<bool> EditAsync(Guid fileId, JsonPatchDocument<DbFile> request)

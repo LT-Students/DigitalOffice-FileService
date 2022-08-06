@@ -1,5 +1,6 @@
 ﻿using LT.DigitalOffice.FileService.Data.Interfaces;
 using LT.DigitalOffice.FileService.Data.Provider.MsSql.Ef;
+using LT.DigitalOffice.FileService.Mappers.Models.Interfaces;
 using LT.DigitalOffice.FileService.Models.Db;
 using LT.DigitalOffice.Kernel.Exceptions.Models;
 using LT.DigitalOffice.UnitTestKernel;
@@ -37,7 +38,10 @@ namespace LT.DigitalOffice.FileService.Data.UnitTests
                 .Options;
 
             _dbContext = new FileServiceDbContext(dbOptionsFileService);
-            _repository = new FileRepository(_dbContext, _autoMocker.GetMock<IHttpContextAccessor>().Object);
+            _repository = new FileRepository(
+              _dbContext, 
+              _autoMocker.GetMock<IHttpContextAccessor>().Object,
+              _autoMocker.GetMock<IFileCharacteristicsDataMapper>().Object);
 
             _autoMocker
                .Setup<IHttpContextAccessor, IDictionary<object, object>>(x => x.HttpContext.Items)
