@@ -1,4 +1,5 @@
 ﻿using LT.DigitalOffice.Kernel.Attributes;
+using LT.DigitalOffice.Models.Broker.Enums;
 using LT.DigitalOffice.Models.Broker.Models.Project;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,6 @@ namespace LT.DigitalOffice.ProjectService.Broker.Requests.Interfaces
 
     Task<List<ProjectUserData>> GetProjectUsersAsync(List<Guid> usersIds);
 
-    Task<(bool isProjectExists, bool? isUserManager)> CheckProjectAndUserExistenceAsync(Guid projectId, Guid? userId = null);
+    Task<(ProjectStatusType projectStatus, ProjectUserRoleType? projectUserRole)> CheckProjectAndUserExistenceAsync(Guid projectId, Guid userId);
   }
 }

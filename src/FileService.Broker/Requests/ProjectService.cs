@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using LT.DigitalOffice.Kernel.BrokerSupport.Helpers;
 using LT.DigitalOffice.Kernel.Extensions;
+using LT.DigitalOffice.Models.Broker.Enums;
 using LT.DigitalOffice.Models.Broker.Models.Project;
 using LT.DigitalOffice.Models.Broker.Requests.Project;
 using LT.DigitalOffice.Models.Broker.Responses.Project;
@@ -19,14 +20,14 @@ namespace LT.DigitalOffice.FileService.Broker.Requests
     private readonly ILogger<ProjectService> _logger;
     private readonly IRequestClient<ICheckProjectFilesAccessesRequest> _rcCheckFiles;
     private readonly IRequestClient<IGetProjectsUsersRequest> _rcGetProjectUser;
-    private readonly IRequestClient<ICheckProjectAndUserExistenceRequest> _rcCheckProjectExistence;
+    private readonly IRequestClient<IGetProjectUserRoleRequest> _rcCheckProjectExistence;
     private readonly IHttpContextAccessor _httpContextAccessor;
 
     public ProjectService(
       ILogger<ProjectService> logger,
       IRequestClient<ICheckProjectFilesAccessesRequest> rcCheckFiles,
       IRequestClient<IGetProjectsUsersRequest> rcGetProjectUser,
-      IRequestClient<ICheckProjectAndUserExistenceRequest> rcCheckProjectExistence,
+      IRequestClient<IGetProjectUserRoleRequest> rcCheckProjectExistence,
       IHttpContextAccessor httpContextAccessor)
     {
       _logger = logger;
@@ -60,15 +61,15 @@ namespace LT.DigitalOffice.FileService.Broker.Requests
           logger: _logger))?.Users;
     }
 
-    public async Task<(bool isProjectExists, bool? isUserManager)> CheckProjectAndUserExistenceAsync(Guid projectId, Guid? userId = null)
+    public async Task<(ProjectStatusType projectStatus, ProjectUserRoleType? projectUserRole)> CheckProjectAndUserExistenceAsync(Guid projectId, Guid userId)
     {
-      ICheckProjectAndUserExistenceResponse result = (await RequestHandler
-        .ProcessRequest<ICheckProjectAndUserExistenceRequest, ICheckProjectAndUserExistenceResponse>(
+      IGetProjectUserRoleResponse result = (await RequestHandler
+        .ProcessRequest<IGetProjectUserRoleRequest, IGetProjectUserRoleResponse>(
           _rcCheckProjectExistence,
-          ICheckProjectAndUserExistenceRequest.CreateObj(projectId: projectId, userId: userId),
+          IGetProjectUserRoleRequest.CreateObj(projectId: projectId, userId: userId),
           logger: _logger));
 
-      return (result.IsProjectExists, result.IsUserManager);
+      return (result.ProjectStatus, result.ProjectUserRole);
     }
 
   }
