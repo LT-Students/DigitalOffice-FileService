@@ -1,5 +1,6 @@
 ﻿using LT.DigitalOffice.FileService.Mappers.Models.Interfaces;
 using Microsoft.AspNetCore.StaticFiles;
+using MimeTypes;
 
 namespace LT.DigitalOffice.FileService.Mappers.Models
 {
@@ -19,7 +20,7 @@ namespace LT.DigitalOffice.FileService.Mappers.Models
         return null;
       }
 
-      if (!_fileExtensionContentTypeProvider.TryGetContentType(extension, out string contentType))
+      if (!MimeTypeMap.TryGetMimeType(extension, out string contentType))
       {
         contentType = "application/octet-stream";
       }

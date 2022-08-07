@@ -4,6 +4,7 @@ using LT.DigitalOffice.FileService.Mappers.Db.Interfaces;
 using LT.DigitalOffice.FileService.Models.Db;
 using LT.DigitalOffice.Kernel.Extensions;
 using Microsoft.AspNetCore.Http;
+using MimeTypes;
 
 namespace LT.DigitalOffice.FileService.Mappers.Db
 {
@@ -30,7 +31,7 @@ namespace LT.DigitalOffice.FileService.Mappers.Db
       {
         Id = Guid.NewGuid(),
         Content = Convert.ToBase64String(ms.ToArray()),
-        Extension = Path.GetExtension(uploadedFile.FileName),
+        Extension = MimeTypeMap.GetExtension(uploadedFile.ContentType),
         Name = Path.GetFileNameWithoutExtension(uploadedFile.FileName),
         Size = uploadedFile.Length,
         CreatedBy = _httpContextAccessor.HttpContext.GetUserId(),
