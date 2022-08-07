@@ -37,7 +37,7 @@ namespace LT.DigitalOffice.FileService.Broker.Requests
       _httpContextAccessor = httpContextAccessor;
     }
 
-    public async Task<List<Guid>> CheckFilesAsync(List<Guid> filesIds, List<string> errors)
+    public async Task<List<Guid>> CheckFilesAsync(List<Guid> filesIds, List<string> errors = null)
     {
       if (filesIds is null || !filesIds.Any())
       {
@@ -61,7 +61,7 @@ namespace LT.DigitalOffice.FileService.Broker.Requests
           logger: _logger))?.Users;
     }
 
-    public async Task<(ProjectStatusType projectStatus, ProjectUserRoleType? projectUserRole)> CheckProjectAndUserExistenceAsync(Guid projectId, Guid userId)
+    public async Task<(ProjectStatusType projectStatus, ProjectUserRoleType? projectUserRole)> GetProjectUserRole(Guid projectId, Guid userId)
     {
       IGetProjectUserRoleResponse result = (await RequestHandler
         .ProcessRequest<IGetProjectUserRoleRequest, IGetProjectUserRoleResponse>(

@@ -48,7 +48,7 @@ namespace LT.DigitalOffice.FileService.Business.Commands.File
 
     public async Task<OperationResultResponse<List<Guid>>> ExecuteAsync(Guid entityId, FileAccessType access, IFormFileCollection uploadedFiles)
     {
-      (ProjectStatusType projectStatus, ProjectUserRoleType? projectUserRole) = await _projectService.CheckProjectAndUserExistenceAsync(entityId, _httpContextAccessor.HttpContext.GetUserId());
+      (ProjectStatusType projectStatus, ProjectUserRoleType? projectUserRole) = await _projectService.GetProjectUserRole(entityId, _httpContextAccessor.HttpContext.GetUserId());
       if (!projectStatus.Equals(ProjectStatusType.Active)
         || !(projectUserRole.HasValue && projectUserRole.Value.Equals(ProjectUserRoleType.Manager))
         && !await _accessValidator.HasRightsAsync(Rights.AddEditRemoveProjects))

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using LT.DigitalOffice.FileService.Business.Commands.File.Interfaces;
-using LT.DigitalOffice.FileService.Models.Dto.Models;
 using LT.DigitalOffice.FileService.Models.Dto.Requests;
 using LT.DigitalOffice.Kernel.Responses;
 using LT.DigitalOffice.Models.Broker.Enums;
@@ -27,11 +27,13 @@ namespace LT.DigitalOffice.FileService.Controllers
     }
 
     [HttpGet("get")]
-    public async Task<OperationResultResponse<List<FileInfo>>> GetAsync(
-      [FromServices] IGetFileCommand command,
+    public async Task<List<FileContentResult>> GetAsync(
+      [FromServices] IGetFilesCommand command,
       [FromQuery] List<Guid> filesIds)
     {
-      return await command.ExecuteAsync(filesIds);
+      List<(byte[] content, string extension, string name)> result = await command.ExecuteAsync(filesIds);
+
+      return result.Select(file => File(file.content, file.extension, file.name)).ToList();
     }
 
     [HttpPatch("edit")]

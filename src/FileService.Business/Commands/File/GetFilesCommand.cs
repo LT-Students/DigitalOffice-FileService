@@ -5,53 +5,48 @@ using System.Threading.Tasks;
 using LT.DigitalOffice.FileService.Business.Commands.File.Interfaces;
 using LT.DigitalOffice.FileService.Data.Interfaces;
 using LT.DigitalOffice.FileService.Mappers.Models.Interfaces;
-using LT.DigitalOffice.FileService.Models.Dto.Models;
 using LT.DigitalOffice.Kernel.BrokerSupport.AccessValidatorEngine.Interfaces;
 using LT.DigitalOffice.Kernel.Constants;
-using LT.DigitalOffice.Kernel.Enums;
-using LT.DigitalOffice.Kernel.Responses;
 using LT.DigitalOffice.ProjectService.Broker.Requests.Interfaces;
 
 namespace LT.DigitalOffice.FileService.Business.Commands.File
 {
-  public class GetFilesCommand : IGetFileCommand
+  public class GetFilesCommand : IGetFilesCommand
   {
     private readonly IFileRepository _repository;
-    private readonly IFileInfoMapper _mapper;
     private readonly IProjectService _projectService;
     private readonly IAccessValidator _accessValidator;
+    private readonly IContentTypeMapper _contentTypeMapper;
 
     public GetFilesCommand(
         IFileRepository repository,
-        IFileInfoMapper mapper,
         IProjectService projectService,
-        IAccessValidator accessValidator)
+        IAccessValidator accessValidator,
+        IContentTypeMapper contentTypeMapper)
     {
       _repository = repository;
-      _mapper = mapper;
       _projectService = projectService;
       _accessValidator = accessValidator;
+      _contentTypeMapper = contentTypeMapper;
     }
 
-    public async Task<OperationResultResponse<List<FileInfo>>> ExecuteAsync(List<Guid> filesIds)
+    public async Task<List<(byte[] content, string extension, string name)>> ExecuteAsync(List<Guid> filesIds)
     {
       if (filesIds is null)
       {
         return null;
       }
 
-      OperationResultResponse<List<FileInfo>> response = new();
-
       if (!await _accessValidator.HasRightsAsync(Rights.AddEditRemoveProjects))
       {
-        filesIds = await _projectService.CheckFilesAsync(filesIds, response.Errors);
+        filesIds = await _projectService.CheckFilesAsync(filesIds);
       }
 
-      response.Body = (await _repository.GetAsync(
-       filesIds))?.Select(x => _mapper.Map(x)).ToList();
-      response.Status = response.Errors.Any() ? OperationResultStatusType.PartialSuccess : OperationResultStatusType.FullSuccess;
-
-      return response;
+      return (await _repository.GetAsync(
+        filesIds))?.Select(file => (
+          Convert.FromBase64String(file.Content),
+          _contentTypeMapper.Map(file.Extension),
+          file.Name)).ToList();
     }
   }
 }
