@@ -11,6 +11,7 @@ namespace LT.DigitalOffice.FileService.Mappers.Models
     {
       _fileExtensionContentTypeProvider =  new FileExtensionContentTypeProvider();
     }
+
     public string Map(string extension)
     {
       if (extension is null)
