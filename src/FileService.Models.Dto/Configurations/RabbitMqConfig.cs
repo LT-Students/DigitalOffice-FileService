@@ -16,5 +16,8 @@ namespace LT.DigitalOffice.FileService.Models.Dto.Configurations
 
     [AutoInjectRequest(typeof(IGetProjectsUsersRequest))]
     public string GetProjectsUsersEndpoint { get; set; }
+
+    [AutoInjectRequest(typeof(IGetProjectUserRoleRequest))]
+    public string GetProjectUserRoleEndpoint { get; set; }
   }
 }

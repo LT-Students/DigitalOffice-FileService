@@ -12,7 +12,6 @@ using LT.DigitalOffice.Kernel.Constants;
 using LT.DigitalOffice.Kernel.Extensions;
 using LT.DigitalOffice.Kernel.Helpers.Interfaces;
 using LT.DigitalOffice.Kernel.Responses;
-using LT.DigitalOffice.Models.Broker.Models.Project;
 using LT.DigitalOffice.Models.Broker.Enums;
 using LT.DigitalOffice.ProjectService.Broker.Requests.Interfaces;
 using Microsoft.AspNetCore.Http;
@@ -49,8 +48,9 @@ namespace LT.DigitalOffice.FileService.Business.Commands.File
 
     public async Task<OperationResultResponse<List<Guid>>> ExecuteAsync(Guid entityId, FileAccessType access, IFormFileCollection uploadedFiles)
     {
-      ProjectUserData user = (await _projectService.GetProjectUsersAsync(new List<Guid>() { _httpContextAccessor.HttpContext.GetUserId() })).FirstOrDefault();
-      if (!(user is not null && user.ProjectId == entityId && user.ProjectUserRole == ProjectUserRoleType.Manager)
+      (ProjectStatusType projectStatus, ProjectUserRoleType? projectUserRole) = await _projectService.GetProjectUserRole(entityId, _httpContextAccessor.HttpContext.GetUserId());
+      if (!projectStatus.Equals(ProjectStatusType.Active)
+        || !(projectUserRole.HasValue && projectUserRole.Value.Equals(ProjectUserRoleType.Manager))
         && !await _accessValidator.HasRightsAsync(Rights.AddEditRemoveProjects))
       {
         return _responseCreator.CreateFailureResponse<List<Guid>>(HttpStatusCode.Forbidden);

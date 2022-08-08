@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using LT.DigitalOffice.Kernel.BrokerSupport.Helpers;
 using LT.DigitalOffice.Kernel.Extensions;
+using LT.DigitalOffice.Models.Broker.Enums;
 using LT.DigitalOffice.Models.Broker.Models.Project;
 using LT.DigitalOffice.Models.Broker.Requests.Project;
 using LT.DigitalOffice.Models.Broker.Responses.Project;
@@ -19,21 +20,24 @@ namespace LT.DigitalOffice.FileService.Broker.Requests
     private readonly ILogger<ProjectService> _logger;
     private readonly IRequestClient<ICheckProjectFilesAccessesRequest> _rcCheckFiles;
     private readonly IRequestClient<IGetProjectsUsersRequest> _rcGetProjectUser;
+    private readonly IRequestClient<IGetProjectUserRoleRequest> _rcCheckProjectExistence;
     private readonly IHttpContextAccessor _httpContextAccessor;
 
     public ProjectService(
       ILogger<ProjectService> logger,
       IRequestClient<ICheckProjectFilesAccessesRequest> rcCheckFiles,
       IRequestClient<IGetProjectsUsersRequest> rcGetProjectUser,
+      IRequestClient<IGetProjectUserRoleRequest> rcCheckProjectExistence,
       IHttpContextAccessor httpContextAccessor)
     {
       _logger = logger;
       _rcCheckFiles = rcCheckFiles;
       _rcGetProjectUser = rcGetProjectUser;
+      _rcCheckProjectExistence = rcCheckProjectExistence;
       _httpContextAccessor = httpContextAccessor;
     }
 
-    public async Task<List<Guid>> CheckFilesAsync(List<Guid> filesIds, List<string> errors)
+    public async Task<List<Guid>> CheckFilesAsync(List<Guid> filesIds, List<string> errors = null)
     {
       if (filesIds is null || !filesIds.Any())
       {
@@ -55,6 +59,17 @@ namespace LT.DigitalOffice.FileService.Broker.Requests
           _rcGetProjectUser,
           IGetProjectsUsersRequest.CreateObj(usersIds: usersIds),
           logger: _logger))?.Users;
+    }
+
+    public async Task<(ProjectStatusType projectStatus, ProjectUserRoleType? projectUserRole)> GetProjectUserRole(Guid projectId, Guid userId)
+    {
+      IGetProjectUserRoleResponse result = (await RequestHandler
+        .ProcessRequest<IGetProjectUserRoleRequest, IGetProjectUserRoleResponse>(
+          _rcCheckProjectExistence,
+          IGetProjectUserRoleRequest.CreateObj(projectId: projectId, userId: userId),
+          logger: _logger));
+
+      return (result.ProjectStatus, result.ProjectUserRole);
     }
   }
 }

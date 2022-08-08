@@ -6,7 +6,6 @@ using LT.DigitalOffice.FileService.Business.Commands.File.Interfaces;
 using LT.DigitalOffice.FileService.Data.Interfaces;
 using LT.DigitalOffice.FileService.Mappers.Models.Interfaces;
 using LT.DigitalOffice.FileService.Models.Db;
-using LT.DigitalOffice.FileService.Models.Dto.Models;
 using LT.DigitalOffice.UnitTestKernel;
 using Moq;
 using Moq.AutoMock;
@@ -16,7 +15,7 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests.Commands.File
 {
   public class GetFileCommandTests
   {
-    private AutoMocker _autoMocker;
+    /*private AutoMocker _autoMocker;
     private IGetFileCommand _command;
     private List<DbFile> _dbFiles;
     private List<FileInfo> _infoFile;
@@ -129,6 +128,6 @@ namespace LT.DigitalOffice.FileService.Business.UnitTests.Commands.File
 
       _autoMocker.Verify<IFileRepository, Task<List<DbFile>>>(x => x.GetAsync(It.IsAny<List<Guid>>()), Times.Never);
       _autoMocker.Verify<IFileInfoMapper, FileInfo>(x => x.Map(It.IsAny<DbFile>()), Times.Never);
-    }
+    }*/
   }
 }
