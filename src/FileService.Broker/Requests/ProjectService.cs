@@ -71,6 +71,5 @@ namespace LT.DigitalOffice.FileService.Broker.Requests
 
       return (result.ProjectStatus, result.ProjectUserRole);
     }
-
   }
 }
