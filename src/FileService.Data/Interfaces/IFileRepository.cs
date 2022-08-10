@@ -18,6 +18,6 @@ namespace LT.DigitalOffice.FileService.Data.Interfaces
 
     Task<List<Guid>> RemoveAsync(List<Guid> filesIds);
 
-    Task<bool> EditNameAsync(Guid fileId, string name);
+    Task<bool> EditNameAsync(Guid fileId, string newName);
   }
 }

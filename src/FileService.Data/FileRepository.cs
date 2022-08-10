@@ -81,7 +81,7 @@ namespace LT.DigitalOffice.FileService.Data
         x.CreatedAtUtc)).ToListAsync();
     }
 
-    public async Task<bool> EditNameAsync(Guid fileId, string name)
+    public async Task<bool> EditNameAsync(Guid fileId, string newName)
     {
       DbFile dbFile = await _provider.Files.FirstOrDefaultAsync(p => p.Id == fileId);
 
@@ -90,7 +90,7 @@ namespace LT.DigitalOffice.FileService.Data
         return false;
       }
 
-      dbFile.Name = name;
+      dbFile.Name = newName;
       dbFile.ModifiedBy = _httpContextAccessor.HttpContext.GetUserId();
       dbFile.ModifiedAtUtc = DateTime.UtcNow;
 
