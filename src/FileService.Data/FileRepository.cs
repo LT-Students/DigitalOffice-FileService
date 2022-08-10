@@ -9,7 +9,6 @@ using LT.DigitalOffice.FileService.Models.Db;
 using LT.DigitalOffice.Kernel.Extensions;
 using LT.DigitalOffice.Models.Broker.Models.File;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
 
 namespace LT.DigitalOffice.FileService.Data
@@ -82,7 +81,7 @@ namespace LT.DigitalOffice.FileService.Data
         x.CreatedAtUtc)).ToListAsync();
     }
 
-    public async Task<bool> EditAsync(Guid fileId, JsonPatchDocument<DbFile> request)
+    public async Task<bool> EditNameAsync(Guid fileId, string name)
     {
       DbFile dbFile = await _provider.Files.FirstOrDefaultAsync(p => p.Id == fileId);
 
@@ -91,7 +90,7 @@ namespace LT.DigitalOffice.FileService.Data
         return false;
       }
 
-      request.ApplyTo(dbFile);
+      dbFile.Name = name;
       dbFile.ModifiedBy = _httpContextAccessor.HttpContext.GetUserId();
       dbFile.ModifiedAtUtc = DateTime.UtcNow;
 
