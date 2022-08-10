@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LT.DigitalOffice.FileService.Business.Commands.File.Interfaces;
-using LT.DigitalOffice.FileService.Models.Dto.Requests;
 using LT.DigitalOffice.Kernel.Responses;
 using LT.DigitalOffice.Models.Broker.Enums;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LT.DigitalOffice.FileService.Controllers
@@ -36,13 +34,14 @@ namespace LT.DigitalOffice.FileService.Controllers
       return result.Select(file => File(file.content, file.extension, file.name)).ToList();
     }
 
-    [HttpPatch("edit")]
+    [HttpPut("edit")]
     public async Task<OperationResultResponse<bool>> EditAsync(
       [FromServices] IEditFileCommand command,
+      [FromQuery] Guid entityId,
       [FromQuery] Guid fileId,
-      [FromBody] JsonPatchDocument<EditFileRequest> request)
+      [FromQuery] string newName)
     {
-      return await command.ExecuteAsync(fileId, request);
+      return await command.ExecuteAsync(entityId, fileId, newName);
     }
   }
 }

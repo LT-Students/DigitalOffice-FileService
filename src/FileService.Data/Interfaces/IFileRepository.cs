@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using LT.DigitalOffice.FileService.Models.Db;
 using LT.DigitalOffice.Kernel.Attributes;
 using LT.DigitalOffice.Models.Broker.Models.File;
-using Microsoft.AspNetCore.JsonPatch;
 
 namespace LT.DigitalOffice.FileService.Data.Interfaces
 {
@@ -19,6 +18,6 @@ namespace LT.DigitalOffice.FileService.Data.Interfaces
 
     Task<List<Guid>> RemoveAsync(List<Guid> filesIds);
 
-    Task<bool> EditAsync(Guid fileId, JsonPatchDocument<DbFile> request);
+    Task<bool> EditNameAsync(Guid fileId, string newName);
   }
 }
