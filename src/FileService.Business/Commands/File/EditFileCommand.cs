@@ -45,7 +45,7 @@ namespace LT.DigitalOffice.FileService.Business.Commands.File
       _httpContextAccessor = httpContextAccessor;
     }
 
-    public async Task<OperationResultResponse<bool>> ExecuteAsync(Guid entityId, Guid fileId, string name)
+    public async Task<OperationResultResponse<bool>> ExecuteAsync(Guid entityId, Guid fileId, string newName)
     {
       (ProjectStatusType projectStatus, ProjectUserRoleType? projectUserRole) = await _projectService.GetProjectUserRole(entityId, _httpContextAccessor.HttpContext.GetUserId());
       if (!projectStatus.Equals(ProjectStatusType.Active)
@@ -56,7 +56,7 @@ namespace LT.DigitalOffice.FileService.Business.Commands.File
       }
 
       OperationResultResponse<bool> response = new(
-        body: await _fileRepository.EditNameAsync(fileId, name),
+        body: await _fileRepository.EditNameAsync(fileId, newName),
         status: OperationResultStatusType.FullSuccess);
 
       if (!response.Body)

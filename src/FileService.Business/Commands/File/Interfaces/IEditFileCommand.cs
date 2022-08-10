@@ -8,6 +8,6 @@ namespace LT.DigitalOffice.FileService.Business.Commands.File.Interfaces
   [AutoInject]
   public interface IEditFileCommand
   {
-    Task<OperationResultResponse<bool>> ExecuteAsync(Guid entityId, Guid fileId, string name);
+    Task<OperationResultResponse<bool>> ExecuteAsync(Guid entityId, Guid fileId, string newName);
   }
 }
