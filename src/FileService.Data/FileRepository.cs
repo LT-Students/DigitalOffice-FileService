@@ -4,8 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using LT.DigitalOffice.FileService.Data.Interfaces;
 using LT.DigitalOffice.FileService.Data.Provider;
+using LT.DigitalOffice.FileService.Data.Provider.MsSql.Ef;
 using LT.DigitalOffice.FileService.Mappers.Models.Interfaces;
 using LT.DigitalOffice.FileService.Models.Db;
+using LT.DigitalOffice.FileService.Models.Dto.Models;
 using LT.DigitalOffice.Models.Broker.Models.File;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,13 +17,19 @@ namespace LT.DigitalOffice.FileService.Data
   {
     private readonly IDataProvider _provider;
     private readonly IFileCharacteristicsDataMapper _fileCharacteristicsDataMapper;
+    private readonly IFileInfoMapper _fileInfoMapper;
+    private readonly FileServiceDbContext _context;
 
     public FileRepository(
       IDataProvider provider,
-      IFileCharacteristicsDataMapper fileCharacteristicsDataMapper)
+      IFileCharacteristicsDataMapper fileCharacteristicsDataMapper,
+      IFileInfoMapper fileInfoMapper,
+      FileServiceDbContext context)
     {
       _provider = provider;
       _fileCharacteristicsDataMapper = fileCharacteristicsDataMapper;
+      _fileInfoMapper = fileInfoMapper;
+      _context = context;
     }
 
     public async Task<List<Guid>> CreateAsync(List<DbFile> files)
@@ -59,7 +67,7 @@ namespace LT.DigitalOffice.FileService.Data
       }
 
       string query = "stream_id = ";
-      
+
       for (int i = 0; i < filesIds.Count; i++)
       {
         query += $"'{filesIds[0]}'";
@@ -67,11 +75,10 @@ namespace LT.DigitalOffice.FileService.Data
         if (i != filesIds.Count - 1)
         {
           query += " && stream_id = ";
-        }  
+        }
       }
 
       return await _provider.Files.FromSqlRaw($"SELECT * FROM Files WITH (READCOMMITTEDLOCK) where {query}").ToListAsync();
-
     }
 
     public async Task<List<FileCharacteristicsData>> GetFileCharacteristicsDataAsync(List<Guid> filesIds)
@@ -91,17 +98,18 @@ namespace LT.DigitalOffice.FileService.Data
 
     public async Task<bool> EditNameAsync(Guid fileId, string newName)
     {
-      DbFile dbFile = await _provider.Files.FirstOrDefaultAsync(p => p.Id == fileId);
+      FileInfo file = await _provider.Files.Where(u => u.Id == fileId).Select(x => _fileInfoMapper.Map(
+       x.Id,
+       x.Name,
+       x.FileType,
+       x.LastWriteTime.UtcDateTime)).FirstOrDefaultAsync();
 
-      if (dbFile is null)
+      if (file is null)
       {
         return false;
       }
 
-      dbFile.Name = newName;
-      dbFile.LastWriteTime = DateTime.UtcNow;
-
-      await _provider.SaveAsync();
+      _context.Database.ExecuteSqlRaw("UPDATE Files SET name = {0}, last_write_time = {1} WHERE stream_id = {2}", newName + file.Extension, DateTime.UtcNow, fileId);
 
       return true;
     }

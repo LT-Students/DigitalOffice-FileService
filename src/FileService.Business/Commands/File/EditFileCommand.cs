@@ -3,8 +3,6 @@ using System.Net;
 using System.Threading.Tasks;
 using LT.DigitalOffice.FileService.Business.Commands.File.Interfaces;
 using LT.DigitalOffice.FileService.Data.Interfaces;
-using LT.DigitalOffice.FileService.Mappers.PatchDocument.Interfaces;
-using LT.DigitalOffice.FileService.Validation.Interfaces;
 using LT.DigitalOffice.Kernel.BrokerSupport.AccessValidatorEngine.Interfaces;
 using LT.DigitalOffice.Kernel.Constants;
 using LT.DigitalOffice.Kernel.Enums;
@@ -22,8 +20,6 @@ namespace LT.DigitalOffice.FileService.Business.Commands.File
     private readonly IAccessValidator _accessValidator;
     private readonly IFileRepository _fileRepository;
     private readonly IResponseCreator _responseCreator;
-    private readonly IPatchDbFileMapper _mapper;
-    private readonly IEditFileRequestValidator _requestValidator;
     private readonly IProjectService _projectService;
     private readonly IHttpContextAccessor _httpContextAccessor;
 
@@ -31,16 +27,12 @@ namespace LT.DigitalOffice.FileService.Business.Commands.File
       IAccessValidator accessValidator,
       IResponseCreator responseCreator,
       IFileRepository fileRepository,
-      IPatchDbFileMapper mapper,
-      IEditFileRequestValidator requestValidator,
       IProjectService projectService,
       IHttpContextAccessor httpContextAccessor)
     {
       _accessValidator = accessValidator;
       _fileRepository = fileRepository;
       _responseCreator = responseCreator;
-      _mapper = mapper;
-      _requestValidator = requestValidator;
       _projectService = projectService;
       _httpContextAccessor = httpContextAccessor;
     }
