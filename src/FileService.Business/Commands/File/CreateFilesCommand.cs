@@ -22,28 +22,28 @@ namespace LT.DigitalOffice.FileService.Business.Commands.File
   {
     private readonly IFileRepository _fileRepository;
     private readonly IResponseCreator _responseCreator;
-    private readonly IDbFileMapper _mapper;
     private readonly IAccessValidator _accessValidator;
     private readonly IProjectService _projectService;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IPublish _publish;
+    private readonly IDbFileMapper _fileTableMapper;
 
     public CreateFilesCommand(
       IResponseCreator responseCreator,
       IFileRepository fileRepository,
-      IDbFileMapper mapper,
       IAccessValidator accessValidator,
       IProjectService projectService,
       IHttpContextAccessor httpContextAccessor,
-      IPublish publish)
+      IPublish publish,
+      IDbFileMapper fileTableMapper)
     {
       _fileRepository = fileRepository;
       _responseCreator = responseCreator;
-      _mapper = mapper;
       _accessValidator = accessValidator;
       _projectService = projectService;
       _httpContextAccessor = httpContextAccessor;
       _publish = publish;
+      _fileTableMapper = fileTableMapper;
     }
 
     public async Task<OperationResultResponse<List<Guid>>> ExecuteAsync(Guid entityId, FileAccessType access, IFormFileCollection uploadedFiles)
@@ -57,7 +57,7 @@ namespace LT.DigitalOffice.FileService.Business.Commands.File
       }
 
       OperationResultResponse<List<Guid>> response = new(body: await _fileRepository.
-        CreateAsync(uploadedFiles.Select(_mapper.Map).ToList()));
+        CreateAsync(uploadedFiles.Select(_fileTableMapper.Map).ToList()));
 
       if (response.Body.Any())
       {

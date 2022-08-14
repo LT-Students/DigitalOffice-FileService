@@ -11,7 +11,7 @@ using System.Collections.Generic;
 
 namespace LT.DigitalOffice.FileService.Data.UnitTests
 {
-    public class FileRepositoryTests
+    /*public class FileRepositoryTests
     {
         private AutoMocker _autoMocker;
         private IFileRepository _repository;
@@ -56,7 +56,7 @@ namespace LT.DigitalOffice.FileService.Data.UnitTests
 
         #region AddFile
 
-        /*[Test]
+        *//*[Test]
         public void ShouldAddNewFileToDatabase()
         {
             Assert.AreEqual(_dbFile.Id, _repository.AddFile(_dbFile));
@@ -70,13 +70,13 @@ namespace LT.DigitalOffice.FileService.Data.UnitTests
 
             Assert.Throws<ArgumentException>(() => _repository.AddFile(_dbFile));
             Assert.That(_dbContext.Files.Find(_dbFile.Id), Is.EqualTo(_dbFile));
-        }*/
+        }*//*
 
         #endregion
 
         #region DisableFile
 
-/*        [Test]
+*//*        [Test]
         public void ShouldThrowExceptionWhenFileWasNotFound()
         {
             _dbContext.Files.Add(_dbFile);
@@ -93,13 +93,13 @@ namespace LT.DigitalOffice.FileService.Data.UnitTests
             _repository.DisableFile(_dbFile.Id);
 
             Assert.That(_dbContext.Files.Find(_dbFile.Id).IsActive == false);
-        }*/
+        }*//*
 
         #endregion
 
         #region GetFile
 
-        /*[Test]
+        *//*[Test]
         public void ShouldThrowExceptionWhenThereNoFileInDatabaseWithSuchId()
         {
             _dbContext.Files.Add(_dbFile);
@@ -126,7 +126,7 @@ namespace LT.DigitalOffice.FileService.Data.UnitTests
             };
 
             SerializerAssert.AreEqual(expected, result);
-        }*/
+        }*//*
 
         #endregion
 
@@ -138,5 +138,5 @@ namespace LT.DigitalOffice.FileService.Data.UnitTests
                 _dbContext.Database.EnsureDeleted();
             }
         }
-    }
+    }*/
 }

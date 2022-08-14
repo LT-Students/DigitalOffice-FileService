@@ -21,7 +21,7 @@ namespace LT.DigitalOffice.FileService.Mappers.UnitTests.Db
         private AddFileRequest _fileRequest;
         private Guid _userId;
 
-        [SetUp]
+        /*[SetUp]
         public void SetUp()
         {
             _autoMocker = new();
@@ -50,7 +50,7 @@ namespace LT.DigitalOffice.FileService.Mappers.UnitTests.Db
                 Extension = ".txt",
                 Name = "DigitalOfficeTestFile"
             };
-        }
+        }*/
 
         /*[Test]
         public void ShouldThrowArgumentNullExceptionWhenRequestMappingObjectIsNull()
