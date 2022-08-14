@@ -99,10 +99,10 @@ namespace LT.DigitalOffice.FileService.Data
     public async Task<bool> EditNameAsync(Guid fileId, string newName)
     {
       FileInfo file = await _provider.Files.Where(u => u.Id == fileId).Select(x => _fileInfoMapper.Map(
-       x.Id,
-       x.Name,
-       x.FileType,
-       x.LastWriteTime.UtcDateTime)).FirstOrDefaultAsync();
+        x.Id,
+        x.Name,
+        x.FileType,
+        x.LastWriteTime.UtcDateTime)).FirstOrDefaultAsync();
 
       if (file is null)
       {
