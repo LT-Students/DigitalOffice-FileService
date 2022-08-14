@@ -45,18 +45,26 @@ namespace LT.DigitalOffice.FileService.Data
 
     public async Task<List<Guid>> RemoveAsync(List<Guid> filesIds)
     {
-      if (filesIds is null)
+      if (filesIds is null || !filesIds.Any())
       {
         return filesIds;
       }
 
-      IEnumerable<DbFile> files = await _provider.Files
-        .Where(x => filesIds.Contains(x.Id)).ToListAsync();
+      string query = "stream_id = ";
 
-      _provider.Files.RemoveRange(files);
-      await _provider.SaveAsync();
+      for (int i = 0; i < filesIds.Count; i++)
+      {
+        query += $"'{filesIds[0]}'";
 
-      return files.Select(f => f.Id).ToList();
+        if (i != filesIds.Count - 1)
+        {
+          query += " && stream_id = ";
+        }
+      }
+
+      await _context.Database.ExecuteSqlRawAsync($"DELETE FROM Files WHERE {query}");
+
+      return filesIds;
     }
 
     public async Task<List<DbFile>> GetAsync(List<Guid> filesIds)
@@ -109,7 +117,11 @@ namespace LT.DigitalOffice.FileService.Data
         return false;
       }
 
-      _context.Database.ExecuteSqlRaw("UPDATE Files SET name = {0}, last_write_time = {1} WHERE stream_id = {2}", newName + "." + file.Extension, DateTime.UtcNow, fileId);
+      await _context.Database.ExecuteSqlRawAsync(
+        "UPDATE Files SET name = {0}, last_write_time = {1} WHERE stream_id = {2}",
+        newName + "." + file.Extension,
+        DateTime.UtcNow,
+        fileId);
 
       return true;
     }
