@@ -46,7 +46,7 @@ namespace LT.DigitalOffice.FileService.Business.Commands.File
       return (await _repository.GetAsync(
         filesIds))?.Select(file => (
           file.FileStream,
-          _mapper.Map(MimeTypeMap.GetMimeType(file.FileType)),
+          _mapper.Map(file.FileType),
           file.Name)).ToList();
     }
   }

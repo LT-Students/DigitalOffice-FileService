@@ -109,7 +109,7 @@ namespace LT.DigitalOffice.FileService.Data
         return false;
       }
 
-      _context.Database.ExecuteSqlRaw("UPDATE Files SET name = {0}, last_write_time = {1} WHERE stream_id = {2}", newName + file.Extension, DateTime.UtcNow, fileId);
+      _context.Database.ExecuteSqlRaw("UPDATE Files SET name = {0}, last_write_time = {1} WHERE stream_id = {2}", newName + "." + file.Extension, DateTime.UtcNow, fileId);
 
       return true;
     }
