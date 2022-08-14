@@ -14,14 +14,14 @@ namespace LT.DigitalOffice.FileService.Mappers.UnitTests.Db
 {
     public class DbFileMapperTests
     {
-        private AutoMocker _autoMocker;
+        /*private AutoMocker _autoMocker;
         private IDbFileMapper _dbFileMapper;
         private IDictionary<object, object> _items;
         private DbFile _dbFile;
         private AddFileRequest _fileRequest;
         private Guid _userId;
 
-        /*[SetUp]
+        [SetUp]
         public void SetUp()
         {
             _autoMocker = new();

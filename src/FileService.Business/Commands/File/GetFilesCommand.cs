@@ -42,10 +42,8 @@ namespace LT.DigitalOffice.FileService.Business.Commands.File
         filesIds = await _projectService.CheckFilesAsync(filesIds);
       }
 
-      var r = await _repository.GetAsync(
-        filesIds);
-
-      return (r)?.Select(file => (
+      return (await _repository.GetAsync(
+        filesIds))?.Select(file => (
           file.FileStream,
           _mapper.Map(".png"),
           file.Name)).ToList();

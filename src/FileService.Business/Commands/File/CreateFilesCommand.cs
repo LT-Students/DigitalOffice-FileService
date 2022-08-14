@@ -26,7 +26,7 @@ namespace LT.DigitalOffice.FileService.Business.Commands.File
     private readonly IProjectService _projectService;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IPublish _publish;
-    private readonly IDbFileMapper _fileTableMapper;
+    private readonly IDbFileMapper _mapper;
 
     public CreateFilesCommand(
       IResponseCreator responseCreator,
@@ -35,7 +35,7 @@ namespace LT.DigitalOffice.FileService.Business.Commands.File
       IProjectService projectService,
       IHttpContextAccessor httpContextAccessor,
       IPublish publish,
-      IDbFileMapper fileTableMapper)
+      IDbFileMapper mapper)
     {
       _fileRepository = fileRepository;
       _responseCreator = responseCreator;
@@ -43,7 +43,7 @@ namespace LT.DigitalOffice.FileService.Business.Commands.File
       _projectService = projectService;
       _httpContextAccessor = httpContextAccessor;
       _publish = publish;
-      _fileTableMapper = fileTableMapper;
+      _mapper = mapper;
     }
 
     public async Task<OperationResultResponse<List<Guid>>> ExecuteAsync(Guid entityId, FileAccessType access, IFormFileCollection uploadedFiles)
@@ -57,7 +57,7 @@ namespace LT.DigitalOffice.FileService.Business.Commands.File
       }
 
       OperationResultResponse<List<Guid>> response = new(body: await _fileRepository.
-        CreateAsync(uploadedFiles.Select(_fileTableMapper.Map).ToList()));
+        CreateAsync(uploadedFiles.Select(_mapper.Map).ToList()));
 
       if (response.Body.Any())
       {
