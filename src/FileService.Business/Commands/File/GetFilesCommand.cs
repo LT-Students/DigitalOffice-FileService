@@ -8,6 +8,7 @@ using LT.DigitalOffice.FileService.Mappers.Models.Interfaces;
 using LT.DigitalOffice.Kernel.BrokerSupport.AccessValidatorEngine.Interfaces;
 using LT.DigitalOffice.Kernel.Constants;
 using LT.DigitalOffice.ProjectService.Broker.Requests.Interfaces;
+using MimeTypes;
 
 namespace LT.DigitalOffice.FileService.Business.Commands.File
 {
@@ -19,10 +20,10 @@ namespace LT.DigitalOffice.FileService.Business.Commands.File
     private readonly IContentTypeMapper _mapper;
 
     public GetFilesCommand(
-        IFileRepository repository,
-        IProjectService projectService,
-        IAccessValidator accessValidator,
-        IContentTypeMapper mapper)
+      IFileRepository repository,
+      IProjectService projectService,
+      IAccessValidator accessValidator,
+      IContentTypeMapper mapper)
     {
       _repository = repository;
       _projectService = projectService;
@@ -45,7 +46,7 @@ namespace LT.DigitalOffice.FileService.Business.Commands.File
       return (await _repository.GetAsync(
         filesIds))?.Select(file => (
           file.FileStream,
-          _mapper.Map(".png"),
+          _mapper.Map(MimeTypeMap.GetMimeType(file.FileType)),
           file.Name)).ToList();
     }
   }

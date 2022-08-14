@@ -11,7 +11,7 @@ namespace LT.DigitalOffice.FileService.Data.Provider.MsSql.Ef
   public class FileServiceDbContext : DbContext, IDataProvider
   {
     public FileServiceDbContext(DbContextOptions<FileServiceDbContext> options)
-        : base(options)
+      : base(options)
     {
     }
 
