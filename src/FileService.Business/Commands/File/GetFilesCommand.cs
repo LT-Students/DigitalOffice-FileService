@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using LT.DigitalOffice.FileService.Business.Commands.File.Interfaces;
@@ -46,7 +47,7 @@ namespace LT.DigitalOffice.FileService.Business.Commands.File
         filesIds))?.Select(file => (
           file.FileStream,
           _mapper.Map(file.FileType),
-          file.Name)).ToList();
+          Path.GetFileNameWithoutExtension(file.Name))).ToList();
     }
   }
 }
