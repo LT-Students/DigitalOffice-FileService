@@ -1,17 +1,14 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace LT.DigitalOffice.FileService.Models.Db
 {
-  [Table("Files")]
   public class DbFile
   {
     public const string TableName = "Files";
 
-    [Key]
     [Column("stream_id")]
     public Guid Id { get; set; }
 
@@ -19,11 +16,9 @@ namespace LT.DigitalOffice.FileService.Models.Db
     public byte[] FileStream { get; set; }
 
     [Column("name")]
-    [StringLength(255)]
     public string Name { get; set; }
 
     [Column("file_type")]
-    [StringLength(255)]
     [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
     public string FileType { get; set; }
 
@@ -71,6 +66,14 @@ namespace LT.DigitalOffice.FileService.Models.Db
 
       builder
         .HasKey(p => p.Id);
+
+      builder
+        .Property(P => P.Name)
+        .HasMaxLength(255);
+
+      builder
+        .Property(P => P.FileType)
+        .HasMaxLength(255);
     }
   }
 }
