@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using LT.DigitalOffice.FileService.Business.Commands.File.Interfaces;
@@ -16,18 +17,18 @@ namespace LT.DigitalOffice.FileService.Business.Commands.File
     private readonly IFileRepository _repository;
     private readonly IProjectService _projectService;
     private readonly IAccessValidator _accessValidator;
-    private readonly IContentTypeMapper _contentTypeMapper;
+    private readonly IContentTypeMapper _mapper;
 
     public GetFilesCommand(
-        IFileRepository repository,
-        IProjectService projectService,
-        IAccessValidator accessValidator,
-        IContentTypeMapper contentTypeMapper)
+      IFileRepository repository,
+      IProjectService projectService,
+      IAccessValidator accessValidator,
+      IContentTypeMapper mapper)
     {
       _repository = repository;
       _projectService = projectService;
       _accessValidator = accessValidator;
-      _contentTypeMapper = contentTypeMapper;
+      _mapper = mapper;
     }
 
     public async Task<List<(byte[] content, string extension, string name)>> ExecuteAsync(List<Guid> filesIds)
@@ -44,9 +45,9 @@ namespace LT.DigitalOffice.FileService.Business.Commands.File
 
       return (await _repository.GetAsync(
         filesIds))?.Select(file => (
-          Convert.FromBase64String(file.Content),
-          _contentTypeMapper.Map(file.Extension),
-          file.Name)).ToList();
+          file.FileStream,
+          _mapper.Map(file.FileType),
+          Path.GetFileNameWithoutExtension(file.Name))).ToList();
     }
   }
 }

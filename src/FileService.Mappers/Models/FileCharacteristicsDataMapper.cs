@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using LT.DigitalOffice.FileService.Mappers.Models.Interfaces;
 using LT.DigitalOffice.Models.Broker.Models.File;
 
@@ -10,7 +11,7 @@ namespace LT.DigitalOffice.FileService.Mappers.Models
     {
       return new(
         id: id,
-        name: name,
+        name: Path.GetFileNameWithoutExtension(name),
         extension: extension,
         size: size,
         createdAtUtc: createdAtUtc);

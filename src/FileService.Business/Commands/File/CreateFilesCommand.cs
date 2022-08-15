@@ -22,28 +22,28 @@ namespace LT.DigitalOffice.FileService.Business.Commands.File
   {
     private readonly IFileRepository _fileRepository;
     private readonly IResponseCreator _responseCreator;
-    private readonly IDbFileMapper _mapper;
     private readonly IAccessValidator _accessValidator;
     private readonly IProjectService _projectService;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IPublish _publish;
+    private readonly IDbFileMapper _mapper;
 
     public CreateFilesCommand(
       IResponseCreator responseCreator,
       IFileRepository fileRepository,
-      IDbFileMapper mapper,
       IAccessValidator accessValidator,
       IProjectService projectService,
       IHttpContextAccessor httpContextAccessor,
-      IPublish publish)
+      IPublish publish,
+      IDbFileMapper mapper)
     {
       _fileRepository = fileRepository;
       _responseCreator = responseCreator;
-      _mapper = mapper;
       _accessValidator = accessValidator;
       _projectService = projectService;
       _httpContextAccessor = httpContextAccessor;
       _publish = publish;
+      _mapper = mapper;
     }
 
     public async Task<OperationResultResponse<List<Guid>>> ExecuteAsync(Guid entityId, FileAccessType access, IFormFileCollection uploadedFiles)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -8,18 +9,55 @@ namespace LT.DigitalOffice.FileService.Models.Db
   {
     public const string TableName = "Files";
 
+    [Column("stream_id")]
     public Guid Id { get; set; }
-    public string Content { get; set; }
-    public string Extension { get; set; }
+
+    [Column("file_stream")]
+    public byte[] FileStream { get; set; }
+
+    [Column("name")]
     public string Name { get; set; }
-    public long Size { get; set; }
-    public DateTime CreatedAtUtc { get; set; }
-    public Guid CreatedBy { get; set; }
-    public DateTime? ModifiedAtUtc { get; set; }
-    public Guid? ModifiedBy { get; set; }
+
+    [Column("file_type")]
+    [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+    public string FileType { get; set; }
+
+    [Column("cached_file_size")]
+    [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+    public long? CachedFileSize { get; set; }
+
+    [Column("creation_time")]
+    public DateTimeOffset CreationTime { get; set; }
+
+    [Column("last_write_time")]
+    public DateTimeOffset LastWriteTime { get; set; }
+
+    [Column("last_access_time")]
+    public DateTimeOffset? LastAccessTime { get; set; }
+
+    [Column("is_directory")]
+    public bool IsDirectory { get; set; }
+
+    [Column("is_offline")]
+    public bool IsOffline { get; set; }
+
+    [Column("is_hidden")]
+    public bool IsHidden { get; set; }
+
+    [Column("is_readonly")]
+    public bool IsReadOnly { get; set; }
+
+    [Column("is_archive")]
+    public bool IsArchive { get; set; }
+
+    [Column("is_system")]
+    public bool IsSystem { get; set; }
+
+    [Column("is_temporary")]
+    public bool IsTemporary { get; set; }
   }
 
-  public class DbFileConfiguration : IEntityTypeConfiguration<DbFile>
+  public class FileTableConfiguration : IEntityTypeConfiguration<DbFile>
   {
     public void Configure(EntityTypeBuilder<DbFile> builder)
     {
@@ -30,12 +68,12 @@ namespace LT.DigitalOffice.FileService.Models.Db
         .HasKey(p => p.Id);
 
       builder
-        .Property(p => p.Content)
-        .IsRequired();
+        .Property(P => P.Name)
+        .HasMaxLength(255);
 
       builder
-        .Property(p => p.Extension)
-        .IsRequired();
+        .Property(P => P.FileType)
+        .HasMaxLength(255);
     }
   }
 }

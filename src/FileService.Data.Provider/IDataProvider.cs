@@ -6,9 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LT.DigitalOffice.FileService.Data.Provider
 {
-    [AutoInject(InjectType.Scoped)]
-    public interface IDataProvider : IBaseDataProvider
-    {
-        DbSet<DbFile> Files { get; set; }
-    }
+  [AutoInject(InjectType.Scoped)]
+  public interface IDataProvider : IBaseDataProvider
+  {
+    DbSet<DbFile> Files { get; set; }
+  }
 }
