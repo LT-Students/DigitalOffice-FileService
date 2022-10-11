@@ -48,8 +48,7 @@ namespace LT.DigitalOffice.FileService.Business.Commands.File
       }
 
       OperationResultResponse<bool> response = new(
-        body: await _fileRepository.EditNameAsync(fileId, newName),
-        status: OperationResultStatusType.FullSuccess);
+        body: await _fileRepository.EditNameAsync(fileId, newName));
 
       if (!response.Body)
       {
