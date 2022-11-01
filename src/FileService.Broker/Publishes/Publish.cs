@@ -5,6 +5,7 @@ using LT.DigitalOffice.Models.Broker.Enums;
 using LT.DigitalOffice.Models.Broker.Publishing.Subscriber.File;
 using MassTransit;
 using LT.DigitalOffice.FileService.Broker.Publishes.Interfaces;
+using DigitalOffice.Models.Broker.Publishing.Subscriber.File;
 
 namespace LT.DigitalOffice.FileService.Broker.Publishes
 {
@@ -23,6 +24,13 @@ namespace LT.DigitalOffice.FileService.Broker.Publishes
         filesIds: filesIds,
         access: access,
         projectId: entityId));
+    }
+
+    public Task CreateWikiFilesAsync(Guid entityId, List<Guid> filesIds)
+    {
+      return _bus.Publish<ICreateWikiFilesPublish> (ICreateWikiFilesPublish.CreateObj(
+        filesIds: filesIds,
+        articleId: entityId));
     }
   }
 }

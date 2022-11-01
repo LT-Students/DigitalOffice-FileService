@@ -10,5 +10,7 @@ namespace LT.DigitalOffice.FileService.Broker.Publishes.Interfaces
   public interface IPublish
   {
     Task CreateFilesAsync(Guid entityId, FileAccessType access, List<Guid> filesIds);
+
+    Task CreateWikiFilesAsync(Guid entityId, List<Guid> filesIds);
   }
 }
