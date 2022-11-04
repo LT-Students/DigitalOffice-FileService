@@ -77,13 +77,14 @@ namespace LT.DigitalOffice.FileService.Business.Commands.File
 
       if (response.Body.Any())
       {
-        if (serviceType == ServiceType.Project)
+        switch (serviceType)
         {
-          await _publish.CreateFilesAsync(entityId, access, response.Body);
-        }
-        else if (serviceType == ServiceType.Wiki)
-        {
-          await _publish.CreateWikiFilesAsync(entityId, response.Body);
+          case ServiceType.Project:
+            await _publish.CreateFilesAsync(entityId, access, response.Body);
+            break;
+          case ServiceType.Wiki:
+            await _publish.CreateWikiFilesAsync(entityId, response.Body);
+            break;
         }
 
         _httpContextAccessor.HttpContext.Response.StatusCode = (int)HttpStatusCode.Created;
