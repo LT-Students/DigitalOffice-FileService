@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LT.DigitalOffice.FileService.Business.Commands.File.Interfaces;
+using LT.DigitalOffice.FileService.Models.Dto.Enums;
 using LT.DigitalOffice.Kernel.Responses;
 using LT.DigitalOffice.Models.Broker.Enums;
 using Microsoft.AspNetCore.Http;
@@ -18,10 +19,11 @@ namespace LT.DigitalOffice.FileService.Controllers
     public async Task<OperationResultResponse<List<Guid>>> CreateAsync(
       [FromServices] ICreateFilesCommand command,
       [FromQuery] Guid entityId,
+      [FromQuery] ServiceType serviceType,
       [FromQuery] FileAccessType access,
       [FromForm] IFormFileCollection uploadedFiles)
     {
-      return await command.ExecuteAsync(entityId, access, uploadedFiles);
+      return await command.ExecuteAsync(entityId, serviceType, access, uploadedFiles);
     }
 
     [HttpGet("get")]

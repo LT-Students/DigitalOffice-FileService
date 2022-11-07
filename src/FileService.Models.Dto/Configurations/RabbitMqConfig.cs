@@ -1,4 +1,5 @@
-﻿using LT.DigitalOffice.Kernel.BrokerSupport.Attributes;
+﻿using DigitalOffice.Models.Broker.Common;
+using LT.DigitalOffice.Kernel.BrokerSupport.Attributes;
 using LT.DigitalOffice.Kernel.BrokerSupport.Configurations;
 using LT.DigitalOffice.Models.Broker.Requests.Project;
 
@@ -19,5 +20,10 @@ namespace LT.DigitalOffice.FileService.Models.Dto.Configurations
 
     [AutoInjectRequest(typeof(IGetProjectUserRoleRequest))]
     public string GetProjectUserRoleEndpoint { get; set; }
+
+    // wiki
+
+    [AutoInjectRequest(typeof(ICheckArticlesExistence))]
+    public string CheckArticlesExistenceEndpoint { get; set; }
   }
 }

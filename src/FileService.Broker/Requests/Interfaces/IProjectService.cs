@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace LT.DigitalOffice.ProjectService.Broker.Requests.Interfaces
+namespace LT.DigitalOffice.FileService.Broker.Requests.Interfaces
 {
   [AutoInject]
   public interface IProjectService
