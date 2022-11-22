@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using LT.DigitalOffice.FileService.Models.Db;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 
@@ -10,10 +12,22 @@ namespace LT.DigitalOffice.FileService.Data.Provider.MsSql.Ef.Migrations
   {
     protected override void Up(MigrationBuilder migrationBuilder)
     {
-      migrationBuilder.Sql(@"
-        CREATE TABLE [dbo].[Files]
-        AS FILETABLE
-        WITH (FILETABLE_DIRECTORY = N'Files')");
+      migrationBuilder.CreateTable(
+        name: DbFile.TableName,
+        columns: table => new
+        {
+          Id = table.Column<Guid>(nullable: false),
+          Name = table.Column<string>(nullable: false),
+          Extension = table.Column<string>(nullable: true),
+          Size = table.Column<int>(nullable: false),
+          Path = table.Column<string>(nullable: false),
+          CreatedBy = table.Column<Guid>(nullable: false),
+          CreatedAtUtc = table.Column<DateTime>(nullable: false)
+        },
+        constraints: table =>
+        {
+          table.PrimaryKey("PK_Rubrics", x => x.Id);
+        });
     }
   }
 }

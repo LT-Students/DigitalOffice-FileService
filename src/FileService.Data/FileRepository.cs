@@ -96,17 +96,19 @@ namespace LT.DigitalOffice.FileService.Data
         return null;
       }
 
-      return await _provider.Files.Where(u => filesIds.Contains(u.Id)).Select(x => _fileCharacteristicsDataMapper.Map(
+/*      return await _provider.Files.Where(u => filesIds.Contains(u.Id)).Select(x => _fileCharacteristicsDataMapper.Map(
         x.Id,
         x.Name,
         x.FileType,
         x.CachedFileSize.Value,
-        x.CreationTime.UtcDateTime)).ToListAsync();
+        x.CreationTime.UtcDateTime)).ToListAsync();*/
+
+      return null;
     }
 
     public async Task<bool> EditNameAsync(Guid fileId, string newName)
     {
-      FileInfo file = await _provider.Files.Where(u => u.Id == fileId).Select(x => _fileInfoMapper.Map(
+/*      FileInfo file = await _provider.Files.Where(u => u.Id == fileId).Select(x => _fileInfoMapper.Map(
         x.Id,
         x.Name,
         x.FileType,
@@ -121,7 +123,7 @@ namespace LT.DigitalOffice.FileService.Data
         "UPDATE Files SET name = {0}, last_write_time = {1} WHERE stream_id = {2}",
         newName + "." + file.Extension,
         DateTime.UtcNow,
-        fileId);
+        fileId);*/
 
       return true;
     }

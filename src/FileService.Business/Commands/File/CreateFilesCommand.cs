@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ using LT.DigitalOffice.FileService.Broker.Requests.Interfaces;
 using LT.DigitalOffice.FileService.Business.Commands.File.Interfaces;
 using LT.DigitalOffice.FileService.Data.Interfaces;
 using LT.DigitalOffice.FileService.Mappers.Db.Interfaces;
+using LT.DigitalOffice.FileService.Models.Db;
 using LT.DigitalOffice.FileService.Models.Dto.Enums;
 using LT.DigitalOffice.Kernel.BrokerSupport.AccessValidatorEngine.Interfaces;
 using LT.DigitalOffice.Kernel.Constants;
@@ -15,6 +17,7 @@ using LT.DigitalOffice.Kernel.Extensions;
 using LT.DigitalOffice.Kernel.Helpers.Interfaces;
 using LT.DigitalOffice.Kernel.Responses;
 using LT.DigitalOffice.Models.Broker.Enums;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 
 namespace LT.DigitalOffice.FileService.Business.Commands.File
@@ -29,6 +32,7 @@ namespace LT.DigitalOffice.FileService.Business.Commands.File
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IPublish _publish;
     private readonly IDbFileMapper _mapper;
+    private readonly IWebHostEnvironment _appEnvironment;
 
     public CreateFilesCommand(
       IResponseCreator responseCreator,
@@ -38,7 +42,8 @@ namespace LT.DigitalOffice.FileService.Business.Commands.File
       IWikiService wikiService,
       IHttpContextAccessor httpContextAccessor,
       IPublish publish,
-      IDbFileMapper mapper)
+      IDbFileMapper mapper,
+      IWebHostEnvironment appEnvironment)
     {
       _fileRepository = fileRepository;
       _responseCreator = responseCreator;
@@ -48,6 +53,7 @@ namespace LT.DigitalOffice.FileService.Business.Commands.File
       _httpContextAccessor = httpContextAccessor;
       _publish = publish;
       _mapper = mapper;
+      _appEnvironment = appEnvironment;
     }
 
     public async Task<OperationResultResponse<List<Guid>>> ExecuteAsync(
@@ -72,8 +78,21 @@ namespace LT.DigitalOffice.FileService.Business.Commands.File
         return _responseCreator.CreateFailureResponse<List<Guid>>(HttpStatusCode.Forbidden);
       }
 
+      List<DbFile> files = new();
+
+      foreach (IFormFile uploadedFile in uploadedFiles)
+      {
+        string path = $"/{serviceType}/" + uploadedFile.FileName;
+        using (FileStream fileStream = new FileStream(_appEnvironment.WebRootPath + path, FileMode.Create))
+        {
+          await uploadedFile.CopyToAsync(fileStream);
+        }
+
+        files.Add(_mapper.Map(uploadedFile, path));
+      }
+
       OperationResultResponse<List<Guid>> response = new(body: await _fileRepository.
-        CreateAsync(uploadedFiles.Select(_mapper.Map).ToList()));
+        CreateAsync(files));
 
       if (response.Body.Any())
       {

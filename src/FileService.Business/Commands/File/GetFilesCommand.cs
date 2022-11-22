@@ -43,11 +43,12 @@ namespace LT.DigitalOffice.FileService.Business.Commands.File
         filesIds = await _projectService.CheckFilesAsync(filesIds);
       }
 
-      return (await _repository.GetAsync(
-        filesIds))?.Select(file => (
-          file.FileStream,
-          _mapper.Map(file.FileType),
-          Path.GetFileNameWithoutExtension(file.Name))).ToList();
+      /*      return (await _repository.GetAsync(
+              filesIds))?.Select(file => (
+                file.FileStream,
+                _mapper.Map(file.FileType),
+                Path.GetFileNameWithoutExtension(file.Name))).ToList();*/
+      return null;
     }
   }
 }
