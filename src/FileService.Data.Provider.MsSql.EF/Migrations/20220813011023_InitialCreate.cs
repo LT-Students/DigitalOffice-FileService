@@ -28,7 +28,7 @@ namespace LT.DigitalOffice.FileService.Data.Provider.MsSql.Ef.Migrations
         },
         constraints: table =>
         {
-          table.PrimaryKey("PK_Rubrics", x => x.Id);
+          table.PrimaryKey("PK_Files", x => x.Id);
         });
     }
   }
