@@ -8,7 +8,9 @@ using LT.DigitalOffice.FileService.Data.Provider.MsSql.Ef;
 using LT.DigitalOffice.FileService.Mappers.Models.Interfaces;
 using LT.DigitalOffice.FileService.Models.Db;
 using LT.DigitalOffice.FileService.Models.Dto.Models;
+using LT.DigitalOffice.Kernel.Extensions;
 using LT.DigitalOffice.Models.Broker.Models.File;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace LT.DigitalOffice.FileService.Data
@@ -19,17 +21,20 @@ namespace LT.DigitalOffice.FileService.Data
     private readonly IFileCharacteristicsDataMapper _fileCharacteristicsDataMapper;
     private readonly IFileInfoMapper _fileInfoMapper;
     private readonly FileServiceDbContext _context;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
     public FileRepository(
       IDataProvider provider,
       IFileCharacteristicsDataMapper fileCharacteristicsDataMapper,
       IFileInfoMapper fileInfoMapper,
-      FileServiceDbContext context)
+      FileServiceDbContext context,
+      IHttpContextAccessor httpContextAccessor)
     {
       _provider = provider;
       _fileCharacteristicsDataMapper = fileCharacteristicsDataMapper;
       _fileInfoMapper = fileInfoMapper;
       _context = context;
+      _httpContextAccessor = httpContextAccessor;
     }
 
     public async Task<List<Guid>> CreateAsync(List<DbFile> files)
@@ -43,38 +48,20 @@ namespace LT.DigitalOffice.FileService.Data
       return files.Select(x => x.Id).ToList();
     }
 
-    public async Task<List<Guid>> RemoveAsync(List<Guid> filesIds)
-    {
-      if (filesIds is null || !filesIds.Any())
-      {
-        return filesIds;
-      }
-
-      string query = "stream_id = ";
-
-      for (int i = 0; i < filesIds.Count; i++)
-      {
-        query += $"'{filesIds[0]}'";
-
-        if (i != filesIds.Count - 1)
-        {
-          query += " && stream_id = ";
-        }
-      }
-
-      await _context.Database.ExecuteSqlRawAsync($"DELETE FROM Files WHERE {query}");
-
-      return filesIds;
-    }
-
-    public async Task<List<DbFile>> GetAsync(List<Guid> filesIds)
+    public async Task<List<string>> RemoveAsync(List<Guid> filesIds)
     {
       if (filesIds is null || !filesIds.Any())
       {
         return null;
       }
 
-      string query = "stream_id = ";
+      List<string> pathes = await _provider.Files
+        .AsNoTracking()
+        .Where(file => filesIds.Contains(file.Id))
+        .Select(file => file.Path)
+        .ToListAsync();
+
+      string query = "Id = ";
 
       for (int i = 0; i < filesIds.Count; i++)
       {
@@ -82,11 +69,26 @@ namespace LT.DigitalOffice.FileService.Data
 
         if (i != filesIds.Count - 1)
         {
-          query += " && stream_id = ";
+          query += " || Id = ";
         }
       }
 
-      return await _provider.Files.FromSqlRaw($"SELECT * FROM Files WITH (READCOMMITTEDLOCK) where {query}").ToListAsync();
+      await _context.Database.ExecuteSqlRawAsync($"DELETE FROM Files WHERE {query}");
+
+      return pathes;
+    }
+
+    public async Task<List<FileInfo>> GetFileInfoAsync(List<Guid> filesIds)
+    {
+      if (filesIds is null || !filesIds.Any())
+      {
+        return null;
+      }
+
+      return await _provider.Files.Where(u => filesIds.Contains(u.Id)).Select(x => _fileInfoMapper.Map(
+        x.Path,
+        x.Name,
+        x.Extension)).ToListAsync();
     }
 
     public async Task<List<FileCharacteristicsData>> GetFileCharacteristicsDataAsync(List<Guid> filesIds)
@@ -96,34 +98,28 @@ namespace LT.DigitalOffice.FileService.Data
         return null;
       }
 
-/*      return await _provider.Files.Where(u => filesIds.Contains(u.Id)).Select(x => _fileCharacteristicsDataMapper.Map(
+      return await _provider.Files.Where(u => filesIds.Contains(u.Id)).Select(x => _fileCharacteristicsDataMapper.Map(
         x.Id,
         x.Name,
-        x.FileType,
-        x.CachedFileSize.Value,
-        x.CreationTime.UtcDateTime)).ToListAsync();*/
-
-      return null;
+        x.Extension,
+        x.Size,
+        x.CreatedAtUtc)).ToListAsync();
     }
 
     public async Task<bool> EditNameAsync(Guid fileId, string newName)
     {
-/*      FileInfo file = await _provider.Files.Where(u => u.Id == fileId).Select(x => _fileInfoMapper.Map(
-        x.Id,
-        x.Name,
-        x.FileType,
-        x.LastWriteTime.UtcDateTime)).FirstOrDefaultAsync();
+      DbFile dbFile = await _provider.Files.FirstOrDefaultAsync(p => p.Id == fileId);
 
-      if (file is null)
+      if (dbFile is null)
       {
         return false;
       }
 
-      await _context.Database.ExecuteSqlRawAsync(
-        "UPDATE Files SET name = {0}, last_write_time = {1} WHERE stream_id = {2}",
-        newName + "." + file.Extension,
-        DateTime.UtcNow,
-        fileId);*/
+      dbFile.Name = newName;
+      dbFile.ModifiedBy = _httpContextAccessor.HttpContext.GetUserId();
+      dbFile.ModifiedAtUtc = DateTime.UtcNow;
+
+      await _provider.SaveAsync();
 
       return true;
     }

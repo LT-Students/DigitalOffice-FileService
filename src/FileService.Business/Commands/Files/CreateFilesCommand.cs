@@ -6,7 +6,7 @@ using System.Net;
 using System.Threading.Tasks;
 using LT.DigitalOffice.FileService.Broker.Publishes.Interfaces;
 using LT.DigitalOffice.FileService.Broker.Requests.Interfaces;
-using LT.DigitalOffice.FileService.Business.Commands.File.Interfaces;
+using LT.DigitalOffice.FileService.Business.Commands.Files.Interfaces;
 using LT.DigitalOffice.FileService.Data.Interfaces;
 using LT.DigitalOffice.FileService.Mappers.Db.Interfaces;
 using LT.DigitalOffice.FileService.Models.Db;
@@ -19,8 +19,9 @@ using LT.DigitalOffice.Kernel.Responses;
 using LT.DigitalOffice.Models.Broker.Enums;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using static System.Net.WebRequestMethods;
 
-namespace LT.DigitalOffice.FileService.Business.Commands.File
+namespace LT.DigitalOffice.FileService.Business.Commands.Files
 {
   public class CreateFilesCommand : ICreateFilesCommand
   {
@@ -78,17 +79,19 @@ namespace LT.DigitalOffice.FileService.Business.Commands.File
         return _responseCreator.CreateFailureResponse<List<Guid>>(HttpStatusCode.Forbidden);
       }
 
+      string uploadPath = $"{Directory.GetCurrentDirectory()}/uploads";
+      Directory.CreateDirectory(uploadPath);
       List<DbFile> files = new();
 
       foreach (IFormFile uploadedFile in uploadedFiles)
       {
-        string path = $"/{serviceType}/" + uploadedFile.FileName;
-        using (FileStream fileStream = new FileStream(_appEnvironment.WebRootPath + path, FileMode.Create))
+        string fullPath = $"{uploadPath}/{uploadedFile.FileName}";
+        using (FileStream fileStream = new FileStream(fullPath, FileMode.Create))
         {
           await uploadedFile.CopyToAsync(fileStream);
         }
 
-        files.Add(_mapper.Map(uploadedFile, path));
+        files.Add(_mapper.Map(uploadedFile, fullPath));
       }
 
       OperationResultResponse<List<Guid>> response = new(body: await _fileRepository.

@@ -7,7 +7,7 @@ using LT.DigitalOffice.Kernel.Responses;
 using LT.DigitalOffice.Models.Broker.Enums;
 using Microsoft.AspNetCore.Http;
 
-namespace LT.DigitalOffice.FileService.Business.Commands.File.Interfaces
+namespace LT.DigitalOffice.FileService.Business.Commands.Files.Interfaces
 {
   [AutoInject]
   public interface ICreateFilesCommand

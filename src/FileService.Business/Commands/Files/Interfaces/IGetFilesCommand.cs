@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using LT.DigitalOffice.Kernel.Attributes;
 
-namespace LT.DigitalOffice.FileService.Business.Commands.File.Interfaces
+namespace LT.DigitalOffice.FileService.Business.Commands.Files.Interfaces
 {
   [AutoInject]
   public interface IGetFilesCommand

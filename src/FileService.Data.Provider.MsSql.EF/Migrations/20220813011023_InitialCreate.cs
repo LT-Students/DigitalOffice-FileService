@@ -19,10 +19,12 @@ namespace LT.DigitalOffice.FileService.Data.Provider.MsSql.Ef.Migrations
           Id = table.Column<Guid>(nullable: false),
           Name = table.Column<string>(nullable: false),
           Extension = table.Column<string>(nullable: true),
-          Size = table.Column<int>(nullable: false),
+          Size = table.Column<long>(nullable: false),
           Path = table.Column<string>(nullable: false),
           CreatedBy = table.Column<Guid>(nullable: false),
-          CreatedAtUtc = table.Column<DateTime>(nullable: false)
+          CreatedAtUtc = table.Column<DateTime>(nullable: false),
+          ModifiedAtUtc = table.Column<DateTime>(nullable: true),
+          ModifiedBy = table.Column<Guid>(nullable: true)
         },
         constraints: table =>
         {

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using LT.DigitalOffice.FileService.Business.Commands.File;
-using LT.DigitalOffice.FileService.Business.Commands.File.Interfaces;
+using LT.DigitalOffice.FileService.Business.Commands.Files;
+using LT.DigitalOffice.FileService.Business.Commands.Files.Interfaces;
 using LT.DigitalOffice.FileService.Data.Interfaces;
 using LT.DigitalOffice.FileService.Mappers.Models.Interfaces;
 using LT.DigitalOffice.FileService.Models.Db;

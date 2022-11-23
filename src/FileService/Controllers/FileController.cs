@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using LT.DigitalOffice.FileService.Business.Commands.File.Interfaces;
+using LT.DigitalOffice.FileService.Business.Commands.Files.Interfaces;
 using LT.DigitalOffice.FileService.Models.Dto.Enums;
 using LT.DigitalOffice.Kernel.Responses;
 using LT.DigitalOffice.Models.Broker.Enums;
@@ -41,9 +41,10 @@ namespace LT.DigitalOffice.FileService.Controllers
       [FromServices] IEditFileCommand command,
       [FromQuery] Guid entityId,
       [FromQuery] Guid fileId,
+      [FromQuery] ServiceType serviceType,
       [FromQuery] string newName)
     {
-      return await command.ExecuteAsync(entityId, fileId, newName);
+      return await command.ExecuteAsync(entityId, fileId, serviceType, newName);
     }
   }
 }

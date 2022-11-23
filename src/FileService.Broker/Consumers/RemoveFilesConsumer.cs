@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using LT.DigitalOffice.FileService.Data.Interfaces;
@@ -24,13 +25,21 @@ namespace LT.DigitalOffice.FileService.Broker.Consumers
 
     public async Task Consume(ConsumeContext<IRemoveFilesPublish> context)
     {
-      List<Guid> removedFiles = await _repository.RemoveAsync(context.Message.FilesIds);
+      List<string> removedFiles = await _repository.RemoveAsync(context.Message.FilesIds);
+
+      foreach (string path in removedFiles)
+      {
+        if (File.Exists($"{path}"))
+        {
+          File.Delete($"{path}");
+        }
+      }
 
       if (removedFiles.Count != context.Message.FilesIds.Count)
       {
         _logger.LogWarning(
           "Files ids: {FilesIds} were not removed.",
-          string.Join(",", context.Message.FilesIds.Where(f => !removedFiles.Contains(f))));
+          string.Join(",", context.Message.FilesIds.Where(f => !context.Message.FilesIds.Contains(f))));
       }
     }
   }
