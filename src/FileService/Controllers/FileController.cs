@@ -29,9 +29,10 @@ namespace LT.DigitalOffice.FileService.Controllers
     [HttpGet("get")]
     public async Task<List<FileContentResult>> GetAsync(
       [FromServices] IGetFilesCommand command,
-      [FromQuery] List<Guid> filesIds)
+      [FromQuery] List<Guid> filesIds,
+      [FromQuery] ServiceType serviceType)
     {
-      List<(byte[] content, string extension, string name)> result = await command.ExecuteAsync(filesIds);
+      List<(byte[] content, string extension, string name)> result = await command.ExecuteAsync(filesIds, serviceType);
 
       return result.Select(file => File(file.content, file.extension, file.name)).ToList();
     }

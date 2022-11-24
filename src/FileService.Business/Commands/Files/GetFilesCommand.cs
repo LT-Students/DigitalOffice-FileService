@@ -9,6 +9,7 @@ using LT.DigitalOffice.Kernel.Constants;
 using FileInfo = LT.DigitalOffice.FileService.Models.Dto.Models.FileInfo;
 using LT.DigitalOffice.FileService.Business.Commands.Files.Interfaces;
 using System.IO;
+using LT.DigitalOffice.FileService.Models.Dto.Enums;
 
 namespace LT.DigitalOffice.FileService.Business.Commands.Files
 {
@@ -31,16 +32,19 @@ namespace LT.DigitalOffice.FileService.Business.Commands.Files
       _mapper = mapper;
     }
 
-    public async Task<List<(byte[] content, string extension, string name)>> ExecuteAsync(List<Guid> filesIds)
+    public async Task<List<(byte[] content, string extension, string name)>> ExecuteAsync(List<Guid> filesIds, ServiceType serviceType)
     {
       if (filesIds is null)
       {
         return null;
       }
 
-      if (!await _accessValidator.HasRightsAsync(Rights.AddEditRemoveProjects))
+      if (serviceType == ServiceType.Project)
       {
-        filesIds = await _projectService.CheckFilesAsync(filesIds);
+        if (!await _accessValidator.HasRightsAsync(Rights.AddEditRemoveProjects))
+        {
+          filesIds = await _projectService.CheckFilesAsync(filesIds);
+        }
       }
 
       List<(byte[] content, string extension, string name)> result = new();

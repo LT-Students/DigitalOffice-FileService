@@ -81,11 +81,12 @@ namespace LT.DigitalOffice.FileService.Business.Commands.Files
 
       string uploadPath = $"{Directory.GetCurrentDirectory()}/uploads";
       Directory.CreateDirectory(uploadPath);
+      Random rnd = new Random();
       List<DbFile> files = new();
 
       foreach (IFormFile uploadedFile in uploadedFiles)
       {
-        string fullPath = $"{uploadPath}/{uploadedFile.FileName}";
+        string fullPath = $"{uploadPath}/{uploadedFile.FileName}_{(short)rnd.Next()}";
         using (FileStream fileStream = new FileStream(fullPath, FileMode.Create))
         {
           await uploadedFile.CopyToAsync(fileStream);
