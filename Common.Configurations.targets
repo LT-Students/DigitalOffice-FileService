@@ -30,7 +30,7 @@
     <PackageReference Include="DigitalOffice.Kernel.BrokerSupport" Version="1.0.0" />
     <PackageReference Include="DigitalOffice.Kernel.EndpointSupport" Version="1.0.1" />
     <PackageReference Include="DigitalOffice.Kernel.EFSupport" Version="1.0.0" />
-    <PackageReference Include="DigitalOffice.Models" Version="1.0.6" />
+    <PackageReference Include="DigitalOffice.Models" Version="1.0.13" />
   </ItemGroup>
 
   <ItemGroup Condition="$(AssemblyName.Contains('.UnitTests'))">

@@ -24,7 +24,7 @@ namespace LT.DigitalOffice.FileService.Broker.Consumers
 
     public async Task Consume(ConsumeContext<IRemoveFilesPublish> context)
     {
-      List<string> removedFiles = await _repository.RemoveAsync(context.Message.FilesIds);
+      List<string> removedFiles = await _repository.RemoveAsync(context.Message.FileSource, context.Message.FilesIds);
 
       foreach (string path in removedFiles)
       {

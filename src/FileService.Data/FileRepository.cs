@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DigitalOffice.Models.Broker.Enums;
 using LT.DigitalOffice.FileService.Data.Interfaces;
 using LT.DigitalOffice.FileService.Data.Provider;
 using LT.DigitalOffice.FileService.Data.Provider.MsSql.Ef;
 using LT.DigitalOffice.FileService.Mappers.Models.Interfaces;
 using LT.DigitalOffice.FileService.Models.Db;
+using LT.DigitalOffice.FileService.Models.Dto.Constants;
 using LT.DigitalOffice.FileService.Models.Dto.Models;
 using LT.DigitalOffice.Kernel.Extensions;
 using LT.DigitalOffice.Models.Broker.Models.File;
@@ -23,6 +25,16 @@ namespace LT.DigitalOffice.FileService.Data
     private readonly FileServiceDbContext _context;
     private readonly IHttpContextAccessor _httpContextAccessor;
 
+    private string GetTargetDBTableName(FileSource fileSource)
+    {
+      switch (fileSource)
+      {
+        case FileSource.Wiki: return DBTablesNames.Wiki;
+        case FileSource.Project: return DBTablesNames.PROJECT;
+        default: throw new ArgumentOutOfRangeException();
+      }
+    }
+
     public FileRepository(
       IDataProvider provider,
       IFileCharacteristicsDataMapper fileCharacteristicsDataMapper,
@@ -37,28 +49,36 @@ namespace LT.DigitalOffice.FileService.Data
       _httpContextAccessor = httpContextAccessor;
     }
 
-    public async Task<List<Guid>> CreateAsync(List<DbFile> files)
+    public async Task<List<Guid>> CreateAsync(FileSource fileSource, List<DbFile> files)
     {
       if (files is not null && files.Any())
       {
-        _provider.Files.AddRange(files);
-        await _provider.SaveAsync();
+        foreach (DbFile file in files)
+        {
+          await _provider.ExecuteRawSqlAsync(
+            @$"INSERT INTO {GetTargetDBTableName(fileSource)}
+              (Id, Name, Extension, Size, Path, CreatedAtUtc, CreatedBy)
+              VALUES ('{file.Id}', '{file.Name}', '{file.Extension}', '{file.Size}', '{file.Path}', '{file.CreatedAtUtc.ToString("yyyy-MM-dd HH:mm:ss")}', '{file.CreatedBy}')");
+        }
       }
 
       return files.Select(x => x.Id).ToList();
     }
 
-    public async Task<List<string>> RemoveAsync(List<Guid> filesIds)
+    public async Task<List<string>> RemoveAsync(FileSource fileSource, List<Guid> filesIds)
     {
       if (filesIds is null || !filesIds.Any())
       {
         return null;
       }
 
-      List<string> pathes = await _provider.Files
+      string tableName = GetTargetDBTableName(fileSource);
+
+      List<string> pathes = await _provider
+        .FromSqlRaw($"SELECT * FROM {tableName}")
         .AsNoTracking()
-        .Where(file => filesIds.Contains(file.Id))
-        .Select(file => file.Path)
+        .Where(x => filesIds.Contains(x.Id))
+        .Select(x => x.Path)
         .ToListAsync();
 
       string query = "Id = ";
@@ -73,53 +93,51 @@ namespace LT.DigitalOffice.FileService.Data
         }
       }
 
-      await _context.Database.ExecuteSqlRawAsync($"DELETE FROM Files WHERE {query}");
+      await _context.Database.ExecuteSqlRawAsync($"DELETE FROM {tableName} WHERE {query}");
 
       return pathes;
     }
 
-    public async Task<List<FileInfo>> GetFileInfoAsync(List<Guid> filesIds)
+    public async Task<List<FileInfo>> GetFileInfoAsync(FileSource fileSource, List<Guid> filesIds)
     {
       if (filesIds is null || !filesIds.Any())
       {
         return null;
       }
 
-      return await _provider.Files.Where(u => filesIds.Contains(u.Id)).Select(x => _fileInfoMapper.Map(
-        x.Path,
-        x.Name,
-        x.Extension)).ToListAsync();
+      return await _provider
+        .FromSqlRaw($"SELECT * FROM {GetTargetDBTableName(fileSource)}")
+        .AsNoTracking()
+        .Where(u => filesIds.Contains(u.Id))
+        .Select(x => _fileInfoMapper.Map(
+          x.Path,
+          x.Name,
+          x.Extension)).ToListAsync();
     }
 
-    public async Task<List<FileCharacteristicsData>> GetFileCharacteristicsDataAsync(List<Guid> filesIds)
+    public async Task<List<FileCharacteristicsData>> GetFileCharacteristicsDataAsync(FileSource fileSource, List<Guid> filesIds)
     {
-      if (filesIds is null)
+      if (filesIds is null || !filesIds.Any())
       {
         return null;
       }
 
-      return await _provider.Files.Where(u => filesIds.Contains(u.Id)).Select(x => _fileCharacteristicsDataMapper.Map(
-        x.Id,
-        x.Name,
-        x.Extension,
-        x.Size,
-        x.CreatedAtUtc)).ToListAsync();
+      return await _provider
+        .FromSqlRaw($"SELECT * FROM {GetTargetDBTableName(fileSource)}")
+        .AsNoTracking()
+        .Where(u => filesIds.Contains(u.Id))
+        .Select(x => _fileCharacteristicsDataMapper.Map(
+          x.Id,
+          x.Name,
+          x.Extension,
+          x.Size,
+          x.CreatedAtUtc)).ToListAsync();
     }
 
-    public async Task<bool> EditNameAsync(Guid fileId, string newName)
+    public async Task<bool> EditNameAsync(FileSource fileSource, Guid fileId, string newName)
     {
-      DbFile dbFile = await _provider.Files.FirstOrDefaultAsync(p => p.Id == fileId);
-
-      if (dbFile is null)
-      {
-        return false;
-      }
-
-      dbFile.Name = newName;
-      dbFile.ModifiedBy = _httpContextAccessor.HttpContext.GetUserId();
-      dbFile.ModifiedAtUtc = DateTime.UtcNow;
-
-      await _provider.SaveAsync();
+      await _provider.ExecuteRawSqlAsync(
+        $"UPDATE {GetTargetDBTableName(fileSource)} SET Name = '{newName}', ModifiedBy = '{_httpContextAccessor.HttpContext.GetUserId()}', ModifiedAtUtc = '{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")}'");
 
       return true;
     }

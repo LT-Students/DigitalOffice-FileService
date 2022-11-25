@@ -4,13 +4,13 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using DigitalOffice.Models.Broker.Enums;
 using LT.DigitalOffice.FileService.Broker.Publishes.Interfaces;
 using LT.DigitalOffice.FileService.Broker.Requests.Interfaces;
 using LT.DigitalOffice.FileService.Business.Commands.Files.Interfaces;
 using LT.DigitalOffice.FileService.Data.Interfaces;
 using LT.DigitalOffice.FileService.Mappers.Db.Interfaces;
 using LT.DigitalOffice.FileService.Models.Db;
-using LT.DigitalOffice.FileService.Models.Dto.Enums;
 using LT.DigitalOffice.Kernel.BrokerSupport.AccessValidatorEngine.Interfaces;
 using LT.DigitalOffice.Kernel.Constants;
 using LT.DigitalOffice.Kernel.Extensions;
@@ -59,11 +59,11 @@ namespace LT.DigitalOffice.FileService.Business.Commands.Files
 
     public async Task<OperationResultResponse<List<Guid>>> ExecuteAsync(
       Guid entityId,
-      ServiceType serviceType,
+      FileSource fileSource,
       FileAccessType access,
       IFormFileCollection uploadedFiles)
     {
-      if (serviceType == ServiceType.Project)
+      if (fileSource == FileSource.Project)
       {
         (ProjectStatusType projectStatus, ProjectUserRoleType? projectUserRole) = await _projectService.GetProjectUserRole(entityId, _httpContextAccessor.HttpContext.GetUserId());
         if (!projectStatus.Equals(ProjectStatusType.Active)
@@ -95,16 +95,16 @@ namespace LT.DigitalOffice.FileService.Business.Commands.Files
       }
 
       OperationResultResponse<List<Guid>> response = new(body: await _fileRepository.
-        CreateAsync(files));
+        CreateAsync(fileSource, files));
 
       if (response.Body.Any())
       {
-        switch (serviceType)
+        switch (fileSource)
         {
-          case ServiceType.Project:
+          case FileSource.Project:
             await _publish.CreateFilesAsync(entityId, access, response.Body);
             break;
-          case ServiceType.Wiki:
+          case FileSource.Wiki:
             await _publish.CreateWikiFilesAsync(entityId, response.Body);
             break;
         }

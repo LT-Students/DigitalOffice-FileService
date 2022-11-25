@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using LT.DigitalOffice.FileService.Broker.Requests;
+using DigitalOffice.Models.Broker.Enums;
 using LT.DigitalOffice.FileService.Broker.Requests.Interfaces;
 using LT.DigitalOffice.FileService.Business.Commands.Files.Interfaces;
 using LT.DigitalOffice.FileService.Data.Interfaces;
-using LT.DigitalOffice.FileService.Models.Dto.Enums;
 using LT.DigitalOffice.Kernel.BrokerSupport.AccessValidatorEngine.Interfaces;
 using LT.DigitalOffice.Kernel.Constants;
 using LT.DigitalOffice.Kernel.Extensions;
@@ -43,9 +42,9 @@ namespace LT.DigitalOffice.FileService.Business.Commands.Files
       _httpContextAccessor = httpContextAccessor;
     }
 
-    public async Task<OperationResultResponse<bool>> ExecuteAsync(Guid entityId, Guid fileId, ServiceType serviceType, string newName)
+    public async Task<OperationResultResponse<bool>> ExecuteAsync(Guid entityId, Guid fileId, FileSource fileSource, string newName)
     {
-      if (serviceType == ServiceType.Project)
+      if (fileSource == FileSource.Project)
       {
         (ProjectStatusType projectStatus, ProjectUserRoleType? projectUserRole) = await _projectService.GetProjectUserRole(entityId, _httpContextAccessor.HttpContext.GetUserId());
         if (!projectStatus.Equals(ProjectStatusType.Active)
@@ -62,7 +61,7 @@ namespace LT.DigitalOffice.FileService.Business.Commands.Files
       }
 
       OperationResultResponse<bool> response = new(
-        body: await _fileRepository.EditNameAsync(fileId, newName));
+        body: await _fileRepository.EditNameAsync(fileSource, fileId, newName));
 
       if (!response.Body)
       {
