@@ -2,7 +2,7 @@
 {
   public static class DBTablesNames
   {
-    public const string Wiki = "WikisFiles";
+    public const string WIKI = "WikisFiles";
     public const string PROJECT = "ProjectsFiles";
   }
 }

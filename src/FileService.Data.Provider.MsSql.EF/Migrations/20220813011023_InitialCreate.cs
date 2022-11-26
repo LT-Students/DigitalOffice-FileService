@@ -12,7 +12,7 @@ namespace LT.DigitalOffice.FileService.Data.Provider.MsSql.Ef.Migrations
   {
     protected override void Up(MigrationBuilder builder)
     {
-      CreateTable(builder, DBTablesNames.Wiki);
+      CreateTable(builder, DBTablesNames.WIKI);
       CreateTable(builder, DBTablesNames.PROJECT);
     }
 

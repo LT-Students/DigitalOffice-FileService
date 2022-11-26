@@ -10,8 +10,7 @@ namespace LT.DigitalOffice.FileService.Validation
     public AddFileRequestValidator()
     {
       RuleForEach(file => file)
-        .Must(x => x.FileName.Length < 245).WithMessage("File name is too long")
-        .Must(x => MimeTypeMap.GetExtension(x.ContentType).Length < 10).WithMessage("File extension is too long");
+        .Must(x => x.FileName.Length < 245).WithMessage("File name is too long");
     }
   }
 }

@@ -29,7 +29,7 @@ namespace LT.DigitalOffice.FileService.Data
     {
       switch (fileSource)
       {
-        case FileSource.Wiki: return DBTablesNames.Wiki;
+        case FileSource.Wiki: return DBTablesNames.WIKI;
         case FileSource.Project: return DBTablesNames.PROJECT;
         default: throw new ArgumentOutOfRangeException();
       }
