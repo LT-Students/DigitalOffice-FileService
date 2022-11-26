@@ -11,15 +11,17 @@ using LT.DigitalOffice.FileService.Business.Commands.Files.Interfaces;
 using LT.DigitalOffice.FileService.Data.Interfaces;
 using LT.DigitalOffice.FileService.Mappers.Db.Interfaces;
 using LT.DigitalOffice.FileService.Models.Db;
+using LT.DigitalOffice.FileService.Validation.Interfaces;
 using LT.DigitalOffice.Kernel.BrokerSupport.AccessValidatorEngine.Interfaces;
 using LT.DigitalOffice.Kernel.Constants;
+using LT.DigitalOffice.Kernel.Exceptions.Models;
 using LT.DigitalOffice.Kernel.Extensions;
 using LT.DigitalOffice.Kernel.Helpers.Interfaces;
 using LT.DigitalOffice.Kernel.Responses;
 using LT.DigitalOffice.Models.Broker.Enums;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using static System.Net.WebRequestMethods;
+using FluentValidation.Results;
 
 namespace LT.DigitalOffice.FileService.Business.Commands.Files
 {
@@ -34,6 +36,7 @@ namespace LT.DigitalOffice.FileService.Business.Commands.Files
     private readonly IPublish _publish;
     private readonly IDbFileMapper _mapper;
     private readonly IWebHostEnvironment _appEnvironment;
+    private readonly IAddFileRequestValidator _validator;
 
     public CreateFilesCommand(
       IResponseCreator responseCreator,
@@ -77,6 +80,12 @@ namespace LT.DigitalOffice.FileService.Business.Commands.Files
         || !_wikiService.CheckArticlesAsync(new List<Guid> { entityId }).Result.Any())
       {
         return _responseCreator.CreateFailureResponse<List<Guid>>(HttpStatusCode.Forbidden);
+      }
+
+      ValidationResult validationResult = await _validator.ValidateAsync(uploadedFiles);
+      if (!validationResult.IsValid)
+      {
+        throw new BadRequestException(validationResult.Errors.Select(x => x.ErrorMessage).ToList());
       }
 
       string uploadPath = $"{Directory.GetCurrentDirectory()}/uploads";

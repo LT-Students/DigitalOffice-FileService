@@ -23,10 +23,10 @@ namespace LT.DigitalOffice.FileService.Data.Provider.MsSql.Ef.Migrations
         columns: table => new
         {
           Id = table.Column<Guid>(nullable: false),
-          Name = table.Column<string>(nullable: false, maxLength: 245),
-          Extension = table.Column<string>(nullable: true, maxLength: 10),
+          Name = table.Column<string>(nullable: false),
+          Extension = table.Column<string>(nullable: true),
           Size = table.Column<long>(nullable: false),
-          Path = table.Column<string>(nullable: false, maxLength: 300),
+          Path = table.Column<string>(nullable: false),
           CreatedBy = table.Column<Guid>(nullable: false),
           CreatedAtUtc = table.Column<DateTime>(nullable: false),
           ModifiedAtUtc = table.Column<DateTime>(nullable: true),

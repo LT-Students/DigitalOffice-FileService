@@ -31,6 +31,7 @@
     <PackageReference Include="DigitalOffice.Kernel.EndpointSupport" Version="1.0.1" />
     <PackageReference Include="DigitalOffice.Kernel.EFSupport" Version="1.0.0" />
     <PackageReference Include="DigitalOffice.Models" Version="1.0.13" />
+    <PackageReference Include="MimeTypeMapOfficial" Version="1.0.17" />
   </ItemGroup>
 
   <ItemGroup Condition="$(AssemblyName.Contains('.UnitTests'))">
