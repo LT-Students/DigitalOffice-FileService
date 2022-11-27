@@ -1,4 +1,6 @@
-﻿using LT.DigitalOffice.FileService.Models.Db;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using LT.DigitalOffice.FileService.Models.Db;
 using LT.DigitalOffice.Kernel.Attributes;
 using LT.DigitalOffice.Kernel.EFSupport.Provider;
 using LT.DigitalOffice.Kernel.Enums;
@@ -10,5 +12,9 @@ namespace LT.DigitalOffice.FileService.Data.Provider
   public interface IDataProvider : IBaseDataProvider
   {
     DbSet<DbFile> Files { get; set; }
+
+    Task<int> ExecuteRawSqlAsync(string query);
+
+    IQueryable<DbFile> FromSqlRaw(string query);
   }
 }

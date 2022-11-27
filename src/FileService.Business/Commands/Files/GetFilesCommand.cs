@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using LT.DigitalOffice.FileService.Broker.Requests.Interfaces;
-using LT.DigitalOffice.FileService.Business.Commands.File.Interfaces;
 using LT.DigitalOffice.FileService.Data.Interfaces;
 using LT.DigitalOffice.FileService.Mappers.Models.Interfaces;
 using LT.DigitalOffice.Kernel.BrokerSupport.AccessValidatorEngine.Interfaces;
 using LT.DigitalOffice.Kernel.Constants;
+using FileInfo = LT.DigitalOffice.FileService.Models.Dto.Models.FileInfo;
+using LT.DigitalOffice.FileService.Business.Commands.Files.Interfaces;
+using System.IO;
+using DigitalOffice.Models.Broker.Enums;
 
-namespace LT.DigitalOffice.FileService.Business.Commands.File
+namespace LT.DigitalOffice.FileService.Business.Commands.Files
 {
   public class GetFilesCommand : IGetFilesCommand
   {
@@ -31,23 +32,30 @@ namespace LT.DigitalOffice.FileService.Business.Commands.File
       _mapper = mapper;
     }
 
-    public async Task<List<(byte[] content, string extension, string name)>> ExecuteAsync(List<Guid> filesIds)
+    public async Task<List<(byte[] content, string extension, string name)>> ExecuteAsync(List<Guid> filesIds, FileSource fileSource)
     {
       if (filesIds is null)
       {
         return null;
       }
 
-      if (!await _accessValidator.HasRightsAsync(Rights.AddEditRemoveProjects))
+      if (fileSource == FileSource.Project)
       {
-        filesIds = await _projectService.CheckFilesAsync(filesIds);
+        if (!await _accessValidator.HasRightsAsync(Rights.AddEditRemoveProjects))
+        {
+          filesIds = await _projectService.CheckFilesAsync(filesIds);
+        }
       }
 
-      return (await _repository.GetAsync(
-        filesIds))?.Select(file => (
-          file.FileStream,
-          _mapper.Map(file.FileType),
-          Path.GetFileNameWithoutExtension(file.Name))).ToList();
+      List<(byte[] content, string extension, string name)> result = new();
+      List<FileInfo> files = await _repository.GetFileInfoAsync(fileSource, filesIds);
+
+      foreach (FileInfo fileInfo in files)
+      {
+        result.Add((await File.ReadAllBytesAsync(fileInfo.Path), _mapper.Map(fileInfo.Extension), fileInfo.Name));
+      }
+
+      return result;
     }
   }
 }

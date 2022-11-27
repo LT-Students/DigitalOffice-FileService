@@ -6,14 +6,13 @@ namespace LT.DigitalOffice.FileService.Mappers.Models
 {
   public class FileInfoMapper : IFileInfoMapper
   {
-    public FileInfo Map(Guid id, string name, string extension, DateTime modifiedAtUtc)
+    public FileInfo Map(string path, string name, string extension)
     {
       return new FileInfo
       {
-        Id = id,
+        Path = path,
         Name = name,
-        Extension = extension,
-        ModifiedAtUtc = modifiedAtUtc
+        Extension = extension
       };
     }
   }

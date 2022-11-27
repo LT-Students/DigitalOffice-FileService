@@ -7,6 +7,6 @@ namespace LT.DigitalOffice.FileService.Mappers.Models.Interfaces
   [AutoInject]
   public interface IFileInfoMapper
   {
-    FileInfo Map(Guid id, string name, string extension, DateTime modifiedAtUtc);
+    FileInfo Map(string path, string name, string extension);
   }
 }

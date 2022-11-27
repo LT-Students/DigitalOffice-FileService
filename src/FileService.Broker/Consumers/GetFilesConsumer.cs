@@ -13,7 +13,7 @@ namespace LT.DigitalOffice.FileService.Broker.Consumers
 
     private async Task<object> GetFilesAsync(IGetFilesRequest request)
     {
-      return IGetFilesResponse.CreateObj(await _repository.GetFileCharacteristicsDataAsync(request.FilesIds));
+      return IGetFilesResponse.CreateObj(await _repository.GetFileCharacteristicsDataAsync(request.FileSource, request.FilesIds));
     }
 
     public GetFilesConsumer(IFileRepository repository)

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using LT.DigitalOffice.FileService.Models.Db;
 using LT.DigitalOffice.Kernel.EFSupport.Provider;
 using Microsoft.EntityFrameworkCore;
@@ -46,6 +47,16 @@ namespace LT.DigitalOffice.FileService.Data.Provider.MsSql.Ef
     public async Task SaveAsync()
     {
       await SaveChangesAsync();
+    }
+
+    public async Task<int> ExecuteRawSqlAsync(string query)
+    {
+      return await Database.ExecuteSqlRawAsync(query);
+    }
+
+    public IQueryable<DbFile> FromSqlRaw(string query)
+    {
+      return Files.FromSqlRaw(query);
     }
   }
 }

@@ -1,11 +1,11 @@
 ﻿using FluentValidation;
-using LT.DigitalOffice.FileService.Models.Dto.Requests;
 using LT.DigitalOffice.Kernel.Attributes;
+using Microsoft.AspNetCore.Http;
 
 namespace LT.DigitalOffice.FileService.Validation.Interfaces
 {
     [AutoInject]
-    public interface IFileRequestValidator : IValidator<AddFileRequest>
+    public interface IAddFileRequestValidator : IValidator<IFormFileCollection>
     {
     }
 }

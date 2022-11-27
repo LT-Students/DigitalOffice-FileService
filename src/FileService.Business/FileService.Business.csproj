@@ -3,6 +3,10 @@
   <Import Project="$(ProjectDir)..\..\Common.Configurations.targets" />
 
   <ItemGroup>
+    <PackageReference Include="System.IO.FileSystem" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\FileService.Broker\FileService.Broker.csproj" />
     <ProjectReference Include="..\FileService.Data\FileService.Data.csproj" />
     <ProjectReference Include="..\FileService.Mappers\FileService.Mappers.csproj" />
